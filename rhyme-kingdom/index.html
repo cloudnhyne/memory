@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#120826">
+<meta name="description" content="Rhyme Kingdom: a hip-hop match-3 adventure. Restore the Kingdom of Rhyme with King Flow and the royal court across 25 levels.">
+<!-- build:head -->
+<title>Rhyme Kingdom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@400;600;800&family=Sedgwick+Ave+Display&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<!-- /build:head -->
+</head>
+<body data-screen="title" data-chapter="block">
+<!-- build:body -->
+<div id="app">
+  <div class="backdrop" aria-hidden="true">
+    <svg class="skyline" viewBox="0 0 520 200" preserveAspectRatio="xMidYMax slice">
+      <path d="M0 200 L0 120 L30 120 L30 92 L58 92 L58 130 L84 130 L84 70 L104 70 L104 54 L124 54 L124 70 L140 70 L140 118 L170 118 L170 86 L204 86 L204 140 L226 140 L226 100 L250 100 L250 60 L262 46 L274 60 L274 112 L300 112 L300 80 L330 80 L330 128 L356 128 L356 96 L382 96 L382 66 L410 66 L410 122 L436 122 L436 90 L470 90 L470 132 L494 132 L494 104 L520 104 L520 200 Z" fill="#1a0c38"/>
+      <g fill="#ffd27a" opacity=".55"><rect x="90" y="80" width="5" height="7"/><rect x="110" y="64" width="5" height="7"/><rect x="180" y="96" width="5" height="7"/><rect x="236" y="110" width="5" height="7"/><rect x="258" y="70" width="5" height="7"/><rect x="312" y="90" width="5" height="7"/><rect x="392" y="76" width="5" height="7"/><rect x="448" y="100" width="5" height="7"/></g>
+    </svg>
+    <canvas id="eq"></canvas>
+  </div>
+
+  <section id="scr-title" class="screen">
+    <div class="title-wrap">
+      <p class="presents">Cloudnhyne Designz presents</p>
+      <h1 class="logo" aria-label="Rhyme Kingdom"><span class="logo-rhyme">Rhyme</span><span class="logo-kingdom">Kingdom</span></h1>
+      <p class="tagline">A hip-hop match-3 adventure</p>
+      <div class="title-cast" id="title-cast"></div>
+      <button id="btn-start" class="btn btn-gold btn-big">Tap to play</button>
+      <p class="title-foot">25 levels &middot; 5 chapters &middot; sound on for the beat</p>
+    </div>
+  </section>
+
+  <section id="scr-home" class="screen" hidden>
+    <header class="topbar">
+      <div class="pill" id="home-stars" title="Stars: spend them to build"><img alt="Stars"><b>0</b></div>
+      <div class="pill" id="home-coins" title="Coins: buy boosters and extra moves"><img alt="Coins"><b>0</b></div>
+      <button class="icon-btn" id="btn-settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8.4 4.6-.1-1.1 2-1.6-2-3.4-2.4.9a8 8 0 0 0-1.9-1.1L15.6 3h-4l-.4 2.6a8 8 0 0 0-1.9 1.1L7 5.8 5 9.2l2 1.6a8 8 0 0 0 0 2.2l-2 1.6 2 3.4 2.4-.9c.6.5 1.2.8 1.9 1.1l.4 2.6h4l.4-2.6c.7-.3 1.3-.6 1.9-1.1l2.4.9 2-3.4-2-1.6Z"/></svg>
+      </button>
+    </header>
+    <div class="home-main">
+    <div class="area-head">
+      <p class="kicker" id="area-chapter">Area 1 of 5</p>
+      <h2 class="area-name" id="area-name">The Block Party</h2>
+      <div class="area-progress"><div class="bar"><i id="area-bar"></i></div><span id="area-count">0/5 built</span></div>
+    </div>
+    <div class="scene" id="scene"></div>
+    <div class="host-row">
+      <img id="host-face" class="host-face" alt="">
+      <div class="bubble"><p class="bubble-name" id="host-name"></p><p id="host-line"></p></div>
+    </div>
+    </div>
+    <div class="chapter-path">
+      <p class="kicker" id="path-title">Chapter 1</p>
+      <ol class="path" id="path"></ol>
+    </div>
+    <div class="home-actions">
+      <button id="btn-build" class="btn btn-pink">Build</button>
+      <button id="btn-play" class="btn btn-gold btn-big">Level 1</button>
+    </div>
+  </section>
+
+  <section id="scr-game" class="screen" hidden>
+    <header class="hud">
+      <div class="hud-moves"><span class="label">Moves</span><b id="hud-moves">0</b></div>
+      <div class="hud-goals" id="hud-goals"></div>
+      <button class="icon-btn" id="btn-pause" aria-label="Pause">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg>
+      </button>
+    </header>
+    <div class="hud-sub">
+      <span id="hud-level">Level 1</span>
+      <span class="tag tag-hard" id="hud-hard" hidden>Hard</span>
+      <span class="boss-timer" id="hud-boss" hidden></span>
+    </div>
+    <div class="coach" id="coach" hidden><img id="coach-face" alt=""><p id="coach-text"></p></div>
+    <div class="board-wrap">
+      <canvas id="board" aria-label="Game board"></canvas>
+    </div>
+    <div class="toast" id="toast" hidden></div>
+    <footer class="boosters">
+      <button class="booster" data-b="hammer"><img alt=""><span class="count">3</span><small>Mic Drop</small></button>
+      <button class="booster" data-b="row"><img alt=""><span class="count">3</span><small>Scratch</small></button>
+      <button class="booster" data-b="col"><img alt=""><span class="count">3</span><small>Bass Drop</small></button>
+      <button class="booster" data-b="shuffle"><img alt=""><span class="count">3</span><small>Remix</small></button>
+    </footer>
+  </section>
+
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div id="modal" class="modal" hidden></div>
+  <div id="dialog" class="dialog" hidden></div>
+</div>
+<!-- /build:body -->
+<!-- build:scripts -->
+<script src="js/engine.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/art.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/story.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+<!-- /build:scripts -->
+</body>
+</html>
