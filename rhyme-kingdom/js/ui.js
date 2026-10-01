@@ -539,7 +539,7 @@
       const first = !this.save.cleared[n];
       this.hintOk = false;
       if (this.eng.moves > 0) {
-        this.view.text('ENCORE!', this.view.W / 2, this.view.oy + this.view.rows * this.view.S * 0.4, Math.min(this.view.W / 6, 64), '#ffc531', 1.2);
+        this.view.text('ENCORE!', this.view.W / 2, this.view.oy + this.view.rows * this.view.S * 0.4, Math.min(this.view.W / 6, 64), '#ff2a3d', 1.2);
         Snd.fx('horn', 2);
         await pause(600);
       }
@@ -802,7 +802,7 @@
 
     confetti(host) {
       if (!host) return;
-      const colors = ['#ff3b8d', '#22e3ff', '#ffc531', '#3bff8a', '#b05cff'];
+      const colors = ['#e3192b', '#ffffff', '#8d8d93', '#ff2a3d', '#2c2c30'];
       const layer = document.createElement('div');
       layer.className = 'confetti';
       for (let i = 0; i < 36; i++) {

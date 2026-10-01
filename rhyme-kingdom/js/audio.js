@@ -1,8 +1,10 @@
 /*
  * Rhyme Kingdom: sound.
- * All music and effects are synthesized live with the Web Audio API:
- * boom-bap drums, a bassline, jazzy keys, vinyl crackle, scratches and airhorns.
- * No samples, so there is nothing to license.
+ * Music: produced tracks in assets/music/ (theme song, G-funk and stutter-beat
+ * level loops, boss and arena loops, win and lose stingers). Drop a new MP3 with
+ * the same name in that folder to replace one. If a track can't load, the
+ * built-in synthesized boom-bap plays instead.
+ * Effects are synthesized live with the Web Audio API.
  */
 (function (root) {
   'use strict';
@@ -32,6 +34,10 @@
     arena: { bpm: 94, drums: 'boom', comp: [0, 6, 10], chords: [['A3', 'C4', 'G4', 'B4'], ['F3', 'A3', 'E4', 'G4'], ['C3', 'E3', 'G3', 'D4'], ['G3', 'B3', 'D4', 'F4']], bass: ['A1', 'F1', 'C2', 'G1'] },
     boss: { bpm: 100, drums: 'boss', comp: [0, 3, 6, 12], stab: true, chords: [['C3', 'Eb3', 'G3', 'C4'], ['Ab2', 'C3', 'Eb3', 'Ab3'], ['F2', 'Ab2', 'C3', 'F3'], ['G2', 'B2', 'D3', 'F3']], bass: ['C2', 'Ab1', 'F1', 'G1'] },
   };
+
+  // Which produced track plays for each game moment.
+  const FILES = { menu: 'theme', block: 'gfunk', shop: 'stutter', blacktop: 'gfunk', wall: 'stutter', arena: 'arena', boss: 'boss', daily: 'stutter' };
+  const musicUrl = (k) => (root.RK_ASSETS && root.RK_ASSETS['music/' + k]) || 'assets/music/' + k + '.mp3';
 
   class Sound {
     constructor() {
@@ -71,11 +77,42 @@
       this.verbIn.gain.value = 0.3;
       this.verbIn.connect(this.verb).connect(this.master);
       this._crackle();
+      this._media();
       document.addEventListener('visibilitychange', () => {
         if (!this.ctx) return;
         if (document.hidden) this.ctx.suspend(); else this.ctx.resume();
       });
-      if (this.want) this.play(this.want);
+      if (this.want) { const w = this.want; this.want = null; this.track = null; this.play(w); }
+    }
+
+    // One streaming element for music and one for stingers. Both are started
+    // inside the unlocking gesture so phones allow them to play later.
+    _media() {
+      const c = this.ctx;
+      const mk = () => { const a = new Audio(); a.preload = 'auto'; a.crossOrigin = 'anonymous'; return a; };
+      this.el = mk(); this.el.loop = true;
+      this.sting = mk();
+      // Routing through Web Audio lets the beat drive the visuals. Pages opened
+      // straight from disk can't route media, so they play the element directly.
+      this.routed = !!(root.RK_ASSETS || location.protocol !== 'file:');
+      this.elGain = c.createGain(); this.elGain.gain.value = 0;
+      this.analyser = c.createAnalyser(); this.analyser.fftSize = 512; this.analyser.smoothingTimeConstant = 0.5;
+      this.bins = new Uint8Array(this.analyser.frequencyBinCount);
+      this.bassAvg = 0;
+      if (this.routed) {
+        try {
+          c.createMediaElementSource(this.el).connect(this.elGain);
+          c.createMediaElementSource(this.sting).connect(this.sfx);
+        } catch (e) { this.routed = false; }
+      }
+      this.elGain.connect(this.analyser);
+      this.elGain.connect(this.music);
+      // prime both elements during the gesture
+      for (const a of [this.el, this.sting]) {
+        a.src = musicUrl('win'); a.muted = true;
+        const p = a.play(); if (p && p.then) p.then(() => { a.pause(); a.muted = false; }, () => { a.muted = false; });
+      }
+      this.el.addEventListener('error', () => { if (this.file) { this.failed = this.failed || {}; this.failed[this.file] = 1; const t = this.track; this.track = null; this.file = null; this.play(t); } });
     }
 
     _noise(sec) {
@@ -110,6 +147,7 @@
     setMusic(on) {
       this.musicOn = on;
       if (this.music) this.music.gain.setTargetAtTime(on ? 0.5 : 0, this.ctx.currentTime, 0.05);
+      if (this.el && !this.routed) this.el.volume = on ? 0.6 : 0;
     }
     setSfx(on) {
       this.sfxOn = on;
@@ -121,15 +159,57 @@
       this.want = name;
       if (!this.ctx || this.track === name) return;
       this.track = name;
+      const file = FILES[name];
+      if (this.el && file && !(this.failed && this.failed[file])) {
+        this._stopSeq();
+        if (this.file === file && !this.el.paused) return;
+        this.file = file;
+        this._fadeTo(0, 0.25);
+        clearTimeout(this.swapT);
+        this.swapT = setTimeout(() => {
+          if (this.file !== file) return;
+          this.el.loop = true;
+          this.el.src = musicUrl(file);
+          this.el.currentTime = 0;
+          const p = this.el.play(); if (p && p.catch) p.catch(() => {});
+          this._fadeTo(1, 0.6);
+        }, 260);
+        return;
+      }
+      this.file = null;
+      if (this.el) this.el.pause();
       this.cfg = TRACKS[name] || TRACKS.menu;
       this.step = 0;
       this.next = this.ctx.currentTime + 0.12;
       if (!this.timer) this.timer = setInterval(() => this._tick(), 25);
     }
-    stop() {
-      this.track = null; this.want = null;
+    _fadeTo(v, sec) {
+      const vol = this.musicOn ? v : 0;
+      if (this.routed) {
+        const g = this.elGain.gain, t = this.ctx.currentTime;
+        g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(vol * 1.6, t + sec);
+      } else if (this.el) {
+        this.el.volume = Math.min(1, vol * 0.6);
+      }
+    }
+    _stopSeq() {
       if (this.timer) clearInterval(this.timer);
       this.timer = null;
+    }
+    stop() {
+      this.track = null; this.want = null; this.file = null;
+      this._stopSeq();
+      if (this.el) { this._fadeTo(0, 0.15); clearTimeout(this.swapT); this.swapT = setTimeout(() => { if (!this.file) this.el.pause(); }, 180); }
+    }
+    // Plays a produced stinger (win, lose). Returns false if it isn't available.
+    _stinger(k) {
+      if (!this.sting || (this.failed && this.failed[k])) return false;
+      this.sting.src = musicUrl(k);
+      this.sting.currentTime = 0;
+      if (!this.routed) this.sting.volume = this.sfxOn ? 0.9 : 0;
+      const p = this.sting.play();
+      if (p && p.catch) p.catch(() => { this.failed = this.failed || {}; this.failed[k] = 1; });
+      return true;
     }
     _tick() {
       if (!this.ctx || !this.track) return;
@@ -162,6 +242,17 @@
     // 0..1 glow that peaks on each kick drum (drives the equalizer visuals).
     pulse() {
       if (!this.ctx || !this.track || !this.musicOn) return 0;
+      if (this.file && this.routed) {
+        // bass energy above its running average: spikes on every kick
+        this.analyser.getByteFrequencyData(this.bins);
+        let b = 0;
+        for (let i = 1; i < 6; i++) b += this.bins[i];
+        b /= 5 * 255;
+        this.bassAvg += (b - this.bassAvg) * 0.04;
+        this.lastPulse = Math.max((this.lastPulse || 0) * 0.86, Math.min(1, Math.max(0, (b - this.bassAvg * 0.92) * 6)));
+        return this.lastPulse;
+      }
+      if (this.file) return 0.5 + 0.5 * Math.sin(performance.now() / 1000 * Math.PI * 2 * 1.53);
       const now = this.ctx.currentTime;
       let last = -1;
       for (const k of this.kicks) if (k <= now && k > last) last = k;
@@ -407,6 +498,7 @@
     }
     _win(t) {
       this.stop();
+      if (this._stinger('win')) { this._horn(t + 0.2, 2); return; }
       const chord = ['C4', 'E4', 'G4', 'B4', 'D5'];
       chord.forEach((n, i) => { const g = this._tone(t + i * 0.08, 'triangle', freq(n), freq(n), 0.9, 0.16); g.connect(this.verbIn); });
       this._horn(t + 0.5, 3);
@@ -415,6 +507,7 @@
     }
     _lose(t) {
       this.stop();
+      if (this._stinger('lose')) return;
       this._scratch(t);
       [392, 370, 349, 311].forEach((f, i) => {
         const c = this.ctx, o = c.createOscillator(), g = c.createGain(), lp = c.createBiquadFilter(), lfo = c.createOscillator(), lg = c.createGain();

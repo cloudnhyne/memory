@@ -26,6 +26,10 @@ const assets = {};
 for (const f of readdirSync(join(root, 'assets')).filter((n) => n.endsWith('.webp')).sort()) {
   assets[f.replace(/\.webp$/, '')] = 'data:image/webp;base64,' + readFileSync(join(root, 'assets', f)).toString('base64');
 }
+// The soundtrack ships inside the page too (assets/music/*.mp3).
+for (const f of readdirSync(join(root, 'assets', 'music')).filter((n) => n.endsWith('.mp3')).sort()) {
+  assets['music/' + f.replace(/\.mp3$/, '')] = 'data:audio/mpeg;base64,' + readFileSync(join(root, 'assets', 'music', f)).toString('base64');
+}
 const assetScript = `<script>window.RK_ASSETS=${JSON.stringify(assets)};</script>`;
 
 // Inline local scripts in order. Escape any "</script" inside the source.
@@ -48,7 +52,7 @@ if (fragment) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#120826">
+<meta name="theme-color" content="#0b0b0c">
 ${head}
 </head>
 <body${bodyAttrs}>

@@ -12,7 +12,7 @@
     const reduce = root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const bars = 28;
     const level = new Array(bars).fill(0.2);
-    const colors = ['#ff3b8d', '#b05cff', '#22e3ff', '#3bff8a', '#ffc531'];
+    const colors = ['#e3192b', '#f2f2f2', '#8d8d93', '#ff2a3d', '#d4d4d8'];
     function frame(now) {
       const dpr = Math.min(root.devicePixelRatio || 1, 2);
       const w = cv.clientWidth, h = cv.clientHeight;

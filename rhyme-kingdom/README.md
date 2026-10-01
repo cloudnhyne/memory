@@ -14,7 +14,9 @@ neighborhood piece by piece.
   on GitHub Pages, Netlify, Vercel or similar.
 - **From source:** open `index.html` directly, or serve the folder (`npx serve .`).
 
-Turn the sound on: the music and every sound effect are synthesized live in the browser.
+Turn the sound on: the game has a produced hip-hop soundtrack (a theme song with chopper
+rap verses, G-funk and stutter-beat level loops, boss and arena loops). See `SOUNDTRACK.md`
+for the Suno and Gemini prompts and how to swap tracks.
 
 ## What's in the game
 
@@ -66,7 +68,8 @@ js/render.js      canvas board renderer, animations and touch input
 js/art.js         art registry and the Block's build regions
 assets/           game art (WebP), cut from the generated sheets
 art-src/          original generated sheets and scene paintings
-js/audio.js       synthesized beats and sound effects (Web Audio)
+js/audio.js       soundtrack player and synthesized sound effects (Web Audio)
+assets/music/     the soundtrack (MP3)
 js/story.js       characters, dialog and mechanic intro cards
 js/ui.js          screens, menus, saving, boosters, win and lose flow
 js/main.js        startup
@@ -119,7 +122,8 @@ Google Play by wrapping it with [Capacitor](https://capacitorjs.com/) when you'r
   affiliated with them. Run a trademark search on the final name before launch.
 - **Characters** are original and fictional. No real artists' names, likenesses or lyrics are
   used, which keeps you clear of right-of-publicity issues.
-- **Music** is generated in code, so there are no samples to clear.
+- **Music** is AI-generated from text descriptions with original lyrics; no samples or real
+  artists' voices are used. Check the generator's commercial-use terms for your plan before launch.
 
 ## Natural next steps
 

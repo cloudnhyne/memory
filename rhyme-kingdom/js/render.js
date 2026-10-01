@@ -10,7 +10,7 @@
   const T = root.RKEngine.T;
 
   const TILE_COLORS = ['#ff3347', '#ff7a1a', '#ffc21a', '#25c75a', '#2e8cff', '#9446f0'];
-  const NEON = ['#ff3b8d', '#22e3ff', '#ffc531', '#3bff8a', '#b05cff'];
+  const NEON = ['#e3192b', '#ffffff', '#ff2a3d', '#bdbdc2', '#ff5a64'];
   const DISPLAY_FONT = "'Sedgwick Ave Display', 'Bungee', Impact, sans-serif";
 
   const ease = {
@@ -165,13 +165,13 @@
         g.fill();
         g.restore();
       };
-      pass(9, 14, 'rgba(255,59,141,.55)', (x) => { x.shadowColor = '#ff3b8d'; x.shadowBlur = 22; });
+      pass(9, 14, 'rgba(227,25,43,.55)', (x) => { x.shadowColor = '#e3192b'; x.shadowBlur = 22; });
       const grad = g.createLinearGradient(0, oy - 10, 0, oy + this.rows * S + 10);
-      grad.addColorStop(0, '#ffd34d'); grad.addColorStop(0.5, '#ff7ab6'); grad.addColorStop(1, '#22e3ff');
+      grad.addColorStop(0, '#f2f2f2'); grad.addColorStop(0.5, '#e3192b'); grad.addColorStop(1, '#5a5a60');
       pass(7, 12, grad);
-      pass(4, 9, 'rgba(14, 6, 32, .92)');
+      pass(4, 9, 'rgba(10, 10, 11, .92)');
       for (const [c, r] of cells) {
-        g.fillStyle = (c + r) % 2 ? 'rgba(46, 24, 92, .78)' : 'rgba(60, 32, 112, .78)';
+        g.fillStyle = (c + r) % 2 ? 'rgba(36, 36, 40, .8)' : 'rgba(50, 50, 55, .8)';
         g.fillRect(ox + c * S, oy + r * S, S, S);
       }
       g.strokeStyle = 'rgba(255,255,255,.05)';
@@ -205,7 +205,7 @@
         g.imageSmoothingQuality = 'high';
         if (!/^(boss_|hand|floor)/.test(key)) {
           // soft contact shadow so the glossy pieces sit on the board
-          g.shadowColor = 'rgba(8, 2, 20, .55)';
+          g.shadowColor = 'rgba(0, 0, 0, .6)';
           g.shadowBlur = px * 0.05;
           g.shadowOffsetY = px * 0.035;
         }
@@ -354,7 +354,7 @@
         this.sparkle(p.x, p.y, 6);
         if (this.time - this.lastFloor > 0.05) { this.lastFloor = this.time; Snd.fx('floor'); }
       } else {
-        this.ring(p.x, p.y, this.S * 0.2, this.S * 0.7, 0.3, '#ff7ab6', 3);
+        this.ring(p.x, p.y, this.S * 0.2, this.S * 0.7, 0.3, '#ff5a64', 3);
       }
       if (ev.g != null) this.flyToGoal(ev.g, 'floor', p.x, p.y);
     }
@@ -401,7 +401,7 @@
       B.hp = ev.hp; B.flash = 1; B.shake = 1;
       const p = this.center(ev.c, ev.r);
       this.text('-1', p.x, p.y - this.S * 0.2, this.S * 0.55, '#ff3b5c', 0.7, 50);
-      this.burst(p.x, p.y, '#b05cff', 5);
+      this.burst(p.x, p.y, '#9a9aa0', 5);
       if (this.time - (B.lastSnd || 0) > 0.06) { B.lastSnd = this.time; Snd.fx('bossHit'); }
       if (ev.g != null) this.hooks.goalTick(ev.g, -1);
     }
@@ -414,9 +414,9 @@
       Snd.fx('boom'); Snd.fx('horn', 3);
       this.shakeAmp = 18;
       for (let k = 0; k < 3; k++) this.ring(p.x, p.y, this.S * 0.5, this.S * (3 + k * 1.5), 0.5 + k * 0.15, NEON[k], 6);
-      this.burst(p.x, p.y, '#b05cff', 30);
+      this.burst(p.x, p.y, '#9a9aa0', 30);
       this.sparkle(p.x, p.y, 30);
-      this.text('MIC DROP!', this.W / 2, this.oy + this.rows * this.S * 0.45, Math.min(this.W / 6, 70), '#ffc531', 1.6);
+      this.text('MIC DROP!', this.W / 2, this.oy + this.rows * this.S * 0.45, Math.min(this.W / 6, 70), '#ff2a3d', 1.6);
       this.hooks.haptic && this.hooks.haptic(80);
       for (let y = B.y; y < B.y + B.h; y++) for (let x = B.x; x < B.x + B.w; x++) this.v[y][x].block = null;
       return this.wait(0.6);
@@ -432,7 +432,7 @@
       this.text(names[ev.kind] || 'ATTACK!', from.x, from.y + this.S * B.h * 0.6, this.S * 0.6, '#ff3b5c', 1.1);
       const proms = ev.targets.map((tg) => this.after(tg.at / 1000, () => {
         const p = this.center(tg.c, tg.r);
-        this.bolt(from.x, from.y, p.x, p.y, 0.35, ev.kind === 'tape' ? '#d6d1e6' : ev.kind === 'static' ? '#b05cff' : '#ff9a3c');
+        this.bolt(from.x, from.y, p.x, p.y, 0.35, ev.kind === 'tape' ? '#d6d1e6' : ev.kind === 'static' ? '#9a9aa0' : '#ff9a3c');
         const cl = this.v[tg.r][tg.c];
         if (ev.kind === 'tape') cl.tape = 1;
         else {
@@ -450,7 +450,7 @@
       const sp = this.sprites.get(ev.id);
       const p = this.center(ev.c, ev.r), q = this.center(ev.from.c, ev.from.r);
       Snd.fx('static');
-      this.bolt(q.x, q.y, p.x, p.y, 0.25, '#b05cff');
+      this.bolt(q.x, q.y, p.x, p.y, 0.25, '#9a9aa0');
       if (ev.g != null) this.hooks.goalTick(ev.g, +1);
       const cl = this.v[ev.r][ev.c];
       const done = () => { this.sprites.delete(ev.id); cl.block = { t: 'static' }; cl.hitT = this.time; };
@@ -488,7 +488,7 @@
       const p = this.center(ev.c, ev.r);
       Snd.fx('crown');
       this.sparkle(p.x, p.y, 16);
-      this.ring(p.x, p.y, this.S * 0.3, this.S * 1.4, 0.45, '#ffc531', 5);
+      this.ring(p.x, p.y, this.S * 0.3, this.S * 1.4, 0.45, '#ff2a3d', 5);
       if (ev.g != null) this.flyToGoal(ev.g, 'crown', p.x, p.y, 1.2);
       if (sp) this.sprites.delete(ev.id);
       return this.wait(0.25);
@@ -496,7 +496,7 @@
 
     _shuffle(ev) {
       Snd.fx('scratch');
-      this.text('REMIX!', this.W / 2, this.oy + this.rows * this.S / 2, Math.min(this.W / 6, 64), '#22e3ff', 1.1);
+      this.text('REMIX!', this.W / 2, this.oy + this.rows * this.S / 2, Math.min(this.W / 6, 64), '#ffffff', 1.1);
       const proms = ev.moves.map((m) => {
         const sp = this.sprites.get(m.id);
         if (!sp) return null;
@@ -511,8 +511,8 @@
       this.cascade = n;
       const txt = n >= 6 ? 'LEGENDARY!' : CALLOUT[n];
       if (!txt) return;
-      const colors = { 2: '#22e3ff', 3: '#3bff8a', 4: '#ffc531', 5: '#ff7a1a' };
-      this.text(txt, this.W / 2, this.oy + this.rows * this.S * 0.42, Math.min(this.W / 6.5, 62), n >= 6 ? '#ff3b8d' : colors[n], 1.1);
+      const colors = { 2: '#ffffff', 3: '#f2f2f2', 4: '#ff2a3d', 5: '#ff7a1a' };
+      this.text(txt, this.W / 2, this.oy + this.rows * this.S * 0.42, Math.min(this.W / 6.5, 62), n >= 6 ? '#e3192b' : colors[n], 1.1);
       if (n >= 4) Snd.fx('horn', n >= 6 ? 3 : 2);
     }
 
@@ -524,7 +524,7 @@
       if (own) this.sprites.delete(ev.id);
       if (ev.ids) {
         const name = COMBO_NAME[ev.pw];
-        if (name) this.text(name, this.W / 2, this.oy + this.rows * S * 0.4, Math.min(this.W / 8, 54), '#ffc531', 1.2);
+        if (name) this.text(name, this.W / 2, this.oy + this.rows * S * 0.4, Math.min(this.W / 8, 54), '#ff2a3d', 1.2);
         for (const id of ev.ids) {
           const sp = this.sprites.get(id);
           if (!sp) continue;
@@ -541,7 +541,7 @@
         case 'row': case 'col': {
           Snd.fx('scratch');
           this.drop(ev.pw, p.x, p.y, 0.2);
-          return this.wait(0.2).then(() => { Snd.fx('spray'); return this.spray(ev.c, ev.r, ev.pw === 'row' ? 'h' : 'v', 0, 1, '#22e3ff'); });
+          return this.wait(0.2).then(() => { Snd.fx('spray'); return this.spray(ev.c, ev.r, ev.pw === 'row' ? 'h' : 'v', 0, 1, '#ffffff'); });
         }
         case 'cross':
           return this.wait(0.15).then(() => { Snd.fx('spray'); Snd.fx('scratch'); return Promise.all([this.spray(ev.c, ev.r, 'h', 0, 1.15), this.spray(ev.c, ev.r, 'v', 0, 1.15)]); });
@@ -565,17 +565,17 @@
         case 'pl': {
           if (!ev.ids && own == null && ev.id != null) { /* plane already gone */ }
           Snd.fx('plane');
-          this.burst(p.x, p.y, '#22e3ff', 6);
+          this.burst(p.x, p.y, '#ffffff', 6);
           if (!ev.to) return this.wait(0.2);
           const q = this.center(ev.to.c, ev.to.r);
           const dur = (ev.dur || T.PLANE) / 1000;
           const side = Math.random() < 0.5 ? -1 : 1;
           this.effects.push({ kind: 'plane', x0: p.x, y0: p.y, x1: q.x, y1: q.y, cx: (p.x + q.x) / 2 + side * S * 2.5, cy: Math.min(p.y, q.y) - S * 2.2, t0: this.time, dur, payload: ev.payload });
-          return this.wait(dur).then(() => { this.ring(q.x, q.y, S * 0.2, S * 1.1, 0.3, '#22e3ff', 4); this.shakeAmp = Math.max(this.shakeAmp, 4); });
+          return this.wait(dur).then(() => { this.ring(q.x, q.y, S * 0.2, S * 1.1, 0.3, '#ffffff', 4); this.shakeAmp = Math.max(this.shakeAmp, 4); });
         }
         case 'plpl':
           Snd.fx('plane');
-          this.burst(p.x, p.y, '#22e3ff', 12);
+          this.burst(p.x, p.y, '#ffffff', 12);
           return null;
         case 'plc':
           return null;
@@ -624,9 +624,9 @@
       if (big) Snd.fx('horn', 2);
       this.shakeAmp = big ? 18 : 11;
       this.hooks.haptic && this.hooks.haptic(big ? 90 : 50);
-      this.ring(x, y, S * 0.3, S * radCells, 0.42, '#ffc531', 10);
-      this.ring(x, y, S * 0.2, S * radCells * 0.8, 0.35, '#ff3b8d', 6);
-      this.effects.push({ kind: 'flash', t0: this.time, dur: 0.18, color: '#ffe9a8', alpha: 0.35 });
+      this.ring(x, y, S * 0.3, S * radCells, 0.42, '#ff2a3d', 10);
+      this.ring(x, y, S * 0.2, S * radCells * 0.8, 0.35, '#e3192b', 6);
+      this.effects.push({ kind: 'flash', t0: this.time, dur: 0.18, color: '#ffd6d6', alpha: 0.35 });
       for (let i = 0; i < (big ? 40 : 24); i++) {
         const a = Math.random() * Math.PI * 2, sp = (180 + Math.random() * 380) * (S / 50);
         this.part({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, g: 300, life: 0.6 + Math.random() * 0.4, size: S * (0.08 + Math.random() * 0.1), color: NEON[i % 5], shape: i % 3 ? 'sq' : 'note', rot: Math.random() * 6, vr: (Math.random() - 0.5) * 10 });
@@ -809,13 +809,13 @@
           // Unlit dance floor: the disco tile, dimmed to almost dark.
           const spr = this._spr('floor', S);
           if (spr) ctx.drawImage(spr, x + 1, y + 1, S - 2, S - 2);
-          ctx.fillStyle = 'rgba(12, 4, 28, .78)';
+          ctx.fillStyle = 'rgba(10, 10, 11, .78)';
           ctx.beginPath(); roundRect(ctx, x + 2, y + 2, S - 4, S - 4, S * 0.12); ctx.fill();
-          ctx.strokeStyle = cl.floor > 1 ? '#ff5aa8' : 'rgba(150, 110, 255, .7)';
+          ctx.strokeStyle = cl.floor > 1 ? '#ff2a3d' : 'rgba(200, 200, 205, .6)';
           ctx.lineWidth = cl.floor > 1 ? 3 : 1.6;
           ctx.beginPath(); roundRect(ctx, x + 2.5, y + 2.5, S - 5, S - 5, S * 0.14); ctx.stroke();
           if (cl.floor > 1) {
-            ctx.strokeStyle = 'rgba(255,90,168,.5)';
+            ctx.strokeStyle = 'rgba(255,42,61,.5)';
             ctx.lineWidth = 1.5;
             ctx.beginPath(); roundRect(ctx, x + 7, y + 7, S - 14, S - 14, S * 0.1); ctx.stroke();
           }
@@ -833,8 +833,8 @@
     _drawExits(ctx) {
       const S = this.S;
       const bob = Math.sin(this.time * 4) * 2;
-      ctx.fillStyle = '#ffc531';
-      ctx.strokeStyle = '#1d0f33';
+      ctx.fillStyle = '#ff2a3d';
+      ctx.strokeStyle = '#050505';
       ctx.lineWidth = 2;
       for (let c = 0; c < this.cols; c++) {
         const r = this.eng.botRow[c];
@@ -942,11 +942,11 @@
       if (!B.dead) {
         const bx0 = this.ox + B.x * S + 2, by0 = this.oy + B.y * S + 2;
         const g0 = ctx.createRadialGradient(bx0 + w / 2, by0 + h * 0.9, S * 0.2, bx0 + w / 2, by0 + h * 0.6, Math.max(w, h));
-        g0.addColorStop(0, B.wind ? 'rgba(255, 59, 92, .75)' : 'rgba(176, 92, 255, .7)');
-        g0.addColorStop(1, 'rgba(20, 6, 40, .95)');
+        g0.addColorStop(0, B.wind ? 'rgba(255, 59, 92, .75)' : 'rgba(120, 120, 128, .7)');
+        g0.addColorStop(1, 'rgba(10, 10, 11, .95)');
         ctx.fillStyle = g0;
         ctx.beginPath(); roundRect(ctx, bx0, by0, w - 4, h - 4, S * 0.25); ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 197, 49, .8)'; ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(227, 25, 43, .8)'; ctx.lineWidth = 2;
         ctx.beginPath(); roundRect(ctx, bx0, by0, w - 4, h - 4, S * 0.25); ctx.stroke();
       }
       const size = w * 1.45;
@@ -968,11 +968,11 @@
       // health bar along the bottom edge of the boss
       const bw = w * 0.86, bh = Math.max(8, S * 0.2);
       const bx = x + (w - bw) / 2, by = this.oy + (B.y + B.h) * S - bh - 3;
-      ctx.fillStyle = '#1d0f33';
+      ctx.fillStyle = '#050505';
       ctx.beginPath(); roundRect(ctx, bx - 2, by - 2, bw + 4, bh + 4, bh / 2 + 2); ctx.fill();
       const k = Math.max(0, B.hp / B.max);
       const g = ctx.createLinearGradient(bx, 0, bx + bw, 0);
-      g.addColorStop(0, '#ff3b5c'); g.addColorStop(1, '#ffc531');
+      g.addColorStop(0, '#ff3b5c'); g.addColorStop(1, '#ff2a3d');
       ctx.fillStyle = g;
       if (k > 0) { ctx.beginPath(); roundRect(ctx, bx, by, Math.max(bh, bw * k), bh, bh / 2); ctx.fill(); }
       ctx.fillStyle = '#fff';
@@ -985,15 +985,15 @@
       const S = this.S;
       if (this.sel && !this.busy) {
         const x = this.ox + this.sel.c * S, y = this.oy + this.sel.r * S;
-        ctx.strokeStyle = '#ffc531';
+        ctx.strokeStyle = '#ff2a3d';
         ctx.lineWidth = 3;
-        ctx.shadowColor = '#ffc531'; ctx.shadowBlur = 12;
+        ctx.shadowColor = '#ff2a3d'; ctx.shadowBlur = 12;
         ctx.beginPath(); roundRect(ctx, x + 2, y + 2, S - 4, S - 4, S * 0.18); ctx.stroke();
         ctx.shadowBlur = 0;
       }
       if (this.targeting) {
         const a = 0.35 + Math.sin(this.time * 6) * 0.15;
-        ctx.strokeStyle = `rgba(34,227,255,${a})`;
+        ctx.strokeStyle = `rgba(255,255,255,${a})`;
         ctx.lineWidth = 3;
         ctx.setLineDash([6, 6]);
         ctx.lineDashOffset = -this.time * 20;
@@ -1150,7 +1150,7 @@
           case 'strip':
             ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot || 0);
             ctx.fillRect(-s / 2, -s * 0.12, s, s * 0.24);
-            ctx.strokeStyle = '#1d0f33'; ctx.lineWidth = 1.2; ctx.strokeRect(-s / 2, -s * 0.12, s, s * 0.24);
+            ctx.strokeStyle = '#050505'; ctx.lineWidth = 1.2; ctx.strokeRect(-s / 2, -s * 0.12, s, s * 0.24);
             ctx.restore(); break;
           case 'disc':
             ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot || 0);
@@ -1181,7 +1181,7 @@
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.lineJoin = 'round';
         ctx.lineWidth = Math.max(4, t.size * 0.16);
-        ctx.strokeStyle = '#1d0f33';
+        ctx.strokeStyle = '#050505';
         ctx.strokeText(t.txt, 0, 0);
         ctx.fillStyle = t.color;
         ctx.fillText(t.txt, 0, 0);
@@ -1207,12 +1207,12 @@
       if (!tut || this.busy) return;
       const S = this.S;
       ctx.save();
-      ctx.fillStyle = 'rgba(10,4,24,.62)';
+      ctx.fillStyle = 'rgba(8,8,9,.62)';
       ctx.beginPath();
       ctx.rect(0, 0, this.W, this.H);
       for (const p of tut.cells) roundRect(ctx, this.ox + p.c * S + 1, this.oy + p.r * S + 1, S - 2, S - 2, S * 0.16);
       ctx.fill('evenodd');
-      ctx.strokeStyle = '#ffc531';
+      ctx.strokeStyle = '#ff2a3d';
       ctx.lineWidth = 3;
       for (const p of tut.cells) { ctx.beginPath(); roundRect(ctx, this.ox + p.c * S + 1, this.oy + p.r * S + 1, S - 2, S - 2, S * 0.16); ctx.stroke(); }
       const hand = this._spr('hand', S * 0.9);
