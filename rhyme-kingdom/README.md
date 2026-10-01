@@ -30,6 +30,11 @@ Turn the sound on: the music and every sound effect are synthesized live in the 
 | Boss fights | Level 10 Baron Buzzkill (throws crates), Level 20 Lady Lip-Sync (tapes tiles), Level 25 King Static (spreads static) |
 | End-of-level celebration | **Encore!** Leftover moves turn into spray cans and fire for bonus coins |
 
+All artwork (pieces, obstacles, characters, bosses, icons and the ten Block paintings) was
+generated with a professional image model and cut into sprites by `tools/slice.mjs`.
+Each area of the Block has a "silenced" painting and a rebuilt one; every piece you build
+lights up its part of the scene.
+
 Also included: forced-move tutorials on the levels that introduce a power-up, "New!" cards for
 each mechanic, idle hints, story scenes with every character, coins, +5 moves when you run out,
 level select, and a **Creator preview** switch in Settings that unlocks all 25 levels so you can
@@ -58,7 +63,9 @@ css/style.css     all styling
 js/engine.js      match-3 rules: matching, gravity, power-ups, combos, obstacles, bosses
 js/levels.js      the 25 level layouts
 js/render.js      canvas board renderer, animations and touch input
-js/art.js         every graphic, drawn as SVG in code
+js/art.js         art registry and the Block's build regions
+assets/           game art (WebP), cut from the generated sheets
+art-src/          original generated sheets and scene paintings
 js/audio.js       synthesized beats and sound effects (Web Audio)
 js/story.js       characters, dialog and mechanic intro cards
 js/ui.js          screens, menus, saving, boosters, win and lose flow
@@ -94,7 +101,8 @@ After changing levels, check them:
 node tools/simulate.mjs 60          # lint layouts and report bot win rates per level
 CAL=1 node tools/simulate.mjs 60    # also report how many moves each level needs
 node tools/invariants.mjs           # stress-test the engine with random play
-node tools/build.mjs                # rebuild dist/rhyme-kingdom.html
+node tools/build.mjs                # rebuild dist/rhyme-kingdom.html (inlines assets/)
+node tools/slice.mjs                # re-cut assets/ from art-src/ (needs Playwright)
 ```
 
 ## Why a web game instead of Unreal Engine
@@ -118,4 +126,4 @@ Google Play by wrapping it with [Capacitor](https://capacitorjs.com/) when you'r
 - Lives and timed refills, a shop, and ads or in-app purchases for coins
 - More chapters (each new area is 5 levels, 5 buildable pieces, and a host)
 - Leaderboards and daily challenges
-- Voiced callouts and real character art from Cloudnhyne Designz
+- Voiced callouts and animated character reactions

@@ -131,6 +131,12 @@
 
     persist() { storeSave(this.save); this.refreshCounters(); },
 
+    // The blurred painting of an area sits behind every screen.
+    setBackdrop(key, silenced) {
+      const el = $('#backdrop-art');
+      if (el) el.style.backgroundImage = `url("${Art.sceneUrl(key, silenced)}")`;
+    },
+
     show(name) {
       this.screen = name;
       for (const el of document.querySelectorAll('.screen')) el.hidden = el.id !== 'scr-' + name;
@@ -157,6 +163,7 @@
 
     _titleArt() {
       const cast = ['djDuchess', 'kingFlow', 'queenCadence'];
+      this.setBackdrop('block');
       $('#title-cast').innerHTML = cast.map((k, i) => `<img class="cast-${i}" src="${Art.portraitUrl(k)}" alt="${esc(Story.CAST[k].name)}">`).join('');
     },
 
@@ -194,6 +201,7 @@
       $('#area-count').textContent = `${n}/5 built`;
       $('#area-bar').style.width = (n / 5) * 100 + '%';
       $('#scene').innerHTML = Art.scene(ai, built);
+      this.setBackdrop(area.key, n < 5);
       const host = area.host;
       $('#host-face').src = Art.portraitUrl(host);
       $('#host-face').alt = Story.CAST[host].name;
@@ -323,6 +331,7 @@
       this.show('game');
       const ch = chapterOf(n);
       document.body.dataset.chapter = ch.bg;
+      this.setBackdrop(ch.bg);
       Snd.play(L.boss ? 'boss' : ch.track);
       $('#hud-level').textContent = `Level ${n}`;
       const hard = $('#hud-hard');

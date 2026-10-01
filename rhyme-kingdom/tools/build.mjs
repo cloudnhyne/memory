@@ -3,7 +3,7 @@
 //   node tools/build.mjs --fragment -> dist/rhyme-kingdom.fragment.html
 //                                      (no <html>/<head>/<body> wrapper, for hosts
 //                                      that supply their own page skeleton)
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -21,8 +21,15 @@ const block = (name) => {
 const head = block('head').replace(/<link rel="stylesheet" href="(css\/[^"]+)">/g, (_, href) =>
   `<style>\n${readFileSync(join(root, href), 'utf8')}</style>`);
 
+// Every generated image in assets/ ships inside the page as a data URI.
+const assets = {};
+for (const f of readdirSync(join(root, 'assets')).filter((n) => n.endsWith('.webp')).sort()) {
+  assets[f.replace(/\.webp$/, '')] = 'data:image/webp;base64,' + readFileSync(join(root, 'assets', f)).toString('base64');
+}
+const assetScript = `<script>window.RK_ASSETS=${JSON.stringify(assets)};</script>`;
+
 // Inline local scripts in order. Escape any "</script" inside the source.
-const scripts = [...block('scripts').matchAll(/<script src="([^"]+)"><\/script>/g)]
+const scripts = assetScript + '\n' + [...block('scripts').matchAll(/<script src="([^"]+)"><\/script>/g)]
   .map((m) => `<script>\n${readFileSync(join(root, m[1]), 'utf8').replace(/<\/script/gi, '<\\/script')}\n</script>`)
   .join('\n');
 

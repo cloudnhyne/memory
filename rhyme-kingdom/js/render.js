@@ -93,12 +93,12 @@
       for (let h = 1; h <= 3; h++) add('c' + h, Art.crateUrl(h));
       add('tape', Art.tapeUrl());
       add('floor', Art.floorUrl());
-      for (let k = 0; k < 4; k++) add('static' + k, Art.staticUrl(k * 7 + 3));
+      add('static', Art.staticUrl());
       add('hand', Art.handUrl());
       add('hammer', Art.iconUrl('hammer'));
       add('row', Art.iconUrl('row'));
       add('col', Art.iconUrl('col'));
-      for (const b of ['buzzkill', 'lipsync', 'static']) add('boss_' + b, Art.dataUrl(Art.BOSS_ART[b]()));
+      for (const b of ['buzzkill', 'lipsync', 'static']) add('boss_' + b, Art.portraitUrl(b));
       await Promise.all(jobs);
     }
 
@@ -169,9 +169,9 @@
       const grad = g.createLinearGradient(0, oy - 10, 0, oy + this.rows * S + 10);
       grad.addColorStop(0, '#ffd34d'); grad.addColorStop(0.5, '#ff7ab6'); grad.addColorStop(1, '#22e3ff');
       pass(7, 12, grad);
-      pass(4, 9, '#140826');
+      pass(4, 9, 'rgba(14, 6, 32, .92)');
       for (const [c, r] of cells) {
-        g.fillStyle = (c + r) % 2 ? '#2a1652' : '#341c62';
+        g.fillStyle = (c + r) % 2 ? 'rgba(46, 24, 92, .78)' : 'rgba(60, 32, 112, .78)';
         g.fillRect(ox + c * S, oy + r * S, S, S);
       }
       g.strokeStyle = 'rgba(255,255,255,.05)';
@@ -203,7 +203,17 @@
         c.width = px; c.height = px;
         const g = c.getContext('2d');
         g.imageSmoothingQuality = 'high';
-        g.drawImage(im, 0, 0, px, px);
+        if (!/^(boss_|hand|floor)/.test(key)) {
+          // soft contact shadow so the glossy pieces sit on the board
+          g.shadowColor = 'rgba(8, 2, 20, .55)';
+          g.shadowBlur = px * 0.05;
+          g.shadowOffsetY = px * 0.035;
+        }
+        if (key === 'h') {
+          g.translate(px / 2, px / 2); g.rotate(Math.PI / 2); g.translate(-px / 2, -px / 2);
+        }
+        const inset = key.startsWith('boss_') ? 0 : px * 0.02;
+        g.drawImage(im, inset, inset, px - inset * 2, px - inset * 2);
         this.cache.set(k, c);
       }
       return c;
@@ -371,7 +381,7 @@
       for (let i = 0; i < 12; i++) {
         this.part({ x: p.x + (Math.random() - 0.5) * this.S * 0.6, y: p.y + (Math.random() - 0.5) * this.S * 0.6, vx: (Math.random() - 0.5) * 220, vy: (Math.random() - 0.5) * 220, g: 0, life: 0.45, size: this.S * 0.09, color: ['#fff', '#cfc4f5', '#7b66b8'][i % 3], shape: 'sq' });
       }
-      if (ev.g != null) this.flyToGoal(ev.g, 'static0', p.x, p.y);
+      if (ev.g != null) this.flyToGoal(ev.g, 'static', p.x, p.y);
     }
 
     _tape(ev) {
@@ -796,30 +806,26 @@
         if (!cl.p) continue;
         const x = this.ox + c * S, y = this.oy + r * S;
         if (cl.floor > 0) {
-          // Unlit dance floor: four dark glass squares with neon seams.
-          ctx.fillStyle = '#0d0420';
-          ctx.beginPath(); roundRect(ctx, x + 1.5, y + 1.5, S - 3, S - 3, S * 0.14); ctx.fill();
-          const g = (S - 8) / 2;
-          for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
-            ctx.fillStyle = (i + j) % 2 ? '#2e1058' : '#22093f';
-            ctx.beginPath(); roundRect(ctx, x + 4 + i * g + 1, y + 4 + j * g + 1, g - 2, g - 2, 3); ctx.fill();
-          }
-          ctx.strokeStyle = cl.floor > 1 ? '#ff5aa8' : '#8a5cf0';
-          ctx.lineWidth = cl.floor > 1 ? 3 : 1.8;
+          // Unlit dance floor: the disco tile, dimmed to almost dark.
+          const spr = this._spr('floor', S);
+          if (spr) ctx.drawImage(spr, x + 1, y + 1, S - 2, S - 2);
+          ctx.fillStyle = 'rgba(12, 4, 28, .78)';
+          ctx.beginPath(); roundRect(ctx, x + 2, y + 2, S - 4, S - 4, S * 0.12); ctx.fill();
+          ctx.strokeStyle = cl.floor > 1 ? '#ff5aa8' : 'rgba(150, 110, 255, .7)';
+          ctx.lineWidth = cl.floor > 1 ? 3 : 1.6;
           ctx.beginPath(); roundRect(ctx, x + 2.5, y + 2.5, S - 5, S - 5, S * 0.14); ctx.stroke();
           if (cl.floor > 1) {
-            ctx.strokeStyle = 'rgba(255,90,168,.55)';
+            ctx.strokeStyle = 'rgba(255,90,168,.5)';
             ctx.lineWidth = 1.5;
             ctx.beginPath(); roundRect(ctx, x + 7, y + 7, S - 14, S - 14, S * 0.1); ctx.stroke();
           }
         } else if (cl.lit) {
-          const hue = (c * 47 + r * 29 + this.time * 50) % 360;
+          // Lit dance floor glows and pulses with the kick drum.
           const fresh = Math.max(0, 1 - (this.time - cl.litT) * 2);
-          ctx.fillStyle = `hsla(${hue}, 95%, 62%, ${0.22 + pulse * 0.22 + fresh * 0.5})`;
-          ctx.beginPath(); roundRect(ctx, x + 2, y + 2, S - 4, S - 4, S * 0.14); ctx.fill();
-          ctx.strokeStyle = `hsla(${hue}, 100%, 80%, ${0.35 + pulse * 0.3})`;
-          ctx.lineWidth = 1.5;
-          ctx.beginPath(); roundRect(ctx, x + 4, y + 4, S - 8, S - 8, S * 0.12); ctx.stroke();
+          const spr = this._spr('floor', S);
+          ctx.globalAlpha = 0.42 + pulse * 0.3 + fresh * 0.28;
+          if (spr) ctx.drawImage(spr, x + 1, y + 1, S - 2, S - 2);
+          ctx.globalAlpha = 1;
         }
       }
     }
@@ -847,7 +853,7 @@
       for (const sp of list) {
         if (sp.a <= 0.01 || sp.s <= 0.01) continue;
         const key = this._keyOf(sp);
-        const base = sp.k === 'c' ? 0.92 : sp.k === 'p' ? 0.98 : 0.9;
+        const base = sp.k === 'c' ? 0.95 : sp.k === 'p' ? 1.0 : 0.96;
         let size = S * base * sp.s;
         let x = this.ox + (sp.x + 0.5) * S, y = this.oy + (sp.y + 0.5) * S;
         let rot = sp.rot;
@@ -903,10 +909,16 @@
           const spr = this._spr('c' + b.hp, size);
           if (spr) ctx.drawImage(spr, x - size / 2 + jx, y - size / 2, size, size);
         } else if (b.t === 'static') {
-          const frame = Math.floor(this.time * 9 + c * 3 + r * 5) % 4;
+          // static crackles: a quick jitter and flicker every few frames
+          const tick = Math.floor(this.time * 12 + c * 7 + r * 3);
+          const glitch = tick % 9 === 0 ? (((tick * 37) % 7) - 3) * S * 0.012 : 0;
           const size = S * (0.98 + Math.sin(this.time * 6 + c + r) * 0.02) * pop;
-          const spr = this._spr('static' + frame, size);
-          if (spr) ctx.drawImage(spr, x - size / 2 + jx, y - size / 2, size, size);
+          const spr = this._spr('static', size);
+          if (spr) {
+            ctx.globalAlpha = tick % 13 === 0 ? 0.82 : 1;
+            ctx.drawImage(spr, x - size / 2 + jx + glitch, y - size / 2, size, size);
+            ctx.globalAlpha = 1;
+          }
         }
       }
     }
@@ -926,18 +938,29 @@
       y += Math.sin(this.time * 2.2) * S * 0.04;
       if (B.shake > 0) x += (Math.random() - 0.5) * B.shake * S * 0.2;
       if (B.wind) scale *= 1 + Math.abs(Math.sin(this.time * 18)) * 0.05;
-      const size = Math.max(w, h) * 1.08;
+      // A lit stage panel fills the boss's cells; the boss bursts out above it.
+      if (!B.dead) {
+        const bx0 = this.ox + B.x * S + 2, by0 = this.oy + B.y * S + 2;
+        const g0 = ctx.createRadialGradient(bx0 + w / 2, by0 + h * 0.9, S * 0.2, bx0 + w / 2, by0 + h * 0.6, Math.max(w, h));
+        g0.addColorStop(0, B.wind ? 'rgba(255, 59, 92, .75)' : 'rgba(176, 92, 255, .7)');
+        g0.addColorStop(1, 'rgba(20, 6, 40, .95)');
+        ctx.fillStyle = g0;
+        ctx.beginPath(); roundRect(ctx, bx0, by0, w - 4, h - 4, S * 0.25); ctx.fill();
+        ctx.strokeStyle = 'rgba(255, 197, 49, .8)'; ctx.lineWidth = 2;
+        ctx.beginPath(); roundRect(ctx, bx0, by0, w - 4, h - 4, S * 0.25); ctx.stroke();
+      }
+      const size = w * 1.45;
       const spr = this._spr('boss_' + B.kind, size);
       ctx.save();
       ctx.globalAlpha = alpha;
-      ctx.translate(x + w / 2, y + h / 2);
+      ctx.translate(x + w / 2, y + h);
       ctx.rotate(rot);
       ctx.scale(scale, scale);
-      if (spr) ctx.drawImage(spr, -size / 2, -size / 2 - S * 0.04, size, size);
+      if (spr) ctx.drawImage(spr, -size / 2, -size, size, size);
       if (B.flash > 0 && spr) {
         ctx.globalAlpha = alpha * B.flash * 0.6;
         ctx.globalCompositeOperation = 'lighter';
-        ctx.drawImage(spr, -size / 2, -size / 2 - S * 0.04, size, size);
+        ctx.drawImage(spr, -size / 2, -size, size, size);
         ctx.globalCompositeOperation = 'source-over';
       }
       ctx.restore();
@@ -1204,7 +1227,7 @@
           const a = this.center(tut.a.c, tut.a.r);
           hx = a.x; hy = a.y + Math.abs(Math.sin(this.time * 4)) * S * 0.15;
         }
-        ctx.drawImage(hand, hx - S * 0.2, hy - S * 0.05, S * 0.9, S * 0.9);
+        ctx.drawImage(hand, hx - S * 0.45, hy - S * 0.02, S * 0.9, S * 0.9);
       }
       ctx.restore();
     }
