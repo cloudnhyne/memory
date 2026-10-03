@@ -164,7 +164,8 @@
       this.offX = rect.left - app.left; this.offY = rect.top - app.top;
       this.cache.clear();
       if (!this.eng) return;
-      const S = Math.floor(Math.min((this.W - 4) / this.cols, (this.H - 4) / this.rows, 66));
+      // leave room around the grid for the chrome frame
+      const S = Math.floor(Math.min((this.W - 6) / (this.cols + 0.5), (this.H - 6) / (this.rows + 0.5), 66));
       this.S = Math.max(16, S);
       this.ox = Math.round((this.W - this.S * this.cols) / 2);
       this.oy = Math.round((this.H - this.S * this.rows) / 2);
@@ -188,19 +189,72 @@
         g.fill();
         g.restore();
       };
-      pass(9, 14, 'rgba(227,25,43,.55)', (x) => { x.shadowColor = '#e3192b'; x.shadowBlur = 22; });
-      const grad = g.createLinearGradient(0, oy - 10, 0, oy + this.rows * S + 10);
-      grad.addColorStop(0, '#f2f2f2'); grad.addColorStop(0.5, '#e3192b'); grad.addColorStop(1, '#5a5a60');
-      pass(7, 12, grad);
-      pass(4, 9, 'rgba(10, 10, 11, .92)');
+      const fw = Math.max(6, S * 0.16); // frame width
+      // drop shadow under the whole board, then a chunky frame: black, chrome, red
+      pass(fw + 3, 18, 'rgba(0,0,0,.85)', (x) => { x.shadowColor = 'rgba(0,0,0,.8)'; x.shadowBlur = 24; x.shadowOffsetY = 10; });
+      pass(fw + 3, 18, '#050505');
+      const chrome = g.createLinearGradient(0, oy - fw, 0, oy + this.rows * S + fw);
+      chrome.addColorStop(0, '#ffffff'); chrome.addColorStop(0.08, '#c9c9cf'); chrome.addColorStop(0.5, '#7d7d85');
+      chrome.addColorStop(0.52, '#e9e9ee'); chrome.addColorStop(0.92, '#8d8d93'); chrome.addColorStop(1, '#3a3a3f');
+      pass(fw + 1, 16, chrome);
+      const red = g.createLinearGradient(0, oy - fw, 0, oy + this.rows * S + fw);
+      red.addColorStop(0, '#ff6b75'); red.addColorStop(0.5, '#c3121f'); red.addColorStop(1, '#5a0710');
+      pass(fw * 0.62, 13, red);
+      pass(fw * 0.3, 10, '#050505');
+      // the recessed well the tiles sit in
+      const well = g.createLinearGradient(0, oy, 0, oy + this.rows * S);
+      well.addColorStop(0, '#0a0a0b'); well.addColorStop(1, '#1b1b1e');
+      pass(fw * 0.2, 9, well);
+      // raised, polished tiles: a thick side, a beveled face, a glossy top
+      const gap = Math.max(1.5, S * 0.05), rad = S * 0.16, depth = Math.max(2, S * 0.075);
       for (const [c, r] of cells) {
-        g.fillStyle = (c + r) % 2 ? 'rgba(36, 36, 40, .8)' : 'rgba(50, 50, 55, .8)';
-        g.fillRect(ox + c * S, oy + r * S, S, S);
+        const x = ox + c * S + gap, y = oy + r * S + gap, w = S - gap * 2, h = S - gap * 2 - depth * 0.6;
+        const alt = (c + r) % 2;
+        // cast shadow and tile side (thickness)
+        g.save();
+        g.shadowColor = 'rgba(0,0,0,.7)'; g.shadowBlur = S * 0.08; g.shadowOffsetY = S * 0.05;
+        g.fillStyle = alt ? '#1c1c20' : '#232328';
+        g.beginPath(); roundRect(g, x, y + depth * 0.6, w, h, rad); g.fill();
+        g.restore();
+        const side = g.createLinearGradient(0, y + h - rad, 0, y + h + depth * 0.6);
+        side.addColorStop(0, alt ? '#2a2a2f' : '#34343a'); side.addColorStop(1, '#0d0d0f');
+        g.fillStyle = side;
+        g.beginPath(); roundRect(g, x, y + depth * 0.6, w, h, rad); g.fill();
+        // face
+        const face = g.createLinearGradient(x, y, x + w * 0.4, y + h);
+        if (alt) { face.addColorStop(0, '#5d5d66'); face.addColorStop(0.55, '#3d3d44'); face.addColorStop(1, '#2b2b31'); }
+        else { face.addColorStop(0, '#6e6e78'); face.addColorStop(0.55, '#4a4a52'); face.addColorStop(1, '#35353c'); }
+        g.fillStyle = face;
+        g.beginPath(); roundRect(g, x, y, w, h, rad); g.fill();
+        // bevel: bright top-left rim, dark bottom-right rim
+        g.save();
+        g.beginPath(); roundRect(g, x, y, w, h, rad); g.clip();
+        g.lineWidth = Math.max(1.5, S * 0.05);
+        g.strokeStyle = 'rgba(0,0,0,.45)';
+        g.beginPath(); roundRect(g, x + 1, y + 2, w, h, rad); g.stroke();
+        g.strokeStyle = 'rgba(255,255,255,.38)';
+        g.beginPath(); roundRect(g, x - 1, y - 1.5, w, h, rad); g.stroke();
+        // gloss on the upper half, and a little specular glint
+        const gl = g.createLinearGradient(0, y, 0, y + h * 0.55);
+        gl.addColorStop(0, 'rgba(255,255,255,.28)'); gl.addColorStop(1, 'rgba(255,255,255,0)');
+        g.fillStyle = gl;
+        g.beginPath(); roundRect(g, x + w * 0.06, y + h * 0.04, w * 0.88, h * 0.46, rad * 0.8); g.fill();
+        g.fillStyle = 'rgba(255,255,255,.55)';
+        g.beginPath(); g.ellipse(x + w * 0.24, y + h * 0.17, w * 0.1, h * 0.04, -0.5, 0, Math.PI * 2); g.fill();
+        g.restore();
       }
-      g.strokeStyle = 'rgba(255,255,255,.05)';
-      g.lineWidth = 1;
-      for (const [c, r] of cells) g.strokeRect(ox + c * S + 0.5, oy + r * S + 0.5, S - 1, S - 1);
       this.bg = bg;
+      // red glow around the frame, drawn every frame so it can pump with the beat
+      const glow = document.createElement('canvas');
+      glow.width = bg.width; glow.height = bg.height;
+      const gg = glow.getContext('2d');
+      gg.setTransform(dpr, 0, 0, dpr, 0, 0);
+      gg.shadowColor = '#ff2a3d'; gg.shadowBlur = 28;
+      gg.fillStyle = '#e3192b';
+      gg.beginPath();
+      for (const [c, r] of cells) roundRect(gg, ox + c * S - fw - 4, oy + r * S - fw - 4, S + fw * 2 + 8, S + fw * 2 + 8, 20);
+      gg.fill();
+      this.glowBg = glow;
     }
 
     // ------------------------------------------------------------ geometry
@@ -236,7 +290,26 @@
           g.translate(px / 2, px / 2); g.rotate(Math.PI / 2); g.translate(-px / 2, -px / 2);
         }
         const inset = key.startsWith('boss_') ? 0 : px * 0.02;
-        g.drawImage(im, inset, inset, px - inset * 2, px - inset * 2);
+        if (/^(t\d|h|v|x|pl|d|crown|c\d)$/.test(key)) {
+          // shade the art like a lit 3D object: shine up top-left, shade low, then shadow
+          const tmp = document.createElement('canvas');
+          tmp.width = px; tmp.height = px;
+          const tg = tmp.getContext('2d');
+          tg.imageSmoothingQuality = 'high';
+          g.setTransform(1, 0, 0, 1, 0, 0);
+          if (key === 'h') { tg.translate(px / 2, px / 2); tg.rotate(Math.PI / 2); tg.translate(-px / 2, -px / 2); }
+          tg.drawImage(im, inset, inset, px - inset * 2, px - inset * 2);
+          tg.setTransform(1, 0, 0, 1, 0, 0);
+          tg.globalCompositeOperation = 'source-atop';
+          const shade = tg.createLinearGradient(0, px * 0.45, 0, px);
+          shade.addColorStop(0, 'rgba(0,0,0,0)'); shade.addColorStop(1, 'rgba(0,0,0,.38)');
+          tg.fillStyle = shade; tg.fillRect(0, 0, px, px);
+          const shine = tg.createRadialGradient(px * 0.34, px * 0.26, 0, px * 0.34, px * 0.26, px * 0.42);
+          shine.addColorStop(0, 'rgba(255,255,255,.5)'); shine.addColorStop(0.5, 'rgba(255,255,255,.12)'); shine.addColorStop(1, 'rgba(255,255,255,0)');
+          tg.fillStyle = shine; tg.fillRect(0, 0, px, px);
+          g.shadowOffsetY = px * 0.06; g.shadowBlur = px * 0.07; g.shadowColor = 'rgba(0,0,0,.75)';
+          g.drawImage(tmp, 0, 0);
+        } else g.drawImage(im, inset, inset, px - inset * 2, px - inset * 2);
         this.cache.set(k, c);
       }
       return c;
@@ -915,6 +988,11 @@
       if (this.zoom > 0.002) {
         const cx = this.ox + this.cols * this.S / 2, cy = this.oy + this.rows * this.S / 2, z = 1 + this.zoom;
         ctx.translate(cx, cy); ctx.scale(z, z); ctx.translate(-cx, -cy);
+      }
+      if (this.glowBg) {
+        ctx.globalAlpha = 0.35 + (Snd.pulse ? Snd.pulse() : 0) * 0.65;
+        ctx.drawImage(this.glowBg, 0, 0, this.W, this.H);
+        ctx.globalAlpha = 1;
       }
       ctx.drawImage(this.bg, 0, 0, this.W, this.H);
       this._drawFloors(ctx);

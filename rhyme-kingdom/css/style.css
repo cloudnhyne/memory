@@ -633,11 +633,7 @@ body[data-screen="title"] .backdrop-art { filter: blur(4px) brightness(.5) satur
 .booster .count { background: linear-gradient(180deg, #ff5a64, #c3121f); border-color: #000; box-shadow: 0 2px 0 #000; }
 .booster.active { background: radial-gradient(circle at 50% 25%, #ff5a64, #8f0b16 75%); box-shadow: 0 0 0 3px #fff, 0 0 18px rgba(255, 42, 61, .8), 0 5px 0 2px #000; }
 
-/* the board glows red with the kick drum */
-.board-wrap::before {
-  content: ''; position: absolute; inset: 2% 0; border-radius: 28px; pointer-events: none;
-  box-shadow: 0 0 calc(16px + var(--beat) * 40px) calc(var(--beat) * 6px) rgba(227, 25, 43, calc(.15 + var(--beat) * .45));
-}
+
 .modal-card { border-width: 4px; box-shadow: 0 0 0 3px #d4d4d8, 0 0 0 6px #000, 0 18px 50px rgba(0, 0, 0, .75); }
 .modal-title { font-size: 28px; }
 .stop { background: radial-gradient(circle at 50% 30%, #5c5c63, #1f1f22); box-shadow: 0 0 0 2px #9a9aa0, 0 4px 0 2px #000; }
