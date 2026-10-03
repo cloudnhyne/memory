@@ -89,12 +89,12 @@
     // inside the unlocking gesture so phones allow them to play later.
     _media() {
       const c = this.ctx;
-      const mk = () => { const a = new Audio(); a.preload = 'auto'; a.crossOrigin = 'anonymous'; return a; };
-      this.el = mk(); this.el.loop = true;
-      this.sting = mk();
       // Routing through Web Audio lets the beat drive the visuals. Pages opened
       // straight from disk can't route media, so they play the element directly.
       this.routed = !!(root.RK_ASSETS || location.protocol !== 'file:');
+      const mk = () => { const a = new Audio(); a.preload = 'auto'; if (this.routed) a.crossOrigin = 'anonymous'; return a; };
+      this.el = mk(); this.el.loop = true;
+      this.sting = mk();
       this.elGain = c.createGain(); this.elGain.gain.value = 0;
       this.analyser = c.createAnalyser(); this.analyser.fftSize = 512; this.analyser.smoothingTimeConstant = 0.5;
       this.bins = new Uint8Array(this.analyser.frequencyBinCount);

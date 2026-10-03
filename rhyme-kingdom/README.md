@@ -108,6 +108,23 @@ node tools/build.mjs                # rebuild dist/rhyme-kingdom.html (inlines a
 node tools/slice.mjs                # re-cut assets/ from art-src/ (needs Playwright)
 ```
 
+### Restyling the art with Gemini
+
+`tools/gemini-art.mjs` remakes every piece of art (cast, pieces, obstacles, icons, the ten
+Block paintings, five tall level backdrops and a logo) in one glossy 3D cartoon style, using
+the current art as the reference for each piece so layouts and characters stay the same.
+It needs a free Gemini API key from https://aistudio.google.com/apikey in `GEMINI_API_KEY`.
+
+```
+node tools/gemini-art.mjs           # make what's missing (re-runs skip finished pieces)
+node tools/gemini-art.mjs cast      # only the jobs whose name contains "cast"
+node tools/gemini-art.mjs --force   # remake everything
+node tools/slice.mjs && node tools/build.mjs
+```
+
+The first-generation art is kept in `art-src/v1/`. Sprites come back on flat magenta,
+which `slice.mjs` keys out. The style line and every prompt live at the top of the script.
+
 ## Why a web game instead of Unreal Engine
 
 Match-3 hits like Royal Match and Royal Kingdom are 2D mobile games. Unreal is built for 3D and

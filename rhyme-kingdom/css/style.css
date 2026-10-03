@@ -586,3 +586,64 @@ body[data-screen="title"] .backdrop-art { filter: blur(4px) brightness(.5) satur
 .stop.current { box-shadow: 0 0 0 4px rgba(255, 255, 255, .35), 0 3px 0 #000; }
 .new-badge { background: var(--gold); color: #fff; }
 .tag-super { background: repeating-linear-gradient(-45deg, var(--gold) 0 6px, #111 6px 12px); }
+
+/* ------------------------------------------------------------- gloss layer
+ * Royal-match style chunk: candy gloss, chrome rims, deep bevels, big type. */
+:root { --beat: 0; --chrome: linear-gradient(180deg, #ffffff, #c9c9cf 45%, #7d7d85 55%, #e9e9ee); }
+.btn {
+  border-width: 3px;
+  box-shadow: 0 6px 0 #000, 0 8px 14px rgba(0, 0, 0, .45), inset 0 -5px 0 rgba(0, 0, 0, .22), inset 0 2px 0 rgba(255, 255, 255, .7);
+  overflow: hidden;
+}
+.btn::after {
+  content: ''; position: absolute; left: 8%; right: 8%; top: 3px; height: 38%;
+  border-radius: 999px; background: linear-gradient(180deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, .05));
+  pointer-events: none;
+}
+.btn.btn-ghost::after { display: none; }
+.btn-gold, .btn-pink { background: linear-gradient(180deg, #ff6b75 0%, #e3192b 50%, #a70d18 100%); color: #fff; text-shadow: 0 2px 0 #000, 0 0 1px #000; }
+.btn-plum { background: linear-gradient(180deg, #5c5c63, #2c2c30 60%, #1a1a1c); }
+.btn-big { font-size: 22px; letter-spacing: .03em; }
+.btn:active:not([disabled]) { box-shadow: 0 2px 0 #000, inset 0 -3px 0 rgba(0, 0, 0, .22), inset 0 2px 0 rgba(255, 255, 255, .7); }
+.icon-btn { background: linear-gradient(180deg, #5c5c63, #1f1f22); box-shadow: 0 4px 0 #000, inset 0 2px 0 rgba(255, 255, 255, .35); position: relative; }
+.pill { background: linear-gradient(180deg, #2a2a2e, #0e0e10); box-shadow: inset 0 2px 0 rgba(255, 255, 255, .18), 0 3px 0 #000; }
+
+/* moves: a chrome-rimmed shield like the big puzzle hits */
+.hud-moves {
+  width: 78px; height: 84px; border-radius: 18px 18px 40px 40px;
+  background: radial-gradient(circle at 50% 28%, #ff5a64, #c3121f 45%, #5a0710 100%);
+  border: 4px solid #000;
+  box-shadow: 0 0 0 3px #d4d4d8, 0 0 0 6px #000, 0 6px 0 5px #000, 0 0 calc(10px + var(--beat) * 24px) rgba(255, 42, 61, .7);
+}
+.hud-moves .label { color: #fff; opacity: .9; }
+.hud-moves b { font-size: 34px; color: #fff; text-shadow: 0 3px 0 #000, 0 0 2px #000; }
+.hud-goals {
+  background: linear-gradient(180deg, #2b2b2f, #111113);
+  border: 3px solid #000;
+  box-shadow: 0 0 0 3px #bdbdc2, 0 0 0 6px #000, inset 0 3px 0 rgba(255, 255, 255, .12), 0 6px 0 5px #000;
+  border-radius: 20px;
+}
+.goal b { color: #fff; font-size: 18px; }
+.boosters { gap: 10px; }
+.booster {
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 25%, #4a4a50, #1a1a1c 70%);
+  box-shadow: 0 0 0 2px #9a9aa0, 0 5px 0 2px #000, inset 0 2px 0 rgba(255, 255, 255, .25);
+}
+.booster .count { background: linear-gradient(180deg, #ff5a64, #c3121f); border-color: #000; box-shadow: 0 2px 0 #000; }
+.booster.active { background: radial-gradient(circle at 50% 25%, #ff5a64, #8f0b16 75%); box-shadow: 0 0 0 3px #fff, 0 0 18px rgba(255, 42, 61, .8), 0 5px 0 2px #000; }
+
+/* the board glows red with the kick drum */
+.board-wrap::before {
+  content: ''; position: absolute; inset: 2% 0; border-radius: 28px; pointer-events: none;
+  box-shadow: 0 0 calc(16px + var(--beat) * 40px) calc(var(--beat) * 6px) rgba(227, 25, 43, calc(.15 + var(--beat) * .45));
+}
+.modal-card { border-width: 4px; box-shadow: 0 0 0 3px #d4d4d8, 0 0 0 6px #000, 0 18px 50px rgba(0, 0, 0, .75); }
+.modal-title { font-size: 28px; }
+.stop { background: radial-gradient(circle at 50% 30%, #5c5c63, #1f1f22); box-shadow: 0 0 0 2px #9a9aa0, 0 4px 0 2px #000; }
+.stop.done, .lv-done { background: radial-gradient(circle at 50% 30%, #ff6b75, #c3121f 60%, #6d0912); }
+@media (max-height: 700px) { .hud-moves { width: 64px; height: 70px; } .hud-moves b { font-size: 26px; } }
+/* full, unblurred level art behind the board once the level backdrops exist */
+body.level-art[data-screen="game"] .backdrop-art { inset: 0; filter: brightness(.82) saturate(1.05); }
+body.level-art[data-screen="game"] .backdrop::after { background: linear-gradient(180deg, rgba(8, 8, 9, .5), transparent 22%, transparent 78%, rgba(8, 8, 9, .6)); }
+.logo-img { width: min(92%, 420px); height: auto; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .6)); animation: bob 3s ease-in-out infinite; }

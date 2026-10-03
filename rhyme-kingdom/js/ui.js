@@ -132,12 +132,21 @@
     persist() { storeSave(this.save); this.refreshCounters(); },
 
     // The blurred painting of an area sits behind every screen.
-    setBackdrop(key, silenced) {
+    setBackdrop(key, silenced, level) {
       const el = $('#backdrop-art');
-      if (el) el.style.backgroundImage = `url("${Art.sceneUrl(key, silenced)}")`;
+      const lv = level && Art.has('level-' + key);
+      document.body.classList.toggle('level-art', !!lv);
+      if (el) el.style.backgroundImage = `url("${lv ? Art.levelUrl(key) : Art.sceneUrl(key, silenced)}")`;
+    },
+
+    _logo() {
+      if (!Art.has('logo')) return;
+      const h = document.querySelector('.logo');
+      if (h && !h.querySelector('img')) h.innerHTML = `<img class="logo-img" src="${Art.asset('logo')}" alt="Rhyme Kingdom">`;
     },
 
     show(name) {
+      this._logo();
       this.screen = name;
       for (const el of document.querySelectorAll('.screen')) el.hidden = el.id !== 'scr-' + name;
       document.body.dataset.screen = name;
@@ -331,7 +340,7 @@
       this.show('game');
       const ch = chapterOf(n);
       document.body.dataset.chapter = ch.bg;
-      this.setBackdrop(ch.bg);
+      this.setBackdrop(ch.bg, false, true);
       Snd.play(L.boss ? 'boss' : ch.track);
       $('#hud-level').textContent = `Level ${n}`;
       const hard = $('#hud-hard');
@@ -546,6 +555,9 @@
       const enc = this.eng.encore();
       await this.view.play(enc.events);
       Snd.fx('win');
+      this.view.text('LEVEL CLEAR!', this.view.W / 2, this.view.oy + this.view.rows * this.view.S * 0.45, Math.min(this.view.W / 7, 60), '#ffffff', 1.6, 10);
+      this.view.fireworks(8, 1.4);
+      await pause(1300);
       const coins = 20 + enc.bonus * 4;
       this.save.coins += coins;
       if (first) {

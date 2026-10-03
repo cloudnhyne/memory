@@ -29,7 +29,28 @@ const SCENES = ['block', 'shop', 'blacktop', 'wall', 'arena'];
 const browser = await chromium.launch();
 const page = await browser.newPage();
 await page.setContent('<canvas id=c></canvas>');
+// Gemini paints sprites on flat magenta: turn that into transparency (soft edges, no pink fringe).
+await page.evaluate(() => {
+  window.keyMagenta = (g, W, H) => {
+    const id = g.getImageData(0, 0, W, H), a = id.data;
+    if (a[3] < 250) return; // already transparent
+    for (let i = 0; i < a.length; i += 4) {
+      const r = a[i], gg = a[i + 1], b = a[i + 2];
+      const m = Math.min(r, b) - gg; // how magenta this pixel is
+      if (m <= 40) continue;
+      const k = Math.min(1, (m - 40) / 110);
+      a[i + 3] = Math.round(a[i + 3] * (1 - k));
+      // pull leftover pink toward neutral
+      const n = Math.max(gg, Math.round((r + b) / 2 - m * 0.8));
+      a[i] = Math.min(r, n + 30); a[i + 2] = Math.min(b, n + 30);
+    }
+    g.putImageData(id, 0, 0);
+  };
+});
 const dataUrl = (f) => 'data:image/png;base64,' + readFileSync(join(src, f)).toString('base64');
+
+const singles = SHEETS[2].names.filter((n) => existsSync(join(src, `portrait-${n}.png`)));
+if (singles.length === SHEETS[2].names.length) SHEETS.splice(2, 1);
 
 for (const sh of SHEETS) {
   const res = await page.evaluate(async ({ url, size, portrait, fixed }) => {
@@ -41,6 +62,7 @@ for (const sh of SHEETS) {
     cv.width = W; cv.height = H;
     const g = cv.getContext('2d');
     g.drawImage(im, 0, 0);
+    window.keyMagenta(g, W, H);
     const a = g.getImageData(0, 0, W, H).data;
     // connected components of opaque pixels on a 2px grid
     const S = 2, gw = Math.ceil(W / S), gh = Math.ceil(H / S);
@@ -125,4 +147,38 @@ for (const s of SCENES) {
   }
 }
 console.log('scenes done');
+
+// One sprite per file: keyed, trimmed to its content and fitted into a square
+// (portraits sit on the bottom edge) or scaled to a width (logo, backdrops).
+async function single(file, out, opts) {
+  const d = await page.evaluate(async ({ url, size, width, portrait, key, q }) => {
+    const im = new Image(); im.src = url; await im.decode();
+    const W = im.width, H = im.height;
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const g = cv.getContext('2d'); g.drawImage(im, 0, 0);
+    if (key) window.keyMagenta(g, W, H);
+    let x0 = 0, y0 = 0, x1 = W - 1, y1 = H - 1;
+    if (key) {
+      const a = g.getImageData(0, 0, W, H).data;
+      x0 = W; y0 = H; x1 = -1; y1 = -1;
+      for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) if (a[(y * W + x) * 4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+      if (x1 < 0) { x0 = 0; y0 = 0; x1 = W - 1; y1 = H - 1; }
+    }
+    const w = x1 - x0 + 1, h = y1 - y0 + 1;
+    const o = document.createElement('canvas');
+    if (width) { o.width = width; o.height = Math.round(width * h / w); } else { o.width = o.height = size; }
+    const og = o.getContext('2d'); og.imageSmoothingQuality = 'high';
+    if (width) og.drawImage(cv, x0, y0, w, h, 0, 0, o.width, o.height);
+    else {
+      const k = (size * 0.96) / Math.max(w, h), dw = w * k, dh = h * k;
+      og.drawImage(cv, x0, y0, w, h, (size - dw) / 2, portrait ? size - dh : (size - dh) / 2, dw, dh);
+    }
+    return o.toDataURL('image/webp', q);
+  }, { url: dataUrl(file), ...opts });
+  writeFileSync(join(out, opts.name + '.webp'), Buffer.from(d.split(',')[1], 'base64'));
+}
+for (const n of singles) await single(`portrait-${n}.png`, out, { name: n, size: 384, portrait: true, key: true, q: 0.86 });
+for (const s of SCENES) if (existsSync(join(src, `level-${s}.png`))) await single(`level-${s}.png`, out, { name: `level-${s}`, width: 720, key: false, q: 0.8 });
+if (existsSync(join(src, 'logo.png'))) await single('logo.png', out, { name: 'logo', width: 900, key: true, q: 0.88 });
+console.log(`singles: ${singles.length} portraits`);
 await browser.close();

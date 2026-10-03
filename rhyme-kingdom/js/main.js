@@ -20,6 +20,8 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       const pulse = root.RKSound.pulse();
+      // let CSS glow with the beat (board frame, buttons)
+      if (Math.abs(pulse - (frame.beat || 0)) > 0.04) { frame.beat = pulse; document.body.style.setProperty('--beat', pulse.toFixed(2)); }
       const bw = w / bars;
       for (let i = 0; i < bars; i++) {
         const wobble = reduce ? 0.3 : 0.25 + 0.25 * Math.sin(now / 300 + i * 1.7) + 0.2 * Math.sin(now / 170 + i * 0.6);

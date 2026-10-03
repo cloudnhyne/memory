@@ -94,6 +94,9 @@
   root.RKArt = {
     TILE_NAMES, AREAS, scene, asset: A,
     sceneUrl: (key, off) => A('scene-' + key + (off ? '-off' : '')),
+    // Optional art: only used once it exists in the bundle (tools/gemini-art.mjs makes it).
+    has: (k) => !!(root.RK_ASSETS && root.RK_ASSETS[k]),
+    levelUrl: (key) => A('level-' + key),
     tileUrl: (col) => A('t' + col),
     powerUrl: (pw) => A(pw === 'h' ? 'v' : pw),
     crownUrl: () => A('crown'),
