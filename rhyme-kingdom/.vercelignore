@@ -1,0 +1,5 @@
+# Only the playable game goes online; source art and tools stay in the repo.
+art-src
+tools
+dist/rhyme-kingdom.fragment.html
+SOUNDTRACK.md
