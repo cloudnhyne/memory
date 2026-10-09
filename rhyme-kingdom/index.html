@@ -38,6 +38,7 @@
 
   <section id="scr-home" class="screen" hidden>
     <header class="topbar">
+      <button class="pill pill-lives" id="home-lives" title="Lives"><img alt="Lives"><b>5</b><small id="lives-timer">Full</small></button>
       <div class="pill" id="home-stars" title="Stars: spend them to build"><img alt="Stars"><b>0</b></div>
       <div class="pill" id="home-coins" title="Coins: buy boosters and extra moves"><img alt="Coins"><b>0</b></div>
       <button class="icon-btn" id="btn-settings" aria-label="Settings">
@@ -51,6 +52,11 @@
       <div class="area-progress"><div class="bar"><i id="area-bar"></i></div><span id="area-count">0/5 built</span></div>
     </div>
     <div class="scene" id="scene"></div>
+    <div class="events" id="events">
+      <button class="event" data-ev="cypher"><span class="event-art"><img alt=""></span><span class="event-name">Daily Cypher</span><i class="event-badge" hidden></i></button>
+      <button class="event" data-ev="tasks"><span class="event-art"><img alt=""></span><span class="event-name">Street Tasks</span><i class="event-badge" hidden></i></button>
+      <button class="event" data-ev="drop"><span class="event-art"><img alt=""></span><span class="event-name">Daily Drop</span><i class="event-badge" hidden></i></button>
+    </div>
     <div class="host-row">
       <img id="host-face" class="host-face" alt="">
       <div class="bubble"><p class="bubble-name" id="host-name"></p><p id="host-line"></p></div>
@@ -100,6 +106,7 @@
 <!-- build:scripts -->
 <script src="js/engine.js"></script>
 <script src="js/levels.js"></script>
+<script src="js/meta.js"></script>
 <script src="js/art.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/story.js"></script>

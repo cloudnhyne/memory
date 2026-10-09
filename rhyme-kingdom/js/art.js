@@ -88,6 +88,19 @@
     return `<div class="scene-stack" role="img" aria-label="${a.name}">${html}</div>`;
   }
 
+  // Small glossy vector icons for the lives and rewards screens (no image files needed).
+  const grad = (id, a, b, c) => `<linearGradient id='${id}' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${a}'/><stop offset='.55' stop-color='${b}'/><stop offset='1' stop-color='${c}'/></linearGradient>`;
+  const HEART = "M32 57C12 43 4 33 4 21C4 12 11 5 19.5 5C25.5 5 29.5 8.5 32 13C34.5 8.5 38.5 5 44.5 5C53 5 60 12 60 21C60 33 52 43 32 57Z";
+  const SVG = {
+    heart: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}</defs><path d='${HEART}' fill='url(#g)' stroke='#050505' stroke-width='4' stroke-linejoin='round'/><ellipse cx='19' cy='18' rx='8' ry='5' fill='#fff' opacity='.6' transform='rotate(-32 19 18)'/>`,
+    heartInf: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}</defs><path d='${HEART}' fill='url(#g)' stroke='#050505' stroke-width='4' stroke-linejoin='round'/><path d='M20 29c0-4 3-6 6-6 5 0 7 12 12 12 3 0 6-2 6-6s-3-6-6-6c-5 0-7 12-12 12-3 0-6-2-6-6z' fill='none' stroke='#fff' stroke-width='4.5' stroke-linecap='round'/>`,
+    heartEmpty: `<path d='${HEART}' fill='#2c2c30' stroke='#050505' stroke-width='4' stroke-linejoin='round'/><ellipse cx='19' cy='18' rx='8' ry='5' fill='#fff' opacity='.15' transform='rotate(-32 19 18)'/>`,
+    gift: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}${grad('w', '#ffffff', '#e6e6ea', '#9a9aa0')}</defs><rect x='8' y='26' width='48' height='32' rx='5' fill='url(#g)' stroke='#050505' stroke-width='4'/><rect x='5' y='18' width='54' height='12' rx='4' fill='url(#g)' stroke='#050505' stroke-width='4'/><rect x='27' y='18' width='10' height='40' fill='url(#w)' stroke='#050505' stroke-width='3'/><path d='M32 18c-4-10-16-12-16-4 0 5 8 4 16 4zM32 18c4-10 16-12 16-4 0 5-8 4-16 4z' fill='url(#w)' stroke='#050505' stroke-width='3.5' stroke-linejoin='round'/>`,
+    share: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}</defs><circle cx='32' cy='32' r='27' fill='url(#g)' stroke='#050505' stroke-width='4'/><path d='M22 33l18-10M22 33l18 10' stroke='#fff' stroke-width='4'/><circle cx='21' cy='33' r='6' fill='#fff' stroke='#050505' stroke-width='2'/><circle cx='42' cy='22' r='6' fill='#fff' stroke='#050505' stroke-width='2'/><circle cx='42' cy='44' r='6' fill='#fff' stroke='#050505' stroke-width='2'/>`,
+    clock: `<circle cx='32' cy='32' r='26' fill='#f2f2f2' stroke='#050505' stroke-width='4'/><path d='M32 16v17l11 7' stroke='#e3192b' stroke-width='5' stroke-linecap='round' fill='none'/>`,
+  };
+  const svgUrl = (k) => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>${SVG[k]}</svg>`);
+
   const ICONS = { coin: 'i-coin', star: 'i-star', lock: 'i-lock', hammer: 'i-hammer', row: 'i-row', col: 'i-col', shuffle: 'i-shuffle', hand: 'i-hand', trophy: 'i-trophy' };
   const PORTRAIT = { static: 'static-boss' };
 
@@ -106,6 +119,6 @@
     staticUrl: () => A('static'),
     handUrl: () => A('i-hand'),
     portraitUrl: (k) => A(PORTRAIT[k] || k),
-    iconUrl: (k) => A(ICONS[k] || k),
+    iconUrl: (k) => (SVG[k] ? svgUrl(k) : A(ICONS[k] || k)),
   };
 })(typeof self !== 'undefined' ? self : this);

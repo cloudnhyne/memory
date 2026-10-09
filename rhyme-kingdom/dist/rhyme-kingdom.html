@@ -337,7 +337,7 @@ button { font: inherit; color: inherit; }
 .hud-sub .tag { margin-left: 0; }
 .boss-timer { font-family: var(--font-body); font-weight: 800; font-size: 12px; color: #ffd6da; background: rgba(255, 42, 61, .18); border: 2px solid rgba(255, 42, 61, .5); padding: 2px 8px; border-radius: 999px; }
 .boss-timer.soon { background: var(--danger); color: #fff; animation: pulse .6s ease-in-out infinite; }
-.board-wrap { position: relative; flex: 1; min-height: 0; margin-top: 6px; }
+.board-wrap { position: relative; flex: 1; min-height: 0; margin-top: 6px; margin-inline: calc(var(--gutter) * -1 + 4px); }
 #board { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; display: block; }
 .coach {
   position: relative;
@@ -654,6 +654,130 @@ body[data-screen="title"] .backdrop-art { filter: blur(4px) brightness(.5) satur
 body.level-art[data-screen="game"] .backdrop-art { inset: 0; filter: brightness(.82) saturate(1.05); }
 body.level-art[data-screen="game"] .backdrop::after { background: linear-gradient(180deg, rgba(8, 8, 9, .5), transparent 22%, transparent 78%, rgba(8, 8, 9, .6)); }
 .logo-img { width: min(92%, 420px); height: auto; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .6)); animation: bob 3s ease-in-out infinite; }
+
+/* ------------------------------------------------------- lives and gifts */
+.pill-lives { cursor: pointer; color: var(--cream); padding-right: 10px; }
+.pill-lives img { width: 28px; height: 28px; animation: heartbeat 2.4s ease-in-out infinite; }
+.pill-lives small { font-family: var(--font-body); font-weight: 800; font-size: 10px; color: var(--muted); min-width: 30px; text-align: left; font-variant-numeric: tabular-nums; }
+.pill-lives.empty { box-shadow: 0 0 0 2px var(--gold), 0 3px 0 #000; }
+.pill-lives.empty img { animation: none; }
+@keyframes heartbeat { 0%, 60%, 100% { transform: scale(1); } 10% { transform: scale(1.18); } 20% { transform: scale(1); } 30% { transform: scale(1.12); } }
+.topbar { gap: 8px; }
+.topbar .pill { font-size: 15px; }
+
+.events { display: flex; gap: 10px; margin-top: 12px; }
+.event {
+  position: relative; flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 4px 6px;
+  border-radius: 18px; border: 3px solid #000;
+  background: var(--concrete), radial-gradient(circle at 50% 20%, #4a4a50, #18181a 75%);
+  box-shadow: 0 0 0 2px #9a9aa0, 0 5px 0 2px #000, inset 0 2px 0 rgba(255, 255, 255, .25);
+  cursor: pointer; color: var(--cream);
+}
+.event:active { transform: translateY(2px); box-shadow: 0 0 0 2px #9a9aa0, 0 2px 0 2px #000; }
+.event-art img { width: 40px; height: 40px; display: block; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .6)); }
+.event[data-ev="cypher"] .event-art img { animation: spin 6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.event-name { font-family: var(--font-sign); font-size: 11px; letter-spacing: .02em; white-space: nowrap; }
+.event-badge {
+  position: absolute; top: -9px; right: -6px; font-style: normal;
+  min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px;
+  background: linear-gradient(180deg, #ff5a64, #c3121f); color: #fff; border: 2px solid #000;
+  font-family: var(--font-sign); font-size: 11px; line-height: 18px; box-shadow: 0 2px 0 #000;
+}
+.event.hot { animation: pulse 1.6s ease-in-out infinite; }
+
+.tag-gold { background: linear-gradient(180deg, #ffe17a, #e0a100); color: #000; }
+.stop.gold { box-shadow: 0 0 0 2px #ffd23f, 0 3px 0 #000; }
+.stop-gift { position: absolute; top: -10px; right: -8px; width: 22px; height: 22px; }
+
+.card-perk, .card-lives { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 8px auto 0; max-width: 32ch; font-size: 13px; font-weight: 600; line-height: 1.35; }
+.card-perk { color: #fff; background: rgba(227, 25, 43, .18); border: 2px solid rgba(255, 42, 61, .55); border-radius: 14px; padding: 6px 10px; }
+.card-perk img, .card-lives img { width: 22px; height: 22px; flex: none; }
+.card-lives { color: var(--muted); }
+
+.reward-extras { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.reward-extra { background: rgba(227, 25, 43, .16); border: 2px solid rgba(255, 42, 61, .5); border-radius: 14px; padding: 6px 8px; }
+.reward-why { margin: 0 0 4px; font-family: var(--font-sign); font-size: 12px; color: #fff; }
+.reward-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.reward-chips li { display: flex; align-items: center; gap: 4px; padding: 3px 9px 3px 4px; border-radius: 999px; background: rgba(0, 0, 0, .45); border: 2px solid rgba(255, 255, 255, .12); font-size: 12px; font-weight: 800; }
+.reward-chips img { width: 22px; height: 22px; }
+.reward-chips.big { margin: 12px 0 4px; gap: 8px; }
+.reward-chips.big li { font-size: 15px; padding: 6px 14px 6px 6px; }
+.reward-chips.big img { width: 34px; height: 34px; }
+
+.lives-hero { position: relative; width: 120px; height: 110px; margin: 0 auto 4px; display: grid; place-items: center; }
+.lives-hero img { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .6)); animation: heartbeat 2.4s ease-in-out infinite; }
+.lives-hero b { position: relative; margin-top: -8px; font-family: var(--font-sign); font-size: 40px; color: #fff; text-shadow: 0 3px 0 #000, 0 0 2px #000; }
+.free-head { margin: 14px 0 6px; font-family: var(--font-sign); font-size: 14px; color: #fff; text-align: left; }
+.free-list { display: flex; flex-direction: column; gap: 8px; }
+.free-row {
+  position: relative; display: flex; align-items: center; gap: 10px; text-align: left;
+  padding: 8px 12px 8px 8px; border-radius: 16px; border: 2px solid rgba(255, 255, 255, .12);
+  background: rgba(0, 0, 0, .4); cursor: pointer; color: var(--cream);
+}
+.free-row:active { transform: translateY(1px); }
+.free-row img { width: 40px; height: 40px; flex: none; }
+.free-row span { display: flex; flex-direction: column; min-width: 0; }
+.free-row b { font-family: var(--font-sign); font-weight: 400; font-size: 14px; }
+.free-row small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.free-row i { margin-left: auto; font-style: normal; font-family: var(--font-sign); font-size: 11px; background: linear-gradient(180deg, #ff5a64, #c3121f); border: 2px solid #000; border-radius: 999px; padding: 2px 8px; }
+
+.task-list { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.task { display: grid; grid-template-columns: 1fr auto; grid-template-areas: 'main btn' 'chips btn'; gap: 6px 10px; align-items: center; padding: 10px 12px; border-radius: 16px; background: rgba(0, 0, 0, .4); border: 2px solid rgba(255, 255, 255, .1); }
+.task.done:not(.claimed) { border-color: var(--gold); box-shadow: 0 0 14px rgba(227, 25, 43, .4); }
+.task.claimed { opacity: .6; }
+.task-main { grid-area: main; min-width: 0; }
+.task-main p { margin: 0 0 5px; font-weight: 800; font-size: 14px; }
+.task-main .bar { height: 10px; border-radius: 999px; background: rgba(255, 255, 255, .08); border: 2px solid #000; overflow: hidden; }
+.task-main .bar i { display: block; height: 100%; background: linear-gradient(90deg, #ff5a64, #e3192b); transition: width .4s ease; }
+.task-main small { font-size: 11px; color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; }
+.task .reward-chips { grid-area: chips; justify-content: flex-start; }
+.task > .btn, .task > .task-check { grid-area: btn; }
+.task-check { font-family: var(--font-sign); font-size: 12px; color: var(--muted); }
+.task-bonus { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 12px; border-radius: 16px; text-align: left; background: rgba(227, 25, 43, .16); border: 2px dashed rgba(255, 42, 61, .6); }
+.task-bonus img { width: 40px; height: 40px; }
+.task-bonus span { display: flex; flex-direction: column; flex: 1; }
+.task-bonus b { font-family: var(--font-sign); font-weight: 400; font-size: 14px; }
+.task-bonus small { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+.drop-grid { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.drop-day { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px; border-radius: 14px; background: rgba(0, 0, 0, .4); border: 2px solid rgba(255, 255, 255, .1); }
+.drop-day span { font-family: var(--font-sign); font-size: 10px; color: var(--muted); }
+.drop-day img { width: 34px; height: 34px; }
+.drop-day b { font-size: 9.5px; font-weight: 800; line-height: 1.15; text-align: center; }
+.drop-day.big { grid-column: span 2; background: rgba(227, 25, 43, .18); }
+.drop-day.today { border-color: var(--gold); box-shadow: 0 0 14px rgba(227, 25, 43, .55); }
+.drop-day.got { opacity: .45; }
+.drop-day.got::after { content: '\2713'; position: absolute; top: 2px; right: 6px; font-weight: 800; color: #fff; }
+
+.lv-scroll { max-height: min(56vh, 520px); overflow-y: auto; margin-top: 6px; padding: 2px 4px 6px; }
+.lv-chapter { margin: 12px 0 4px; font-family: var(--font-sign); font-weight: 400; font-size: 14px; color: #fff; text-align: left; }
+.lv-gold { box-shadow: 0 0 0 2px #ffd23f, 0 3px 0 #000; }
+.lv-legend span { display: flex; align-items: center; gap: 6px; justify-content: center; }
+.lv-legend img { width: 18px; height: 18px; }
+.share-link { font-family: var(--font-sign); font-size: 16px; padding: 10px; border-radius: 12px; background: rgba(0, 0, 0, .5); user-select: all; -webkit-user-select: all; word-break: break-all; }
+
+@media (max-height: 700px) {
+  .events { margin-top: 8px; }
+  .event { padding: 5px 4px 4px; }
+  .event-art img { width: 30px; height: 30px; }
+}
+@media (max-width: 360px) {
+  .topbar .pill { font-size: 13px; padding: 3px 8px 3px 4px; }
+  .topbar .pill img { width: 22px; height: 22px; }
+  .event-name { font-size: 9.5px; }
+}
+/* short phones: drop the host's speech bubble so the Block, events and path all fit */
+.home-main { justify-content: safe center; }
+@media (max-height: 760px) {
+  .host-row { display: none; }
+  .area-head { margin-top: 4px; }
+  .area-name { font-size: clamp(26px, 8vw, 36px); margin-bottom: 2px; }
+  .chapter-path { padding-top: 8px; }
+  .home-actions { margin-top: 10px; }
+}
 </style>
 </head>
 <body data-screen="title" data-chapter="block">
@@ -676,6 +800,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
 
   <section id="scr-home" class="screen" hidden>
     <header class="topbar">
+      <button class="pill pill-lives" id="home-lives" title="Lives"><img alt="Lives"><b>5</b><small id="lives-timer">Full</small></button>
       <div class="pill" id="home-stars" title="Stars: spend them to build"><img alt="Stars"><b>0</b></div>
       <div class="pill" id="home-coins" title="Coins: buy boosters and extra moves"><img alt="Coins"><b>0</b></div>
       <button class="icon-btn" id="btn-settings" aria-label="Settings">
@@ -689,6 +814,11 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       <div class="area-progress"><div class="bar"><i id="area-bar"></i></div><span id="area-count">0/5 built</span></div>
     </div>
     <div class="scene" id="scene"></div>
+    <div class="events" id="events">
+      <button class="event" data-ev="cypher"><span class="event-art"><img alt=""></span><span class="event-name">Daily Cypher</span><i class="event-badge" hidden></i></button>
+      <button class="event" data-ev="tasks"><span class="event-art"><img alt=""></span><span class="event-name">Street Tasks</span><i class="event-badge" hidden></i></button>
+      <button class="event" data-ev="drop"><span class="event-art"><img alt=""></span><span class="event-name">Daily Drop</span><i class="event-badge" hidden></i></button>
+    </div>
     <div class="host-row">
       <img id="host-face" class="host-face" alt="">
       <div class="bubble"><p class="bubble-name" id="host-name"></p><p id="host-line"></p></div>
@@ -1966,6 +2096,8 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
 <script>
 /*
  * Rhyme Kingdom: level definitions.
+ * GENERATED by tools/makelevels.mjs. Edit the specs there and rerun it; it also
+ * sets each level's move count by playing it with the balancing bot.
  *
  * board chars:  .  random tile        -  hole (not part of the board)
  *               R O Y G B P  preset tile (mic, sneaker, chain, cap, headphones, cassette)
@@ -1977,6 +2109,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
  * tape:         x  the tile is taped in place
  * goals:        { type: color|crate|floor|tape|static|crown|boss, color?, count? }
  *               count is optional for board obstacles (defaults to everything on the board)
+ * gold:         the first clear also gives a free life
  * tutorial:     forced moves at the start of the level, with an optional expected power-up
  */
 (function (root, factory) {
@@ -1987,570 +2120,2921 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
   'use strict';
 
   const LEVELS = [
-    // ---------------- Chapter 1: The Block Party ----------------
+    // ---------------- Chapter 1: The Block Party (levels 1 to 20) ----------------
     {
       id: 1, name: 'First Beat', moves: 15, colors: [0, 2, 3, 4],
-      goals: [{ type: 'color', color: 0, count: 30 }],
+      goals: [{ type: 'color', color: 0, count: 24 }],
       board: [
-        '.......',
-        '...G...',
-        '..GRY..',
-        '..RBR..',
-        '.......',
-        '.......',
-        '.......',
+        '......',
+        '..G...',
+        '.GRY..',
+        '.RBR..',
+        '......',
+        '......',
+        '......',
       ],
       tutorial: [
-        { do: 'swap', a: { c: 3, r: 2 }, b: { c: 3, r: 3 }, text: 'Swipe the mic down to line up 3 in a row.' },
+        { do: 'swap', a: { c: 2, r: 2 }, b: { c: 2, r: 3 }, text: 'Swipe the mic down to line up 3 in a row.' },
       ],
     },
     {
-      id: 2, name: 'Spray It Loud', moves: 18, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'color', color: 4, count: 24 }, { type: 'color', color: 3, count: 24 }],
-      board: [
-        '........',
-        '........',
-        '....G...',
-        '...GBR..',
-        '.RBBYBG.',
-        '........',
-        '........',
-        '........',
-      ],
+      id: 2, name: 'Spray It Loud', moves: 15, colors: [0, 2, 3, 4],
+      goals: [{ type: 'color', color: 4, count: 26 }, { type: 'color', color: 3, count: 24 }],
       intro: 'spray',
+      board: [
+        '......',
+        '......',
+        '...G..',
+        '..GBR.',
+        'RBBYB.',
+        '......',
+        '......',
+      ],
       tutorial: [
-        { do: 'swap', a: { c: 4, r: 3 }, b: { c: 4, r: 4 }, expect: { pw: 'h', c: 4, r: 4 }, text: 'Line up 4 headphones to make a Spray Can.' },
-        { do: 'tap', at: { c: 4, r: 4 }, text: 'Tap the Spray Can to tag the whole row.' },
+        { do: 'swap', a: { c: 3, r: 3 }, b: { c: 3, r: 4 }, expect: { pw: 'h', c: 3, r: 4 }, text: 'Line up 4 headphones to make a Spray Can.' },
+        { do: 'tap', at: { c: 3, r: 4 }, text: 'Tap the Spray Can to tag the whole row.' },
       ],
     },
     {
-      id: 3, name: 'Light the Floor', moves: 20, colors: [0, 1, 2, 3, 4],
+      id: 3, name: 'Light the Floor', moves: 15, colors: [0, 1, 3, 4],
       goals: [{ type: 'floor' }],
       intro: 'floor',
       board: [
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
       ],
       floor: [
-        '11111111',
-        '1......1',
-        '1.1111.1',
-        '1.1..1.1',
-        '1.1..1.1',
-        '1.1111.1',
-        '1......1',
-        '11111111',
+        '111111',
+        '111111',
+        '111111',
+        '111111',
+        '111111',
+        '111111',
+        '111111',
       ],
     },
     {
-      id: 4, name: 'Drop the Bass', moves: 17, colors: [0, 1, 2, 3, 5],
-      goals: [{ type: 'floor' }, { type: 'color', color: 2, count: 26 }],
+      id: 4, name: 'Drop the Bass', moves: 23, colors: [0, 1, 2, 3, 5],
+      goals: [{ type: 'floor' }, { type: 'color', color: 2, count: 20 }],
       intro: 'boombox',
       board: [
-        '-......-',
-        '........',
-        '....G...',
-        '....P...',
-        '....PR..',
-        '.YPPOPY.',
-        '....RG..',
-        '........',
-        '-......-',
+        '.......',
+        '...G...',
+        '...P...',
+        '...PR..',
+        'YPPOPY.',
+        '...RG..',
+        '.......',
+        '.......',
       ],
       floor: [
-        '-111111-',
-        '........',
-        '.11..11.',
-        '.11..11.',
-        '........',
-        '........',
-        '........',
-        '11....11',
-        '-1....1-',
+        '11...11',
+        '11...11',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '11...11',
+        '1111111',
       ],
       tutorial: [
-        { do: 'swap', a: { c: 5, r: 5 }, b: { c: 4, r: 5 }, expect: { pw: 'x', c: 4, r: 5 }, text: 'Match in an L or T shape to build a Boombox.' },
-        { do: 'tap', at: { c: 4, r: 5 }, text: 'Tap the Boombox to drop the bass!' },
+        { do: 'swap', a: { c: 4, r: 4 }, b: { c: 3, r: 4 }, expect: { pw: 'x', c: 3, r: 4 }, text: 'Match in an L or T shape to build a Boombox.' },
+        { do: 'tap', at: { c: 3, r: 4 }, text: 'Tap the Boombox to drop the bass!' },
       ],
     },
     {
-      id: 5, name: 'Go Platinum', moves: 20, colors: [0, 2, 3, 4, 5],
-      goals: [{ type: 'color', color: 5, count: 40 }, { type: 'color', color: 4, count: 34 }],
+      id: 5, name: 'Block Party', moves: 15, colors: [0, 1, 3, 4], gold: true,
+      goals: [{ type: 'color', color: 0, count: 34 }, { type: 'color', color: 1, count: 34 }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 6, name: 'Go Platinum', moves: 15, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'color', color: 5, count: 30 }, { type: 'color', color: 4, count: 22 }],
       intro: 'platinum',
       board: [
-        '.---.---.',
-        '..-...-..',
-        '.........',
-        '.........',
-        '....G....',
-        '...GYB...',
-        '.BYYRYYG.',
-        '....P....',
-        '.........',
+        '.......',
+        '.......',
+        '.......',
+        '...G...',
+        '..GYB..',
+        'BYYRYYG',
+        '...P...',
+        '.......',
       ],
       tutorial: [
-        { do: 'swap', a: { c: 4, r: 5 }, b: { c: 4, r: 6 }, expect: { pw: 'd', c: 4, r: 6 }, text: 'Line up 5 to go Platinum!' },
-        { do: 'swap', a: { c: 4, r: 6 }, b: { c: 4, r: 7 }, text: 'Swap the Platinum Record with a cassette to clear every cassette.' },
+        { do: 'swap', a: { c: 3, r: 4 }, b: { c: 3, r: 5 }, expect: { pw: 'd', c: 3, r: 5 }, text: 'Line up 5 to go Platinum!' },
+        { do: 'swap', a: { c: 3, r: 5 }, b: { c: 3, r: 6 }, text: 'Swap the Platinum Record with a cassette to clear every cassette.' },
       ],
     },
-
-    // ---------------- Chapter 2: The Record Shop ----------------
     {
-      id: 6, name: 'Crate Digging', moves: 15, colors: [0, 1, 2, 3, 4],
+      id: 7, name: 'Turn It Up', moves: 15, colors: [0, 2, 3, 4],
+      goals: [{ type: 'floor' }, { type: 'color', color: 3, count: 30 }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+      floor: [
+        '111111',
+        '.1111.',
+        '.1111.',
+        '.1111.',
+        '.1111.',
+        '.1111.',
+        '......',
+      ],
+    },
+    {
+      id: 8, name: 'Flyer Drop', moves: 19, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'color', color: 3, count: 22 }, { type: 'floor' }],
+      intro: 'flyer',
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '..YB...',
+        '.RGGP..',
+        '.BGRGY.',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      tutorial: [
+        { do: 'swap', a: { c: 4, r: 7 }, b: { c: 3, r: 7 }, expect: { pw: 'pl', c: 3, r: 7 }, text: 'Match 4 in a square to fold a Flyer.' },
+        { do: 'tap', at: { c: 3, r: 7 }, text: 'Tap the Flyer. It flies straight to what you need.' },
+      ],
+    },
+    {
+      id: 9, name: 'Mic Check', moves: 15, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'floor' }, { type: 'color', color: 0, count: 22 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+      floor: [
+        '..111..',
+        '.11111.',
+        '1111111',
+        '1111111',
+        '1111111',
+        '.11111.',
+        '..111..',
+      ],
+    },
+    {
+      id: 10, name: 'Fresh Kicks', moves: 18, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'color', color: 1, count: 30 }, { type: 'color', color: 2, count: 26 }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 11, name: 'Crate Digging', moves: 15, colors: [0, 1, 2, 3, 4],
       goals: [{ type: 'crate' }],
       intro: 'crate',
       board: [
-        '........',
-        '........',
-        '.1.11.1.',
-        '1.1..1.1',
-        '........',
-        '........',
-        '1.1..1.1',
-        '.1.11.1.',
-        '11....11',
+        '......',
+        '......',
+        '..11..',
+        '......',
+        '1.1.1.',
+        '.1.1.1',
+        '1.1.1.',
       ],
     },
     {
-      id: 7, name: 'Deep Crates', moves: 18, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'crate' }, { type: 'color', color: 1, count: 26 }],
+      id: 12, name: 'Stack It Up', moves: 17, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }, { type: 'color', color: 4, count: 28 }],
       board: [
-        '........',
-        '........',
-        '2......2',
-        '.2....2.',
-        '........',
-        '...22...',
-        '...22...',
-        '........',
-        '1.1..1.1',
+        '......',
+        '......',
+        '......',
+        '.1.1.1',
+        '1.1.1.',
+        '.1.1.1',
+        '......',
+        '......',
       ],
     },
     {
-      id: 8, name: 'Flyer Drop', moves: 21, colors: [0, 2, 3, 4, 5],
-      goals: [{ type: 'crate' }, { type: 'color', color: 3, count: 26 }],
-      intro: 'flyer',
-      board: [
-        '1.......1',
-        '.........',
-        '.........',
-        '2.......2',
-        '.........',
-        '...YB....',
-        '..RGGP...',
-        '1.BGRGY.1',
-        '21.BYP.12',
-      ],
-      tutorial: [
-        { do: 'swap', a: { c: 5, r: 7 }, b: { c: 4, r: 7 }, expect: { pw: 'pl', c: 4, r: 7 }, text: 'Match 4 in a square to fold a Flyer.' },
-        { do: 'tap', at: { c: 4, r: 7 }, text: 'Tap the Flyer. It flies straight to what you need.' },
-      ],
-    },
-    {
-      id: 9, name: 'Spin It Back', moves: 20, colors: [0, 1, 2, 3, 4],
+      id: 13, name: 'Corner Store', moves: 15, colors: [0, 1, 2, 3, 4],
       goals: [{ type: 'crate' }, { type: 'floor' }],
       board: [
-        '---...---',
-        '--.....--',
-        '-.......-',
-        '....2....',
-        '...2.2...',
-        '....2....',
-        '-.......-',
-        '--.....--',
-        '---...---',
+        '.......',
+        '1.....1',
+        '-.....-',
+        '-1...1-',
+        '-.....-',
+        '-.1.1.-',
+        '--...--',
       ],
       floor: [
-        '---111---',
-        '--.....--',
-        '-1.....1-',
-        '11.....11',
-        '1.......1',
-        '11.....11',
-        '-1.....1-',
-        '--.....--',
-        '---111---',
+        '.......',
+        '.......',
+        '.11111.',
+        '..111..',
+        '.11111.',
+        '.1.1.1.',
+        '..111..',
       ],
     },
     {
-      id: 10, name: 'Baron Buzzkill', moves: 22, colors: [0, 1, 2, 3, 4], hard: 1,
-      goals: [{ type: 'boss' }],
-      boss: { kind: 'buzzkill', hp: 22, every: 4, attack: 'crate', count: 2 },
-      intro: 'boss',
+      id: 14, name: 'Combo Moves', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'floor' }, { type: 'color', color: 4, count: 20 }],
+      intro: 'combo',
       board: [
-        '...KK...',
-        '...KK...',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '...hv..',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.......',
+      ],
+      tutorial: [
+        { do: 'swap', a: { c: 3, r: 4 }, b: { c: 4, r: 4 }, text: 'Swap two power-ups together for a combo!' },
+      ],
+    },
+    {
+      id: 15, name: 'Golden Hour', moves: 22, colors: [0, 1, 2, 4, 5], gold: true,
+      goals: [{ type: 'color', color: 0, count: 26 }, { type: 'color', color: 5, count: 22 }],
+      board: [
+        '-..-..-',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '---.---',
+      ],
+    },
+    {
+      id: 16, name: 'Double Up', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }],
+      board: [
+        '......',
+        '......',
+        '2....2',
+        '2....2',
+        '2....2',
+        '2....2',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 17, name: 'Speaker Stack', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }, { type: 'color', color: 3, count: 22 }],
+      board: [
+        '...-...',
+        '...-...',
+        '...-...',
+        '.......',
+        '1.1.1.1',
+        '1.1.1.1',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 18, name: 'Night Shift', moves: 15, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'crate' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '2.2.2.2',
+        '.2.2.2.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '1111111',
+        '1111111',
+        '1111111',
+      ],
+    },
+    {
+      id: 19, name: 'Last Call', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }, { type: 'floor' }, { type: 'color', color: 0, count: 24 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.1...1.',
+        '...1...',
+        '1.....1',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.11111.',
+        '.11111.',
+        '.......',
+      ],
+    },
+    {
+      id: 20, name: 'Baron Buzzkill', moves: 17, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'boss' }],
+      intro: 'boss',
+      boss: { kind: 'buzzkill', hp: 18, every: 4, attack: 'crate', count: 2 },
+      board: [
+        '..KKK..',
+        '..KKK..',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
       ],
     },
 
-    // ---------------- Chapter 3: The Blacktop ----------------
+    // ---------------- Chapter 2: The Record Shop (levels 21 to 40) ----------------
     {
-      id: 11, name: 'Taped Up', moves: 17, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'tape' }, { type: 'color', color: 0, count: 22 }],
+      id: 21, name: 'Back in the Shop', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }, { type: 'color', color: 1, count: 26 }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '2....2',
+        '.2..2.',
+        '..22..',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 22, name: 'B Side', moves: 24, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'crate' }, { type: 'color', color: 5, count: 20 }],
+      board: [
+        '.......',
+        '.......',
+        '.1---1.',
+        '.1---1.',
+        '.1---1.',
+        '.......',
+        '...2...',
+      ],
+    },
+    {
+      id: 23, name: 'Taped Up', moves: 20, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'tape' }, { type: 'color', color: 0, count: 16 }],
       intro: 'tape',
       board: [
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
       ],
       tape: [
-        'x......x',
-        '.x....x.',
-        '..x..x..',
-        '...xx...',
-        '...xx...',
-        '..x..x..',
-        '.x....x.',
-        'x......x',
-        '........',
+        'x....x',
+        '.x..x.',
+        '..xx..',
+        '..xx..',
+        '..xx..',
+        '.x..x.',
+        'x....x',
       ],
     },
     {
-      id: 12, name: 'Combo Moves', moves: 19, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'floor' }, { type: 'color', color: 4, count: 24 }],
-      intro: 'combo',
+      id: 24, name: 'Rewind', moves: 16, colors: [0, 1, 2, 4, 5],
+      goals: [{ type: 'tape' }, { type: 'color', color: 2, count: 26 }],
       board: [
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '...hv...',
-        '........',
-        '........',
-        '........',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.x.x.x.',
+        '.......',
+        '.x...x.',
+        '.......',
+        '.x.x.x.',
+        '.......',
+      ],
+    },
+    {
+      id: 25, name: 'Gold Record', moves: 16, colors: [0, 2, 3, 4, 5], gold: true,
+      goals: [{ type: 'floor' }, { type: 'color', color: 2, count: 26 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
       ],
       floor: [
-        '........',
-        '..2222..',
-        '.2....2.',
-        '.2....2.',
-        '.2....2.',
-        '.2....2.',
-        '.2....2.',
-        '..2222..',
-        '........',
-      ],
-      tutorial: [
-        { do: 'swap', a: { c: 3, r: 5 }, b: { c: 4, r: 5 }, text: 'Swap two power-ups together for a combo!' },
+        '.......',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.......',
       ],
     },
     {
-      id: 13, name: 'Crown Run', moves: 22, colors: [0, 1, 2, 3, 4],
+      id: 26, name: 'Needle Drop', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }, { type: 'tape' }],
+      board: [
+        '.......',
+        '.......',
+        '2.2.2.2',
+        '.2.2.2.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'xxxxxxx',
+      ],
+    },
+    {
+      id: 27, name: 'Crown Run', moves: 23, colors: [0, 1, 2, 3, 4],
       goals: [{ type: 'crown' }],
-      crowns: { total: 4, max: 1, gap: 3 },
       intro: 'crown',
+      crowns: { total: 3, max: 1, gap: 3 },
       board: [
-        '...C....',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
-        '........',
+        '..C...',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
       ],
     },
     {
-      id: 14, name: 'Cypher Circle', moves: 20, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'floor' }, { type: 'tape' }],
-      board: [
-        '--.....--',
-        '-.......-',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '-.......-',
-        '--.....--',
-      ],
-      floor: [
-        '--11111--',
-        '-1.....1-',
-        '1..222..1',
-        '1.2...2.1',
-        '1.2...2.1',
-        '1.2...2.1',
-        '1..222..1',
-        '-1.....1-',
-        '--11111--',
-      ],
-      tape: [
-        '.........',
-        '.x.....x.',
-        '.........',
-        '...x.x...',
-        '....x....',
-        '...x.x...',
-        '.........',
-        '.x.....x.',
-        '.........',
-      ],
-    },
-    {
-      id: 15, name: 'Windmill', moves: 22, colors: [0, 1, 2, 3, 4], hard: 1,
+      id: 28, name: 'Vinyl Vault', moves: 16, colors: [0, 1, 2, 3, 4], hard: 1,
       goals: [{ type: 'crown' }, { type: 'crate' }],
       crowns: { total: 3, max: 1, gap: 3 },
       board: [
-        '.........',
-        '.........',
-        '..1...1..',
-        '...2.2...',
-        '.........',
-        '...2.2...',
-        '..1...1..',
-        '.........',
-        '2.......2',
-      ],
-    },
-
-    // ---------------- Chapter 4: The Wall ----------------
-    {
-      id: 16, name: 'Static Spreads', moves: 16, colors: [0, 1, 2, 3, 4], spread: true,
-      goals: [{ type: 'static' }, { type: 'color', color: 3, count: 26 }],
-      intro: 'static',
-      board: [
-        '........',
-        '........',
-        '........',
-        '...SS...',
-        '........',
-        'S......S',
-        '.S....S.',
-        'S.S..S.S',
-        '.S.SS.S.',
+        '.......',
+        '.......',
+        '.......',
+        '1.....1',
+        '..1.1..',
+        '.......',
+        '.1...1.',
+        '.......',
       ],
     },
     {
-      id: 17, name: 'Triple Crates', moves: 19, colors: [0, 1, 2, 3, 4], spread: true,
-      goals: [{ type: 'crate' }, { type: 'static' }],
-      board: [
-        '..3...3..',
-        '.........',
-        '3.......3',
-        '.3.....3.',
-        '3.......3',
-        '....S....',
-        '...S.S...',
-        '....S....',
-        '.........',
-      ],
-    },
-    {
-      id: 18, name: 'Paint the Wall', moves: 22, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'floor' }, { type: 'crate' }],
-      board: [
-        '.........',
-        '.........',
-        '.........',
-        '1.1.1.1.1',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-      ],
-      floor: [
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '222222222',
-        '222222222',
-        '222222222',
-        '222222222',
-      ],
-    },
-    {
-      id: 19, name: 'Crown Heist', moves: 23, colors: [0, 1, 2, 3, 4], spread: true,
-      goals: [{ type: 'crown' }],
-      crowns: { total: 5, max: 2, gap: 2 },
-      board: [
-        '.........',
-        '.........',
-        '.........',
-        'S.......S',
-        'S.......S',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-      ],
-    },
-    {
-      id: 20, name: 'Lady Lip-Sync', moves: 24, colors: [0, 1, 2, 3, 4], hard: 1,
-      goals: [{ type: 'boss' }],
-      boss: { kind: 'lipsync', hp: 32, every: 3, attack: 'tape', count: 3 },
-      board: [
-        '...KKK...',
-        '...KKK...',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-      ],
-    },
-
-    // ---------------- Chapter 5: The Crown Arena ----------------
-    {
-      id: 21, name: 'Arena Gates', moves: 23, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'crate' }, { type: 'floor' }],
-      board: [
-        '.........',
-        '.........',
-        '.........',
-        '3.2...2.3',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '2.......2',
-        '32.....23',
-      ],
-      floor: [
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.2222222.',
-        '.2222222.',
-        '.1111111.',
-        '.1111111.',
-        '.........',
-        '.........',
-      ],
-    },
-    {
-      id: 22, name: 'Mixtape Maze', moves: 28, colors: [0, 1, 2, 3, 4],
-      goals: [{ type: 'crown' }, { type: 'color', color: 4, count: 24 }],
+      id: 29, name: 'Mixtape Maze', moves: 26, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'color', color: 4, count: 18 }],
       crowns: { total: 3, max: 1, gap: 3 },
       board: [
-        '.........',
-        '.........',
-        '.........',
-        '..--.--..',
-        '..--.--..',
-        '.........',
-        '.........',
-        '.........',
-        '-.......-',
+        '.......',
+        '.......',
+        '.......',
+        '...-...',
+        '...-...',
+        '.......',
+        '.......',
+        '.......',
       ],
     },
     {
-      id: 23, name: 'Static Storm', moves: 17, colors: [0, 1, 2, 3, 4], spread: true,
-      goals: [{ type: 'static' }, { type: 'floor' }],
+      id: 30, name: 'Liner Notes', moves: 18, colors: [1, 2, 3, 4, 5],
+      goals: [{ type: 'tape' }, { type: 'floor' }],
       board: [
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        'S.......S',
-        '.S.....S.',
-        'S.S...S.S',
-        '.S.S.S.S.',
-        'S.S...S.S',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
       ],
       floor: [
-        '.........',
-        '.2222222.',
-        '.2222222.',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-      ],
-    },
-    {
-      id: 24, name: 'All Elements', moves: 22, colors: [0, 1, 2, 3, 4], hard: 2,
-      goals: [{ type: 'crown' }, { type: 'floor' }, { type: 'crate' }],
-      crowns: { total: 3, max: 1, gap: 3 },
-      board: [
-        '.........',
-        '.........',
-        '2.......2',
-        '.........',
-        '...1.1...',
-        '.........',
-        '.........',
-        '.........',
-        '1.......1',
-        '21.....12',
-      ],
-      floor: [
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '..22222..',
-        '..22222..',
-        '.........',
-        '.........',
-        '.........',
+        '1111111',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1111111',
       ],
       tape: [
-        '.........',
-        '.........',
-        '.........',
-        '.x.....x.',
-        '.........',
-        '.........',
-        '.........',
-        '.x.....x.',
-        '.........',
-        '.........',
+        '.......',
+        '.x.x.x.',
+        '.......',
+        '.x.x.x.',
+        '.......',
+        '.x.x.x.',
+        '.......',
       ],
     },
     {
-      id: 25, name: 'King Static', moves: 27, colors: [0, 1, 2, 3, 4], hard: 2, spread: true,
-      goals: [{ type: 'boss' }],
-      boss: { kind: 'static', hp: 44, every: 3, attack: 'static', count: 2 },
+      id: 31, name: 'Triple Crates', moves: 14, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }],
       board: [
-        '...KKK...',
-        '...KKK...',
-        '...KKK...',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
-        '.........',
+        '......',
+        '......',
+        '3....3',
+        '......',
+        '..33..',
+        '2....2',
+        '.2..2.',
+        '......',
+      ],
+    },
+    {
+      id: 32, name: 'Crate Wall', moves: 14, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'crate' }, { type: 'color', color: 3, count: 28 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '2.2.2.2',
+        '.......',
+        '.1.1.1.',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 33, name: 'Deep Cuts', moves: 14, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'crate' }, { type: 'tape' }],
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '-.....-',
+        '-3...3-',
+        '-..3..-',
+        '--...--',
+      ],
+      tape: [
+        'x.x.x.x',
+        '.x.x.x.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 34, name: 'Album Wall', moves: 14, colors: [0, 1, 2, 4, 5],
+      goals: [{ type: 'floor' }, { type: 'crate' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '...1...',
+        '1.....1',
+        '..1.1..',
+        '.......',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '1111111',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 35, name: 'Gold Plaque', moves: 16, colors: [0, 1, 2, 3, 4], gold: true,
+      goals: [{ type: 'color', color: 0, count: 32 }, { type: 'color', color: 2, count: 32 }, { type: 'color', color: 4, count: 32 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 36, name: 'Spin Cycle', moves: 17, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'crate' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.1...1.',
+        '..1.1..',
+        '-.....-',
+        '--...--',
+      ],
+    },
+    {
+      id: 37, name: 'Sample Hunt', moves: 24, colors: [1, 2, 3, 4, 5], hard: 1,
+      goals: [{ type: 'crown' }, { type: 'tape' }],
+      crowns: { total: 4, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.x.x.x.',
+        'x.x.x.x',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 38, name: 'Locked Groove', moves: 15, colors: [0, 1, 2, 3, 4], hard: 2,
+      goals: [{ type: 'crown' }, { type: 'crate' }, { type: 'tape' }],
+      crowns: { total: 2, max: 1, gap: 4 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '3.....3',
+        '...3...',
+        '.2...2.',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        'x.x.x.x',
+        '.x.x.x.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 39, name: 'Listening Party', moves: 23, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'floor' }, { type: 'color', color: 5, count: 18 }],
+      board: [
+        '-..-..-',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '---.---',
+      ],
+      floor: [
+        '.11.11.',
+        '1111111',
+        '1111111',
+        '1111111',
+        '.11111.',
+        '..111..',
+        '...1...',
+      ],
+    },
+    {
+      id: 40, name: 'Lady Lip-Sync', moves: 23, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'boss' }],
+      boss: { kind: 'lipsync', hp: 24, every: 3, attack: 'tape', count: 3 },
+      board: [
+        '..KKK..',
+        '..KKK..',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+
+    // ---------------- Chapter 3: The Blacktop (levels 41 to 60) ----------------
+    {
+      id: 41, name: 'Hit the Court', moves: 14, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'floor' }, { type: 'color', color: 1, count: 28 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.......',
+      ],
+    },
+    {
+      id: 42, name: 'Cardboard Cypher', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.22222.',
+        '.22222.',
+        '.22222.',
+        '.22222.',
+        '.22222.',
+        '.......',
+      ],
+    },
+    {
+      id: 43, name: 'Fast Break', moves: 17, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'color', color: 3, count: 24 }, { type: 'color', color: 4, count: 24 }],
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 44, name: 'Crossover', moves: 18, colors: [0, 1, 2, 4, 5],
+      goals: [{ type: 'floor' }, { type: 'crate' }],
+      board: [
+        '--2.2--',
+        '--...--',
+        '.......',
+        '.......',
+        '.......',
+        '--...--',
+        '--2.2--',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '1111111',
+        '1111111',
+        '1111111',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 45, name: 'Gold Chain', moves: 14, colors: [0, 2, 3, 4], gold: true,
+      goals: [{ type: 'color', color: 2, count: 54 }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 46, name: 'Bleacher Seats', moves: 17, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }, { type: 'color', color: 0, count: 28 }],
+      board: [
+        '---....',
+        '--.....',
+        '-......',
+        '.......',
+        '.......',
+        '.1.1.1-',
+        '1.1.1--',
+        '.1.1---',
+      ],
+    },
+    {
+      id: 47, name: 'Pick and Roll', moves: 24, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'crown' }, { type: 'floor' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '1111111',
+        '1111111',
+      ],
+    },
+    {
+      id: 48, name: 'Full Court Press', moves: 16, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'crate' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '2.2.2.2',
+        '.2.2.2.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2222222',
+        '2222222',
+        '2222222',
+      ],
+    },
+    {
+      id: 49, name: 'Freeze Frame', moves: 27, colors: [1, 2, 3, 4, 5],
+      goals: [{ type: 'crown' }, { type: 'tape' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        'x.....x',
+        '.x...x.',
+        '..x.x..',
+        '...x...',
+        '...x...',
+        '..x.x..',
+        '.x...x.',
+        'x.....x',
+      ],
+    },
+    {
+      id: 50, name: 'Halftime Show', moves: 28, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'floor' }, { type: 'color', color: 4, count: 18 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+      floor: [
+        '..222..',
+        '.22222.',
+        '2222222',
+        '2222222',
+        '2222222',
+        '2222222',
+        '.22222.',
+        '..222..',
+      ],
+    },
+    {
+      id: 51, name: 'Windmill', moves: 22, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'crate' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.1...1.',
+        '..1.1..',
+        '.......',
+        '..1.1..',
+        '.1...1.',
+        '.......',
+      ],
+    },
+    {
+      id: 52, name: 'Six Step', moves: 14, colors: [0, 1, 2, 4, 5], hard: 1,
+      goals: [{ type: 'tape' }, { type: 'crate' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '...3...',
+        '.......',
+        '.2...2.',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.x.x.x.',
+        '..x.x..',
+        '.x...x.',
+        '..x.x..',
+        '...x...',
+        '..x.x..',
+        '.......',
+      ],
+    },
+    {
+      id: 53, name: 'Head Spin', moves: 20, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'floor' }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+      floor: [
+        '..111..',
+        '.22222.',
+        '1211121',
+        '1211121',
+        '1211121',
+        '.22222.',
+        '..111..',
+      ],
+    },
+    {
+      id: 54, name: 'Toprock', moves: 23, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'color', color: 0, count: 18 }],
+      crowns: { total: 4, max: 2, gap: 2 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 55, name: 'Golden Kicks', moves: 16, colors: [0, 1, 3, 4, 5], gold: true,
+      goals: [{ type: 'color', color: 1, count: 30 }, { type: 'color', color: 3, count: 30 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 56, name: 'Power Move', moves: 15, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '3.3.3.3',
+        '.......',
+        '.3.3.3.',
+        '.......',
+      ],
+    },
+    {
+      id: 57, name: 'Battle Ready', moves: 20, colors: [0, 2, 3, 4, 5], hard: 1,
+      goals: [{ type: 'floor' }, { type: 'tape' }, { type: 'crate' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.2...2.',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '2222222',
+        '2222222',
+        '2222222',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'x.x.x.x',
+        '.x.x.x.',
+      ],
+    },
+    {
+      id: 58, name: 'Breakers Circle', moves: 29, colors: [0, 1, 2, 3, 4], hard: 2,
+      goals: [{ type: 'crown' }, { type: 'floor' }, { type: 'crate' }],
+      crowns: { total: 2, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.2---2.',
+        '..---..',
+        '.2---2.',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '1111111',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1111111',
+      ],
+    },
+    {
+      id: 59, name: 'Street Lights', moves: 27, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'floor' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '...-...',
+        '...-...',
+        '...-...',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '1111111',
+        '1111111',
+        '1111111',
+      ],
+    },
+    {
+      id: 60, name: 'Buzzkill Remix', moves: 27, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'boss' }],
+      boss: { kind: 'buzzkill', hp: 28, every: 3, attack: 'crate', count: 3 },
+      board: [
+        '..KKK..',
+        '..KKK..',
+        '.......',
+        '.......',
+        '1.....1',
+        '.......',
+        '.1...1.',
+        '.......',
+      ],
+    },
+
+    // ---------------- Chapter 4: The Wall (levels 61 to 80) ----------------
+    {
+      id: 61, name: 'Blank Canvas', moves: 17, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'floor' }, { type: 'color', color: 3, count: 26 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+      ],
+    },
+    {
+      id: 62, name: 'Static Spreads', moves: 14, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'static' }, { type: 'color', color: 3, count: 18 }],
+      intro: 'static',
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '.S.S.S',
+        'S.S.S.',
+        '.S.S.S',
+      ],
+    },
+    {
+      id: 63, name: 'Outline', moves: 14, colors: [0, 2, 3, 4, 5], spread: true,
+      goals: [{ type: 'static' }, { type: 'color', color: 5, count: 28 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'S.....S',
+        '.S...S.',
+        'S.S.S.S',
+      ],
+    },
+    {
+      id: 64, name: 'Fill In', moves: 16, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '..S.S..',
+        '...S...',
+        '..S.S..',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '1111111',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1111111',
+      ],
+    },
+    {
+      id: 65, name: 'Gold Leaf', moves: 22, colors: [0, 1, 2, 3, 4], gold: true,
+      goals: [{ type: 'color', color: 2, count: 30 }, { type: 'color', color: 0, count: 24 }],
+      board: [
+        '-..-..-',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '---.---',
+      ],
+    },
+    {
+      id: 66, name: 'Drip Effect', moves: 14, colors: [0, 1, 2, 4, 5], spread: true,
+      goals: [{ type: 'static' }, { type: 'crate' }],
+      board: [
+        '.......',
+        '.......',
+        '.3.3.3.',
+        '.......',
+        '.......',
+        'S.S.S.S',
+        '.S.S.S.',
+        'S.S.S.S',
+      ],
+    },
+    {
+      id: 67, name: 'Wildstyle', moves: 14, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'static' }, { type: 'tape' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'S.....S',
+        '.S...S.',
+        'S.S.S.S',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.x.x.x.',
+        'x.x.x.x',
+        '.x.x.x.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 68, name: 'Subway Car', moves: 17, colors: [0, 2, 3, 4, 5], hard: 1, spread: true,
+      goals: [{ type: 'crown' }, { type: 'static' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.S.S.S.',
+      ],
+    },
+    {
+      id: 69, name: 'Spray Pattern', moves: 22, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '2.2.2.2',
+        '.2.2.2.',
+        '2.2.2.2',
+        '.2.2.2.',
+        '2.2.2.2',
+        '.2.2.2.',
+        '2.2.2.2',
+        '.2.2.2.',
+      ],
+    },
+    {
+      id: 70, name: 'Tag Team', moves: 14, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'static' }, { type: 'crate' }],
+      board: [
+        '.......',
+        '..3.3..',
+        '3.....3',
+        '...S...',
+        '.......',
+        '.3...3.',
+        '...S...',
+        '.......',
+      ],
+    },
+    {
+      id: 71, name: 'Mural Day', moves: 18, colors: [1, 2, 3, 4, 5],
+      goals: [{ type: 'floor' }, { type: 'color', color: 5, count: 20 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+      floor: [
+        '..111..',
+        '.11111.',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '.11111.',
+        '..111..',
+      ],
+    },
+    {
+      id: 72, name: 'Night Painters', moves: 14, colors: [0, 1, 2, 3, 4], hard: 1, spread: true,
+      goals: [{ type: 'static' }, { type: 'color', color: 0, count: 26 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.S.S.S.',
+        'S.S.S.S',
+        '.S.S.S.',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+    },
+    {
+      id: 73, name: 'Color Burst', moves: 14, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'color', color: 0, count: 30 }, { type: 'color', color: 1, count: 30 }, { type: 'color', color: 3, count: 30 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 74, name: 'Stencil', moves: 21, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'tape' }, { type: 'floor' }],
+      board: [
+        '--...--',
+        '--...--',
+        '.......',
+        '.......',
+        '.......',
+        '--...--',
+        '--...--',
+      ],
+      floor: [
+        '..111..',
+        '..111..',
+        '1111111',
+        '1111111',
+        '1111111',
+        '..111..',
+        '..111..',
+      ],
+      tape: [
+        '.......',
+        '.......',
+        'x.x.x.x',
+        '.x.x.x.',
+        'x.x.x.x',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 75, name: 'Golden Wall', moves: 15, colors: [0, 2, 3, 4, 5], gold: true,
+      goals: [{ type: 'floor' }, { type: 'color', color: 5, count: 30 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.11111.',
+        '.......',
+      ],
+    },
+    {
+      id: 76, name: 'Paint Cans', moves: 14, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'crate' }, { type: 'static' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.3...3.',
+        '.......',
+        '..3.3..',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+    },
+    {
+      id: 77, name: 'Masterpiece', moves: 14, colors: [0, 1, 2, 4, 5], hard: 1, spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        'S..S..S',
+        '.......',
+        '.S...S.',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2222222',
+        '2222222',
+      ],
+    },
+    {
+      id: 78, name: 'Static Storm', moves: 14, colors: [0, 1, 2, 3, 4], hard: 2, spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.S.S.S.',
+        'S.S.S.S',
+        '.S.S.S.',
+        'S.S.S.S',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 79, name: 'Final Coat', moves: 26, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'crown' }, { type: 'static' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '...-...',
+        '...-...',
+        'S.....S',
+        '.S...S.',
+        '.......',
+      ],
+    },
+    {
+      id: 80, name: 'Lip-Sync Encore', moves: 30, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'boss' }, { type: 'floor' }],
+      boss: { kind: 'lipsync', hp: 30, every: 3, attack: 'tape', count: 3 },
+      board: [
+        '..KKK..',
+        '..KKK..',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '1111111',
+        '1111111',
+      ],
+    },
+
+    // ---------------- Chapter 5: The Crown Arena (levels 81 to 100) ----------------
+    {
+      id: 81, name: 'Arena Gates', moves: 14, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crate' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '3.3.3.3',
+        '.......',
+        '.3...3.',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '..222..',
+        '.22222.',
+        '.......',
+      ],
+    },
+    {
+      id: 82, name: 'Soundcheck', moves: 16, colors: [0, 1, 3, 4, 5],
+      goals: [{ type: 'color', color: 0, count: 32 }, { type: 'color', color: 4, count: 32 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 83, name: 'Spotlight', moves: 25, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'floor' }, { type: 'tape' }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+      floor: [
+        '..222..',
+        '.22222.',
+        '2222222',
+        '2222222',
+        '2222222',
+        '2222222',
+        '.22222.',
+        '..222..',
+      ],
+      tape: [
+        '.......',
+        '..x.x..',
+        '.x...x.',
+        '.......',
+        '.x...x.',
+        '.......',
+        '.x.x.x.',
+        '.......',
+      ],
+    },
+    {
+      id: 84, name: 'Crowd Wave', moves: 22, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'color', color: 1, count: 16 }],
+      crowns: { total: 4, max: 2, gap: 2 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 85, name: 'Gold Mic', moves: 19, colors: [0, 1, 2, 3, 4], gold: true,
+      goals: [{ type: 'color', color: 0, count: 40 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 86, name: 'Backstage', moves: 15, colors: [0, 2, 3, 4, 5],
+      goals: [{ type: 'crate' }, { type: 'tape' }],
+      board: [
+        '.......',
+        '.......',
+        '...3...',
+        '.3...3.',
+        '.......',
+        '3.....3',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'x.x.x.x',
+        '.x.x.x.',
+      ],
+    },
+    {
+      id: 87, name: 'Light Rig', moves: 15, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'floor' }, { type: 'static' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 88, name: 'Encore Please', moves: 18, colors: [0, 1, 2, 3, 4], hard: 1,
+      goals: [{ type: 'crown' }, { type: 'crate' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '...1...',
+        '.......',
+        '2.2.2.2',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 89, name: 'Main Stage', moves: 35, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'floor' }, { type: 'color', color: 2, count: 16 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '..---..',
+        '..---..',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '22...22',
+        '22...22',
+      ],
+    },
+    {
+      id: 90, name: 'Hype Man', moves: 22, colors: [0, 1, 2, 4, 5], spread: true,
+      goals: [{ type: 'crown' }, { type: 'static' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+    },
+    {
+      id: 91, name: 'All Elements', moves: 16, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'floor' }, { type: 'crate' }],
+      crowns: { total: 2, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2.....2',
+        '.......',
+        '.2...2.',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '..222..',
+        '..222..',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 92, name: 'Mic Stand', moves: 14, colors: [0, 1, 2, 3, 4], hard: 1, spread: true,
+      goals: [{ type: 'tape' }, { type: 'static' }, { type: 'color', color: 4, count: 24 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.S.S.S.',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+      tape: [
+        'x.x.x.x',
+        '.x.x.x.',
+        'x.x.x.x',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 93, name: 'Front Row', moves: 20, colors: [0, 1, 2, 3, 4, 5],
+      goals: [{ type: 'color', color: 2, count: 20 }, { type: 'color', color: 4, count: 20 }, { type: 'color', color: 5, count: 20 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 94, name: 'Throne Room', moves: 27, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'floor' }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.-.-.-.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2222222',
+        '2222222',
+        '2222222',
+      ],
+    },
+    {
+      id: 95, name: 'Golden Throne', moves: 18, colors: [0, 1, 2, 3, 4], gold: true,
+      goals: [{ type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+        '1111111',
+      ],
+    },
+    {
+      id: 96, name: 'The Cypher', moves: 29, colors: [0, 1, 2, 3, 4], spread: true,
+      goals: [{ type: 'floor' }, { type: 'crate' }, { type: 'static' }],
+      board: [
+        '.......',
+        '.3...3.',
+        '..---..',
+        '..---..',
+        '..---..',
+        '.......',
+        '...S...',
+      ],
+      floor: [
+        '1111111',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '1.....1',
+        '111.111',
+      ],
+    },
+    {
+      id: 97, name: 'Royal Court', moves: 14, colors: [0, 1, 2, 3, 4], hard: 1, spread: true,
+      goals: [{ type: 'crate' }, { type: 'static' }],
+      board: [
+        '.......',
+        '.......',
+        '3.3.3.3',
+        '.......',
+        '.3...3.',
+        '.S.S.S.',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+    },
+    {
+      id: 98, name: 'Static Surge', moves: 17, colors: [0, 1, 2, 3, 4], hard: 2, spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        'S.S.S.S',
+        '.S.S.S.',
+        'S.S.S.S',
+        '.S.S.S.',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+      floor: [
+        '2222222',
+        '2222222',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 99, name: 'Crown Ceremony', moves: 30, colors: [0, 1, 2, 3, 4],
+      goals: [{ type: 'crown' }, { type: 'floor' }],
+      crowns: { total: 4, max: 1, gap: 3 },
+      board: [
+        '.-.-.-.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '1111111',
+        '1111111',
+      ],
+    },
+    {
+      id: 100, name: 'King Static', moves: 31, colors: [0, 1, 2, 3, 4], hard: 2, spread: true,
+      goals: [{ type: 'boss' }],
+      boss: { kind: 'static', hp: 36, every: 3, attack: 'static', count: 2 },
+      board: [
+        '..KKK..',
+        '..KKK..',
+        '..KKK..',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
       ],
     },
   ];
 
-  return { LEVELS };
+  // Daily Cypher: one plays each day, free, with a life for the win.
+  const DAILY = [
+    {
+      id: 1001, name: 'Morning Cypher', moves: 20, colors: [0, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'color', color: 0, count: 30 }, { type: 'color', color: 3, count: 30 }],
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1002, name: 'Block Cypher', moves: 14, colors: [0, 1, 2, 3, 4], daily: true,
+      goals: [{ type: 'crate' }, { type: 'color', color: 1, count: 26 }],
+      board: [
+        '......',
+        '......',
+        '2.2.2.',
+        '.2.2.2',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 1003, name: 'Freestyle Friday', moves: 15, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'floor' }, { type: 'color', color: 4, count: 24 }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+      floor: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '111111',
+        '111111',
+        '111111',
+      ],
+    },
+    {
+      id: 1004, name: 'Open Mic', moves: 16, colors: [0, 1, 2, 4, 5], daily: true,
+      goals: [{ type: 'tape' }, { type: 'crate' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '...-...',
+        '.2.-.2.',
+        '...2...',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        '.......',
+        '.x.x.x.',
+        '.......',
+        '.x...x.',
+        '.......',
+        '.x...x.',
+        '..x.x..',
+        '.......',
+      ],
+    },
+    {
+      id: 1005, name: 'Rooftop Session', moves: 23, colors: [0, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crown' }, { type: 'color', color: 5, count: 16 }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1006, name: 'Corner Cypher', moves: 17, colors: [0, 1, 3, 4, 5], daily: true, spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '-.....-',
+        '-.S.S.-',
+        '-S.S.S-',
+        '--S.S--',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '.11111.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1007, name: 'Late Night Set', moves: 22, colors: [0, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crate' }, { type: 'floor' }],
+      board: [
+        '--...--',
+        '--...--',
+        '.3...3.',
+        '3.....3',
+        '..3.3..',
+        '--...--',
+        '--...--',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '..222..',
+        '..222..',
+      ],
+    },
+    {
+      id: 1008, name: 'Sunday Jam', moves: 22, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crown' }, { type: 'floor' }],
+      crowns: { total: 2, max: 1, gap: 3 },
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+      floor: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '222222',
+        '222222',
+      ],
+    },
+    {
+      id: 1009, name: 'Park Jam', moves: 16, colors: [0, 1, 2, 3, 4], daily: true,
+      goals: [{ type: 'color', color: 0, count: 30 }, { type: 'color', color: 2, count: 30 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+    },
+    {
+      id: 1010, name: 'Stoop Session', moves: 14, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crate' }, { type: 'color', color: 2, count: 26 }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '2....2',
+        '......',
+        '..22..',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 1011, name: 'Beat Battle', moves: 34, colors: [0, 1, 2, 4, 5], daily: true,
+      goals: [{ type: 'floor' }, { type: 'color', color: 4, count: 24 }],
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '2222222',
+        '2.....2',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2.....2',
+        '2222222',
+      ],
+    },
+    {
+      id: 1012, name: 'Crate Session', moves: 14, colors: [0, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'tape' }, { type: 'crate' }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '.2..2.',
+        '..22..',
+        '......',
+        '......',
+      ],
+      tape: [
+        'x.x.x.',
+        '.x.x.x',
+        'x.x.x.',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 1013, name: 'Boom Bap Break', moves: 22, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crown' }, { type: 'color', color: 5, count: 16 }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '-.....-',
+        '-.....-',
+        '-.....-',
+        '--...--',
+      ],
+    },
+    {
+      id: 1014, name: 'Golden Era', moves: 25, colors: [0, 1, 3, 4, 5], daily: true, spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '--...--',
+        '-S.S.S-',
+        'S.S.S.S',
+        '.S.S.S.',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '.11111.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1015, name: 'Sample Day', moves: 25, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crate' }, { type: 'floor' }],
+      board: [
+        '-..-..-',
+        '.......',
+        '.3...3.',
+        '3.....3',
+        '-.3.3.-',
+        '--...--',
+        '---.---',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '..222..',
+        '...2...',
+      ],
+    },
+    {
+      id: 1016, name: 'Dance Break', moves: 20, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crown' }, { type: 'floor' }],
+      crowns: { total: 2, max: 1, gap: 3 },
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2222222',
+        '2222222',
+      ],
+    },
+    {
+      id: 1017, name: 'Tag Day', moves: 22, colors: [0, 1, 2, 4, 5], daily: true,
+      goals: [{ type: 'color', color: 0, count: 30 }, { type: 'color', color: 2, count: 30 }],
+      board: [
+        '--...--',
+        '--...--',
+        '.......',
+        '.......',
+        '.......',
+        '--...--',
+        '--...--',
+      ],
+    },
+    {
+      id: 1018, name: 'Mixtape Monday', moves: 15, colors: [0, 1, 2, 4, 5], daily: true,
+      goals: [{ type: 'crate' }, { type: 'color', color: 1, count: 26 }],
+      board: [
+        '...-...',
+        '...-...',
+        '1.1-1.1',
+        '.1.1.1.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1019, name: 'Throwback Thursday', moves: 14, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'floor' }, { type: 'color', color: 4, count: 24 }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '1111111',
+        '1111111',
+        '1111111',
+      ],
+    },
+    {
+      id: 1020, name: 'Cookout Cypher', moves: 14, colors: [0, 1, 2, 3, 4], daily: true,
+      goals: [{ type: 'tape' }, { type: 'crate' }],
+      board: [
+        '-..-..-',
+        '.......',
+        '.......',
+        '.......',
+        '-2...2-',
+        '--.2.--',
+        '---.---',
+      ],
+      tape: [
+        '.......',
+        '.x.x.x.',
+        '.......',
+        '.x...x.',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1021, name: 'Bus Stop Bars', moves: 23, colors: [0, 1, 3, 4, 5], daily: true,
+      goals: [{ type: 'crown' }, { type: 'color', color: 5, count: 16 }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+    },
+    {
+      id: 1022, name: 'Front Stoop', moves: 16, colors: [0, 1, 2, 4, 5], daily: true, spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        'S.S.S.S',
+        '.S.S.S.',
+        'S.S.S.S',
+      ],
+      floor: [
+        '1111111',
+        '1111111',
+        '1111111',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1023, name: 'Summer Jam', moves: 24, colors: [0, 1, 3, 4, 5], daily: true,
+      goals: [{ type: 'crate' }, { type: 'floor' }],
+      board: [
+        '.......',
+        '.......',
+        '.3...3.',
+        '3..-..3',
+        '..3-3..',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2222222',
+        '2222222',
+      ],
+    },
+    {
+      id: 1024, name: 'Lunch Break Bars', moves: 19, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crown' }, { type: 'floor' }],
+      crowns: { total: 2, max: 1, gap: 3 },
+      board: [
+        '.-.-.-.',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '2222222',
+        '2222222',
+      ],
+    },
+    {
+      id: 1025, name: 'Record Fair', moves: 17, colors: [0, 1, 3, 4, 5], daily: true,
+      goals: [{ type: 'color', color: 0, count: 30 }, { type: 'color', color: 3, count: 30 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+    },
+    {
+      id: 1026, name: 'Turntable Tuesday', moves: 15, colors: [1, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'crate' }, { type: 'color', color: 2, count: 26 }],
+      board: [
+        '--...--',
+        '-.....-',
+        '2.2.2.2',
+        '.2.2.2.',
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+      ],
+    },
+    {
+      id: 1027, name: 'Wax Wednesday', moves: 16, colors: [0, 1, 2, 4, 5], daily: true,
+      goals: [{ type: 'floor' }, { type: 'color', color: 4, count: 24 }],
+      board: [
+        '.......',
+        '.......',
+        '-.....-',
+        '--...--',
+        '--...--',
+        '-.....-',
+        '.......',
+        '.......',
+      ],
+      floor: [
+        '.......',
+        '.11111.',
+        '.11111.',
+        '..111..',
+        '..111..',
+        '.11111.',
+        '.11111.',
+        '.......',
+      ],
+    },
+    {
+      id: 1028, name: 'Soundclash', moves: 14, colors: [0, 2, 3, 4, 5], daily: true,
+      goals: [{ type: 'tape' }, { type: 'crate' }],
+      board: [
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.2...2.',
+        '...2...',
+        '.......',
+        '.......',
+      ],
+      tape: [
+        'x.x.x.x',
+        '.x.x.x.',
+        'x.x.x.x',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+        '.......',
+      ],
+    },
+    {
+      id: 1029, name: 'Hometown Hero', moves: 17, colors: [0, 1, 3, 4, 5], daily: true,
+      goals: [{ type: 'crown' }, { type: 'color', color: 5, count: 16 }],
+      crowns: { total: 3, max: 1, gap: 3 },
+      board: [
+        '--...--',
+        '--...--',
+        '.......',
+        '.......',
+        '.......',
+        '--...--',
+        '--...--',
+      ],
+    },
+    {
+      id: 1030, name: 'Weekend Warmup', moves: 16, colors: [0, 2, 3, 4, 5], daily: true, spread: true,
+      goals: [{ type: 'static' }, { type: 'floor' }],
+      board: [
+        '......',
+        '......',
+        '......',
+        '......',
+        'S.S.S.',
+        '.S.S.S',
+        'S.S.S.',
+      ],
+      floor: [
+        '111111',
+        '111111',
+        '111111',
+        '......',
+        '......',
+        '......',
+        '......',
+      ],
+    },
+  ];
+
+  return { LEVELS, DAILY };
+});
+
+</script>
+<script>
+/*
+ * Rhyme Kingdom: lives, daily tasks and daily rewards.
+ *
+ * Pure rules over the save object and a clock (no DOM), so they run in the
+ * browser (window.RKMeta) and in Node tests. Every function takes `now` (ms).
+ *
+ * Lives:  5 max, one comes back every 30 minutes. A life is used when you fail
+ *         a level or quit one after making a move. Rewards can stack lives past
+ *         5 (up to 9); timed "unlimited lives" stop lives from being used.
+ * Free lives: Daily Cypher win, Street Tasks, the Daily Drop calendar, Gold
+ *         levels (every level ending in 5), a 3-win hot streak, boss wins,
+ *         and sharing the game once a day.
+ */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.RKMeta = api;
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  const MAX_LIVES = 5;
+  const LIFE_CAP = 9;
+  const REGEN_MS = 30 * 60 * 1000;
+  const REFILL_PRICE = 250;
+  const MIN = 60 * 1000;
+
+  // ---------------------------------------------------------------- dates
+  const pad = (n) => String(n).padStart(2, '0');
+  function today(now) {
+    const d = new Date(now);
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+  // Days since 2026-01-01 in local time: picks the Daily Cypher and the task color.
+  function dayNumber(now) {
+    const d = new Date(now);
+    return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - new Date(2026, 0, 1)) / 86400000);
+  }
+  function msToMidnight(now) {
+    const d = new Date(now);
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1) - d;
+  }
+  function clock(ms) {
+    const s = Math.max(0, Math.ceil(ms / 1000));
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = s % 60;
+    return h ? `${h}h ${pad(m)}m` : `${m}:${pad(ss)}`;
+  }
+
+  // ---------------------------------------------------------------- lives
+  function ensure(save) {
+    if (!save.lives || typeof save.lives !== 'object') save.lives = { n: MAX_LIVES, t: 0, inf: 0 };
+    if (typeof save.streak !== 'number') save.streak = 0;
+    if (!save.daily || typeof save.daily !== 'object') save.daily = { day: '' };
+    if (!save.drop || typeof save.drop !== 'object') save.drop = { last: '', idx: 0 };
+    return save;
+  }
+  // Bring regenerated lives up to date.
+  function tick(save, now) {
+    const L = ensure(save).lives;
+    if (L.n >= MAX_LIVES) { L.t = 0; return; }
+    if (!L.t) { L.t = now; return; }
+    const k = Math.floor((now - L.t) / REGEN_MS);
+    if (k > 0) {
+      L.n = Math.min(MAX_LIVES, L.n + k);
+      L.t = L.n >= MAX_LIVES ? 0 : L.t + k * REGEN_MS;
+    }
+  }
+  const unlimited = (save, now) => !!save.creatorLives || ensure(save).lives.inf > now;
+  function status(save, now) {
+    tick(save, now);
+    const L = save.lives;
+    return {
+      n: L.n,
+      unlimited: unlimited(save, now),
+      infLeft: Math.max(0, L.inf - now),
+      next: L.n < MAX_LIVES && L.t ? Math.max(0, REGEN_MS - (now - L.t)) : 0,
+      full: L.n >= MAX_LIVES,
+    };
+  }
+  function canPlay(save, now) {
+    tick(save, now);
+    return unlimited(save, now) || save.lives.n > 0;
+  }
+  // Returns true when a life was actually used.
+  function loseLife(save, now) {
+    tick(save, now);
+    if (unlimited(save, now)) return false;
+    const L = save.lives;
+    if (L.n <= 0) return false;
+    L.n--;
+    if (L.n < MAX_LIVES && !L.t) L.t = now;
+    return true;
+  }
+  function addLives(save, k, now) {
+    tick(save, now);
+    const L = save.lives;
+    L.n = Math.min(LIFE_CAP, L.n + k);
+    if (L.n >= MAX_LIVES) L.t = 0;
+  }
+  function addUnlimited(save, minutes, now) {
+    const L = ensure(save).lives;
+    L.inf = Math.max(L.inf, now) + minutes * MIN;
+  }
+  function refill(save, now) {
+    tick(save, now);
+    if (save.lives.n < MAX_LIVES) save.lives.n = MAX_LIVES;
+    save.lives.t = 0;
+  }
+
+  // Apply a reward: { lives, coins, unlimited (minutes), boosters: { type: n } }
+  function grant(save, reward, now) {
+    if (!reward) return;
+    if (reward.lives) addLives(save, reward.lives, now);
+    if (reward.coins) save.coins = (save.coins || 0) + reward.coins;
+    if (reward.unlimited) addUnlimited(save, reward.unlimited, now);
+    if (reward.refill) refill(save, now);
+    for (const [k, n] of Object.entries(reward.boosters || {})) save.boosters[k] = (save.boosters[k] || 0) + n;
+  }
+  function describe(reward) {
+    const out = [];
+    if (!reward) return out;
+    if (reward.refill) out.push({ icon: 'heart', text: 'Full lives' });
+    if (reward.lives) out.push({ icon: 'heart', text: `+${reward.lives} ${reward.lives === 1 ? 'life' : 'lives'}` });
+    if (reward.unlimited) out.push({ icon: 'heartInf', text: `${reward.unlimited >= 60 ? reward.unlimited / 60 + ' hr' : reward.unlimited + ' min'} unlimited lives` });
+    if (reward.coins) out.push({ icon: 'coin', text: `+${reward.coins} coins` });
+    for (const [k, n] of Object.entries(reward.boosters || {})) out.push({ icon: k, text: `+${n} ${BOOSTER_NAMES[k] || k}` });
+    return out;
+  }
+  const BOOSTER_NAMES = { hammer: 'Mic Drop', row: 'Scratch', col: 'Bass Drop', shuffle: 'Remix' };
+
+  // ---------------------------------------------------------- street tasks
+  // Three a day: two that give lives, one that gives coins. Finish all three
+  // for 30 minutes of unlimited lives. `from` is the first level where the
+  // task makes sense (no crate tasks before crates exist).
+  const TILE_NAMES = ['Mics', 'Sneakers', 'Gold Chains', 'Snapbacks', 'Headphones', 'Mixtapes'];
+  const LIFE_TASKS = [
+    { id: 'win2', stat: 'wins', need: 2, text: 'Win 2 levels', reward: { lives: 1 }, from: 1 },
+    { id: 'moves', stat: 'moves', need: 25, text: 'Make 25 moves', reward: { lives: 1 }, from: 1 },
+    { id: 'win3', stat: 'wins', need: 3, text: 'Win 3 levels', reward: { lives: 2 }, from: 6 },
+    { id: 'spray', stat: 'spray', need: 5, text: 'Fire 5 Spray Cans', reward: { lives: 1 }, from: 3 },
+    { id: 'boom', stat: 'boom', need: 3, text: 'Drop 3 Boomboxes', reward: { lives: 1 }, from: 5 },
+    { id: 'plat', stat: 'plat', need: 2, text: 'Spin 2 Platinum Records', reward: { lives: 1 }, from: 7 },
+    { id: 'combo', stat: 'combos', need: 2, text: 'Pull off 2 power-up combos', reward: { lives: 1 }, from: 15 },
+    { id: 'cascade', stat: 'cascade5', need: 1, text: 'Chain a x5 combo', reward: { lives: 1 }, from: 4 },
+    { id: 'bigwin', stat: 'bigwin', need: 1, text: 'Win with 5 or more moves left', reward: { lives: 1 }, from: 2 },
+  ];
+  const COIN_TASKS = [
+    { id: 'color', stat: 'col', need: 60, text: 'Collect 60 {color}', reward: { coins: 60 }, from: 1 },
+    { id: 'flyer', stat: 'flyer', need: 4, text: 'Launch 4 Flyers', reward: { coins: 60 }, from: 9 },
+    { id: 'crates', stat: 'crates', need: 15, text: 'Break 15 crates', reward: { coins: 60 }, from: 12 },
+    { id: 'floor', stat: 'floor', need: 30, text: 'Light up 30 floor panels', reward: { coins: 50 }, from: 4 },
+    { id: 'tape', stat: 'tape', need: 12, text: 'Rip the tape off 12 tiles', reward: { coins: 60 }, from: 24 },
+    { id: 'boosters', stat: 'boosters', need: 2, text: 'Use 2 boosters', reward: { coins: 40, boosters: { shuffle: 1 } }, from: 3 },
+  ];
+  const ALL_DONE = { unlimited: 30 };
+
+  function rng(seed) {
+    let s = seed >>> 0;
+    return () => {
+      s = (s + 0x6d2b79f5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), s | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function shuffle(list, R) {
+    const a = list.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+
+  // Today's daily state, rolled over at local midnight.
+  function daily(save, now) {
+    ensure(save);
+    const day = today(now);
+    if (save.daily.day !== day) {
+      const dn = dayNumber(now);
+      const R = rng(dn * 7919 + 13);
+      const lvl = save.level || 1;
+      const ok = (t) => lvl >= t.from;
+      const lifePool = shuffle(LIFE_TASKS.filter(ok), R);
+      const coinPool = shuffle(COIN_TASKS.filter(ok), R);
+      const color = dn % 5; // one of the five tiles every level uses
+      const picks = [lifePool[0], lifePool[1], coinPool[0]].filter(Boolean);
+      save.daily = {
+        day,
+        color,
+        tasks: picks.map((t) => ({ id: t.id, prog: 0, claimed: false })),
+        stats: {},
+        bonus: false,
+        cypher: false,
+        shared: false,
+      };
+    }
+    return save.daily;
+  }
+  function taskDef(id) { return LIFE_TASKS.find((t) => t.id === id) || COIN_TASKS.find((t) => t.id === id); }
+  function taskList(save, now) {
+    const d = daily(save, now);
+    return d.tasks.map((t, i) => {
+      const def = taskDef(t.id);
+      const stat = def.stat === 'col' ? 'col' + d.color : def.stat;
+      const prog = Math.min(def.need, d.stats[stat] || 0);
+      return {
+        i, id: t.id, need: def.need, prog,
+        text: def.text.replace('{color}', TILE_NAMES[d.color]),
+        reward: def.reward, done: prog >= def.need, claimed: t.claimed,
+      };
+    });
+  }
+  function claimTask(save, i, now) {
+    const list = taskList(save, now);
+    const t = list[i];
+    if (!t || !t.done || t.claimed) return null;
+    save.daily.tasks[i].claimed = true;
+    grant(save, t.reward, now);
+    return t.reward;
+  }
+  function bonusReady(save, now) {
+    const d = daily(save, now);
+    return !d.bonus && d.tasks.length > 0 && d.tasks.every((t) => t.claimed);
+  }
+  function claimBonus(save, now) {
+    if (!bonusReady(save, now)) return null;
+    save.daily.bonus = true;
+    grant(save, ALL_DONE, now);
+    return ALL_DONE;
+  }
+  // Things ready to claim (for the badge on the home screen).
+  function tasksReady(save, now) {
+    return taskList(save, now).filter((t) => t.done && !t.claimed).length + (bonusReady(save, now) ? 1 : 0);
+  }
+
+  function track(save, stats, now) {
+    const d = daily(save, now);
+    for (const [k, v] of Object.entries(stats)) if (v) d.stats[k] = (d.stats[k] || 0) + v;
+  }
+  const COMBOS = ['cross', 'bigcross', 'xx', 'plpl', 'plc', 'dconv', 'dd'];
+  // Count what a move did, from the engine's event list.
+  function statsFromEvents(events) {
+    const s = {};
+    const add = (k, v = 1) => { s[k] = (s[k] || 0) + v; };
+    let topCascade = 0;
+    for (const ev of events) {
+      switch (ev.t) {
+        case 'act':
+          if (ev.pw === 'h' || ev.pw === 'v') add('spray');
+          else if (ev.pw === 'x') add('boom');
+          else if (ev.pw === 'd') add('plat');
+          else if (ev.pw === 'pl') { if (ev.id != null) add('flyer'); }
+          else if (COMBOS.includes(ev.pw)) add('combos');
+          break;
+        case 'clear': case 'merge':
+          if (ev.col >= 0) add('col' + ev.col);
+          break;
+        case 'crate': if (ev.hp === 0) add('crates'); break;
+        case 'floor': add('floor'); break;
+        case 'tape': add('tape'); break;
+        case 'static': add('static'); break;
+        case 'combo': topCascade = Math.max(topCascade, ev.n); break;
+        default: break;
+      }
+    }
+    if (topCascade >= 5) add('cascade5');
+    return s;
+  }
+
+  // ------------------------------------------------------- daily cypher etc
+  const CYPHER_REWARD = { lives: 1, coins: 50 };
+  const SHARE_REWARD = { lives: 1 };
+  function cypherWin(save, now) {
+    const d = daily(save, now);
+    if (d.cypher) return null;
+    d.cypher = true;
+    grant(save, CYPHER_REWARD, now);
+    return CYPHER_REWARD;
+  }
+  function shareReward(save, now) {
+    const d = daily(save, now);
+    if (d.shared) return null;
+    d.shared = true;
+    grant(save, SHARE_REWARD, now);
+    return SHARE_REWARD;
+  }
+
+  // ----------------------------------------------------------- daily drop
+  // A 7-day calendar of gifts. Missing a day never resets it: no pressure.
+  const DROP = [
+    { lives: 1 },
+    { coins: 100 },
+    { boosters: { hammer: 1 } },
+    { lives: 2 },
+    { coins: 150 },
+    { boosters: { row: 1, shuffle: 1 } },
+    { unlimited: 60 },
+  ];
+  function dropReady(save, now) { return ensure(save).drop.last !== today(now); }
+  function claimDrop(save, now) {
+    if (!dropReady(save, now)) return null;
+    const r = DROP[save.drop.idx % DROP.length];
+    save.drop.idx = (save.drop.idx + 1) % DROP.length;
+    save.drop.last = today(now);
+    grant(save, r, now);
+    return r;
+  }
+
+  // ----------------------------------------------------------- level wins
+  // Extra rewards for a story level win (stars and coins are handled by the UI).
+  function levelWinRewards(save, L, first, now) {
+    const out = [];
+    save.streak = (save.streak || 0) + 1;
+    if (first && L.gold) out.push({ why: 'Gold level', reward: { lives: 1 } });
+    if (first && L.boss) out.push({ why: 'Boss defeated', reward: { refill: true, unlimited: 30 } });
+    if (save.streak % 3 === 0) out.push({ why: 'Hot streak: 3 wins in a row', reward: { lives: 1 } });
+    for (const o of out) grant(save, o.reward, now);
+    return out;
+  }
+  function levelLost(save) { save.streak = 0; }
+
+  return {
+    MAX_LIVES, LIFE_CAP, REGEN_MS, REFILL_PRICE, DROP, CYPHER_REWARD, SHARE_REWARD, ALL_DONE,
+    today, dayNumber, msToMidnight, clock,
+    ensure, tick, status, canPlay, loseLife, addLives, addUnlimited, refill, grant, describe,
+    daily, taskList, claimTask, bonusReady, claimBonus, tasksReady, track, statsFromEvents,
+    cypherWin, shareReward, dropReady, claimDrop, levelWinRewards, levelLost,
+  };
 });
 
 </script>
@@ -2645,6 +5129,19 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
     return `<div class="scene-stack" role="img" aria-label="${a.name}">${html}</div>`;
   }
 
+  // Small glossy vector icons for the lives and rewards screens (no image files needed).
+  const grad = (id, a, b, c) => `<linearGradient id='${id}' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${a}'/><stop offset='.55' stop-color='${b}'/><stop offset='1' stop-color='${c}'/></linearGradient>`;
+  const HEART = "M32 57C12 43 4 33 4 21C4 12 11 5 19.5 5C25.5 5 29.5 8.5 32 13C34.5 8.5 38.5 5 44.5 5C53 5 60 12 60 21C60 33 52 43 32 57Z";
+  const SVG = {
+    heart: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}</defs><path d='${HEART}' fill='url(#g)' stroke='#050505' stroke-width='4' stroke-linejoin='round'/><ellipse cx='19' cy='18' rx='8' ry='5' fill='#fff' opacity='.6' transform='rotate(-32 19 18)'/>`,
+    heartInf: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}</defs><path d='${HEART}' fill='url(#g)' stroke='#050505' stroke-width='4' stroke-linejoin='round'/><path d='M20 29c0-4 3-6 6-6 5 0 7 12 12 12 3 0 6-2 6-6s-3-6-6-6c-5 0-7 12-12 12-3 0-6-2-6-6z' fill='none' stroke='#fff' stroke-width='4.5' stroke-linecap='round'/>`,
+    heartEmpty: `<path d='${HEART}' fill='#2c2c30' stroke='#050505' stroke-width='4' stroke-linejoin='round'/><ellipse cx='19' cy='18' rx='8' ry='5' fill='#fff' opacity='.15' transform='rotate(-32 19 18)'/>`,
+    gift: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}${grad('w', '#ffffff', '#e6e6ea', '#9a9aa0')}</defs><rect x='8' y='26' width='48' height='32' rx='5' fill='url(#g)' stroke='#050505' stroke-width='4'/><rect x='5' y='18' width='54' height='12' rx='4' fill='url(#g)' stroke='#050505' stroke-width='4'/><rect x='27' y='18' width='10' height='40' fill='url(#w)' stroke='#050505' stroke-width='3'/><path d='M32 18c-4-10-16-12-16-4 0 5 8 4 16 4zM32 18c4-10 16-12 16-4 0 5-8 4-16 4z' fill='url(#w)' stroke='#050505' stroke-width='3.5' stroke-linejoin='round'/>`,
+    share: `<defs>${grad('g', '#ff6b75', '#e3192b', '#8f0b16')}</defs><circle cx='32' cy='32' r='27' fill='url(#g)' stroke='#050505' stroke-width='4'/><path d='M22 33l18-10M22 33l18 10' stroke='#fff' stroke-width='4'/><circle cx='21' cy='33' r='6' fill='#fff' stroke='#050505' stroke-width='2'/><circle cx='42' cy='22' r='6' fill='#fff' stroke='#050505' stroke-width='2'/><circle cx='42' cy='44' r='6' fill='#fff' stroke='#050505' stroke-width='2'/>`,
+    clock: `<circle cx='32' cy='32' r='26' fill='#f2f2f2' stroke='#050505' stroke-width='4'/><path d='M32 16v17l11 7' stroke='#e3192b' stroke-width='5' stroke-linecap='round' fill='none'/>`,
+  };
+  const svgUrl = (k) => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>${SVG[k]}</svg>`);
+
   const ICONS = { coin: 'i-coin', star: 'i-star', lock: 'i-lock', hammer: 'i-hammer', row: 'i-row', col: 'i-col', shuffle: 'i-shuffle', hand: 'i-hand', trophy: 'i-trophy' };
   const PORTRAIT = { static: 'static-boss' };
 
@@ -2663,7 +5160,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
     staticUrl: () => A('static'),
     handUrl: () => A('i-hand'),
     portraitUrl: (k) => A(PORTRAIT[k] || k),
-    iconUrl: (k) => A(ICONS[k] || k),
+    iconUrl: (k) => (SVG[k] ? svgUrl(k) : A(ICONS[k] || k)),
   };
 })(typeof self !== 'undefined' ? self : this);
 
@@ -3220,11 +5717,11 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
 
   // One chapter per area of the Block. Levels are 1-based and inclusive.
   const CHAPTERS = [
-    { n: 1, title: 'The Block Party', host: 'kingFlow', from: 1, to: 5, track: 'block', bg: 'block' },
-    { n: 2, title: 'The Record Shop', host: 'djDuchess', from: 6, to: 10, track: 'shop', bg: 'shop' },
-    { n: 3, title: 'The Blacktop', host: 'princeBreaks', from: 11, to: 15, track: 'blacktop', bg: 'blacktop' },
-    { n: 4, title: 'The Wall', host: 'countessCanvas', from: 16, to: 20, track: 'wall', bg: 'wall' },
-    { n: 5, title: 'The Crown Arena', host: 'queenCadence', from: 21, to: 25, track: 'arena', bg: 'arena' },
+    { n: 1, title: 'The Block Party', host: 'kingFlow', from: 1, to: 20, track: 'block', bg: 'block' },
+    { n: 2, title: 'The Record Shop', host: 'djDuchess', from: 21, to: 40, track: 'shop', bg: 'shop' },
+    { n: 3, title: 'The Blacktop', host: 'princeBreaks', from: 41, to: 60, track: 'blacktop', bg: 'blacktop' },
+    { n: 4, title: 'The Wall', host: 'countessCanvas', from: 61, to: 80, track: 'wall', bg: 'wall' },
+    { n: 5, title: 'The Crown Arena', host: 'queenCadence', from: 81, to: 100, track: 'arena', bg: 'arena' },
   ];
 
   // Scenes shown before or after a level. Keys: before-<level>, after-<level>.
@@ -3237,46 +5734,70 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       ['kingFlow', 'Not on my watch. Help me bring the music back, one beat at a time.'],
       ['kingFlow', 'Match 3 or more to clear the noise. Let’s get this block party started!'],
     ],
-    'before-6': [
-      ['djDuchess', 'The block is jumping again! Now King Static has my record shop locked in crates.'],
-      ['djDuchess', 'Every record tells somebody’s story. Let’s dig them out.'],
-    ],
-    'before-10': [
-      ['buzzkill', 'Music? Dancing? Smiling? Not while Baron Buzzkill is on duty.'],
-      ['djDuchess', 'Somebody’s mad he can’t find the beat. Hit him with matches right next to him, and power-ups that reach him.'],
-    ],
-    'after-10': [
-      ['buzzkill', 'Okay... okay. That beat is kind of fresh.'],
-      ['djDuchess', 'Told you. Nobody stays a buzzkill once the needle drops.'],
-    ],
     'before-11': [
-      ['princeBreaks', 'Yo! King Static taped up the whole park. You can’t spin on a court full of tape.'],
-      ['princeBreaks', 'When I dance, I’m free. Let’s free the Blacktop!'],
-    ],
-    'before-13': [
-      ['princeBreaks', 'Those are the Crowns King Static stole! Clear the tiles under them and bring them down to the bottom row.'],
-    ],
-    'before-16': [
-      ['countessCanvas', 'This wall held all our names, every color, every story. Now it’s static.'],
-      ['countessCanvas', 'Static spreads if you leave it alone. Knock some out every turn!'],
+      ['kingFlow', 'Somebody stacked crates all over the block. Match right next to them to break them open.'],
     ],
     'before-20': [
-      ['lipsync', 'Why write your own rhymes when you can borrow mine? Well. Everybody else’s.'],
-      ['countessCanvas', 'Your voice is yours. Nobody gets to tape it shut.'],
+      ['buzzkill', 'Music? Dancing? Smiling? Not while Baron Buzzkill is on duty.'],
+      ['kingFlow', 'Somebody’s mad he can’t find the beat. Hit him with matches right next to him, and power-ups that reach him.'],
     ],
     'after-20': [
-      ['lipsync', 'Maybe... maybe I could write a verse of my own.'],
-      ['countessCanvas', 'Pick up a pen. The wall has room for you too.'],
+      ['buzzkill', 'Okay... okay. That beat is kind of fresh.'],
+      ['kingFlow', 'Told you. Nobody stays a buzzkill once the needle drops.'],
     ],
     'before-21': [
+      ['djDuchess', 'The block is jumping again! Now King Static has my record shop locked down.'],
+      ['djDuchess', 'Every record tells somebody’s story. Let’s dig them out.'],
+    ],
+    'before-23': [
+      ['djDuchess', 'He taped the records shut! Match a taped tile, or hit it with a power-up, to rip the tape off.'],
+    ],
+    'before-27': [
+      ['djDuchess', 'Those are the Crowns King Static stole! Clear the tiles under them and bring them down to the bottom row.'],
+    ],
+    'before-40': [
+      ['lipsync', 'Why write your own rhymes when you can borrow mine? Well. Everybody else’s.'],
+      ['djDuchess', 'Your voice is yours. Nobody gets to tape it shut.'],
+    ],
+    'after-40': [
+      ['lipsync', 'Maybe... maybe I could write a verse of my own.'],
+      ['djDuchess', 'Pick up a pen. There’s a spot on the wall for you too.'],
+    ],
+    'before-41': [
+      ['princeBreaks', 'Yo! The Blacktop went quiet. No cyphers, no battles, no dancing.'],
+      ['princeBreaks', 'When I dance, I’m free. Let’s free the Blacktop!'],
+    ],
+    'before-60': [
+      ['buzzkill', 'I’m back, and I brought a bigger frown.'],
+      ['princeBreaks', 'Bad days happen to everybody. We can still dance through them.'],
+    ],
+    'after-60': [
+      ['buzzkill', 'Fine. Maybe I just needed somebody to ask how I was doing.'],
+      ['princeBreaks', 'So how are you doing, Baron? For real. We’ve got time.'],
+    ],
+    'before-61': [
+      ['countessCanvas', 'This wall held all our names, every color, every story. Now it’s static.'],
+    ],
+    'before-62': [
+      ['countessCanvas', 'Static spreads if you leave it alone. Knock some out every turn!'],
+    ],
+    'before-80': [
+      ['lipsync', 'One more show! Everybody’s lines, my mouth!'],
+      ['countessCanvas', 'Use your own voice. It’s the only one that fits you.'],
+    ],
+    'after-80': [
+      ['lipsync', 'I wrote this one myself. It’s short... but it’s mine.'],
+      ['countessCanvas', 'Short and true beats long and borrowed. Every time.'],
+    ],
+    'before-81': [
       ['queenCadence', 'The Crown Arena. This is where the whole Kingdom comes together.'],
       ['griot', 'King Static is waiting at the end of this road. Stay sharp, and keep your heart open.'],
     ],
-    'before-25': [
+    'before-100': [
       ['static', 'Every king needs a crowd. So why does NOBODY ever listen to ME?!'],
       ['kingFlow', 'Then step into the cypher. But first, we’re bringing the music back!'],
     ],
-    'after-25': [
+    'after-100': [
       ['static', '...I got loud because I felt like nobody heard me.'],
       ['griot', 'Feeling unheard is heavy. Naming it is how we set it down.'],
       ['queenCadence', 'Everybody gets a turn in the cypher. Even you.'],
@@ -3480,7 +6001,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       this.cache.clear();
       if (!this.eng) return;
       // leave room around the grid for the chrome frame
-      const S = Math.floor(Math.min((this.W - 6) / (this.cols + 0.5), (this.H - 6) / (this.rows + 0.5), 66));
+      const S = Math.floor(Math.min((this.W - 6) / (this.cols + 0.45), (this.H - 6) / (this.rows + 0.45), 78));
       this.S = Math.max(16, S);
       this.ox = Math.round((this.W - this.S * this.cols) / 2);
       this.oy = Math.round((this.H - this.S * this.rows) / 2);
@@ -4468,7 +6989,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       for (const sp of list) {
         if (sp.a <= 0.01 || sp.s <= 0.01) continue;
         const key = this._keyOf(sp);
-        const base = sp.k === 'c' ? 0.95 : sp.k === 'p' ? 1.0 : 0.96;
+        const base = sp.k === 'c' ? 1.02 : sp.k === 'p' ? 1.1 : 1.06;
         let size = S * base * sp.s;
         let x = this.ox + (sp.x + 0.5) * S, y = this.oy + (sp.y + 0.5) * S;
         let rot = sp.rot;
@@ -5018,9 +7539,10 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
  */
 (function (root) {
   'use strict';
-  const Art = root.RKArt, Snd = root.RKSound, Story = root.RKStory;
+  const Art = root.RKArt, Snd = root.RKSound, Story = root.RKStory, Meta = root.RKMeta;
   const { Engine } = root.RKEngine;
-  const { LEVELS } = root.RKLevels;
+  const { LEVELS, DAILY } = root.RKLevels;
+  const now = () => Date.now();
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -5032,6 +7554,9 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
   };
   const BOOSTER_PRICE = 80;
   const CONTINUE_PRICE = 100;
+  // Star cost of the five pieces in each area (20 stars per area, one per level).
+  const BUILD_COSTS = [1, 3, 4, 5, 7];
+  const SHARE_URL = 'https://rhyme-kingdom.vercel.app';
   const HYPE = [
     'You got bars and skills.',
     'That last move was cold!',
@@ -5046,7 +7571,8 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
   // ------------------------------------------------------------------ save
   const SAVE_KEY = 'rhymeKingdom.save.v1';
   const DEFAULTS = () => ({
-    v: 1, level: 1, stars: 0, coins: 300, cleared: {},
+    v: 2, level: 1, stars: 0, coins: 300, cleared: {},
+    lives: { n: 5, t: 0, inf: 0 }, streak: 0, daily: { day: '' }, drop: { last: '', idx: 0 }, creatorLives: false,
     built: [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]],
     boosters: { hammer: 3, row: 3, col: 3, shuffle: 3 },
     music: true, sfx: true, haptics: true, unlockAll: false, seen: {},
@@ -5062,7 +7588,8 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       s.boosters = Object.assign(DEFAULTS().boosters, data.boosters || {});
       if (!Array.isArray(s.built) || s.built.length !== 5) s.built = DEFAULTS().built;
     }
-    return s;
+    s.v = 2;
+    return Meta.ensure(s);
   }
   function storeSave(s) {
     try { root.localStorage.setItem(SAVE_KEY, JSON.stringify(s)); } catch (e) { /* storage unavailable */ }
@@ -5105,6 +7632,30 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
     return Art.iconUrl('star');
   }
   const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+  function rewardIcon(k) {
+    if (k === 'heart' || k === 'heartInf') return Art.iconUrl(k);
+    if (k === 'coin') return Art.iconUrl('coin');
+    return Art.iconUrl(BOOSTERS[k] ? BOOSTERS[k].icon : 'star');
+  }
+  const rewardItems = (reward) => Meta.describe(reward).map((d) =>
+    `<li><img src="${rewardIcon(d.icon)}" alt=""><span>${esc(d.text)}</span></li>`).join('');
+  // The level where each obstacle is first taught; the Daily Cypher only uses ones you know.
+  function needsLevel(L) {
+    let n = 1;
+    const types = L.goals.map((g) => g.type);
+    const has = (ch) => L.board.some((row) => row.includes(ch));
+    if (L.floor || types.includes('floor')) n = Math.max(n, 3);
+    if (has('1') || has('2') || has('3') || types.includes('crate')) n = Math.max(n, 11);
+    if (L.tape || types.includes('tape')) n = Math.max(n, 23);
+    if (L.crowns || types.includes('crown')) n = Math.max(n, 27);
+    if (has('S') || types.includes('static')) n = Math.max(n, 62);
+    return n;
+  }
+  function todayDaily(t, level) {
+    const fits = DAILY.filter((L) => needsLevel(L) <= level);
+    const pool = fits.length ? fits : DAILY.filter((L) => needsLevel(L) <= 3);
+    return pool[((Meta.dayNumber(t) % pool.length) + pool.length) % pool.length];
+  }
 
   // ------------------------------------------------------------------- app
   const App = {
@@ -5135,7 +7686,10 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
         haptic: (ms) => { if (this.save.haptics && navigator.vibrate) { try { navigator.vibrate(ms); } catch (e) { /* ignore */ } } },
       });
       await this.view.init();
+      Meta.daily(this.save, now());
       this._wire();
+      // Live countdowns (next life, unlimited lives, task refresh) tick once a second.
+      setInterval(() => this.tickLive(), 1000);
       this._titleArt();
       this.show('title');
       root.addEventListener('resize', () => this.view.layout());
@@ -5180,6 +7734,17 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       for (const b of document.querySelectorAll('.booster img')) b.src = Art.iconUrl(BOOSTERS[b.parentElement.dataset.b].icon);
       $('#home-stars img').src = Art.iconUrl('star');
       $('#home-coins img').src = Art.iconUrl('coin');
+      $('#home-lives').addEventListener('click', () => { Snd.fx('click'); this.openLives(); });
+      const evArt = { cypher: Art.powerUrl('d'), tasks: Art.iconUrl('trophy'), drop: Art.iconUrl('gift') };
+      for (const b of document.querySelectorAll('.event')) {
+        b.querySelector('img').src = evArt[b.dataset.ev];
+        b.addEventListener('click', () => {
+          Snd.fx('click');
+          if (b.dataset.ev === 'cypher') this.openCypher();
+          else if (b.dataset.ev === 'tasks') this.openTasks();
+          else this.openDrop();
+        });
+      }
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && this.screen === 'game' && $('#modal').hidden) this.openPause();
       });
@@ -5234,32 +7799,37 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       const lv = this.save.level;
       const play = $('#btn-play');
       if (lv > LEVELS.length) {
-        play.innerHTML = '<span class="btn-kicker">All 25 cleared</span>Replay a level';
+        play.innerHTML = `<span class="btn-kicker">All ${LEVELS.length} cleared</span>Replay a level`;
       } else {
         const L = LEVELS[lv - 1];
-        const tag = L.hard === 2 ? '<span class="tag tag-super">Super hard</span>' : L.hard ? '<span class="tag tag-hard">Hard</span>' : '';
+        const tag = L.hard === 2 ? '<span class="tag tag-super">Super hard</span>' : L.hard ? '<span class="tag tag-hard">Hard</span>' : L.gold ? '<span class="tag tag-gold">+1 life</span>' : '';
         play.innerHTML = `<span class="btn-kicker">${esc(L.name)}</span>Level ${lv}${tag}`;
       }
       this.renderPath();
       const buildBtn = $('#btn-build');
-      buildBtn.classList.toggle('ready', this.save.stars > 0 && n < 5);
+      const nextCost = BUILD_COSTS[built.findIndex((b) => !b)];
+      buildBtn.classList.toggle('ready', n < 5 && this.save.stars >= nextCost);
       this.refreshCounters();
     },
 
-    // The five levels of the current chapter as a path of stops.
+    // A window of five stops along the current chapter's 20 levels.
     renderPath() {
       const lv = Math.min(this.save.level, LEVELS.length);
       const ch = chapterOf(lv);
+      const from = Math.max(ch.from, Math.min(lv - 2, ch.to - 4));
       const stops = [];
-      for (let n = ch.from; n <= ch.to; n++) {
+      for (let n = from; n <= from + 4; n++) {
         const L = LEVELS[n - 1];
         const done = !!this.save.cleared[n];
         const cur = n === this.save.level;
         const face = L.boss ? `<img src="${Art.portraitUrl(L.boss.kind)}" alt="">` : '';
-        stops.push(`<li class="stop${done ? ' done' : ''}${cur ? ' current' : ''}${L.boss ? ' boss' : ''}" title="Level ${n}: ${esc(L.name)}">
-          ${face}<b>${n}</b>${done ? `<img class="stop-star" src="${Art.iconUrl('star')}" alt="cleared">` : ''}</li>`);
+        const gold = L.gold && !done ? `<img class="stop-gift" src="${Art.iconUrl('heart')}" alt="free life">` : '';
+        stops.push(`<li class="stop${done ? ' done' : ''}${cur ? ' current' : ''}${L.boss ? ' boss' : ''}${L.gold ? ' gold' : ''}" title="Level ${n}: ${esc(L.name)}">
+          ${face}<b>${n}</b>${done ? `<img class="stop-star" src="${Art.iconUrl('star')}" alt="cleared">` : gold}</li>`);
       }
-      $('#path-title').textContent = `Chapter ${ch.n}: ${ch.title}`;
+      const boss = LEVELS[ch.to - 1];
+      const left = ch.to - lv;
+      $('#path-title').textContent = `Chapter ${ch.n}: ${ch.title}` + (left > 4 && boss.boss ? ` · Boss in ${left}` : '');
       $('#path').innerHTML = stops.join('');
     },
 
@@ -5267,14 +7837,30 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       const s = this.save.stars;
       if (this.save.built.every((a) => a.every(Boolean))) return 'The whole Kingdom is rebuilt. Thank you, for real.';
       if (n === 5) return 'This spot is done. Next stop on the map!';
-      if (s > 0) return `You’ve got ${s} star${s > 1 ? 's' : ''}. Tap Build and let’s fix up ${Art.AREAS[ai].name}!`;
-      if (this.save.level > LEVELS.length) return 'All 25 levels cleared. Replay any level for coins and stars.';
+      const cost = BUILD_COSTS[this.save.built[ai].findIndex((b) => !b)];
+      if (s >= cost) return `You’ve got ${s} star${s > 1 ? 's' : ''}. Tap Build and let’s fix up ${Art.AREAS[ai].name}!`;
+      if (this.save.level > LEVELS.length) return `All ${LEVELS.length} levels cleared. Replay any level for coins.`;
+      if (s > 0) return `${s} of ${cost} stars for the next piece. Keep winning!`;
       return `Win Level ${this.save.level} to earn a star, then spend it here.`;
     },
 
     refreshCounters() {
       $('#home-stars b').textContent = this.save.stars;
       $('#home-coins b').textContent = this.save.coins;
+      this.tickLive();
+      const badge = (ev, text) => {
+        const el = document.querySelector(`.event[data-ev="${ev}"] .event-badge`);
+        if (!el) return;
+        el.hidden = !text;
+        el.textContent = text || '';
+        el.parentElement.classList.toggle('hot', !!text);
+      };
+      const t = now();
+      const d = Meta.daily(this.save, t);
+      badge('cypher', d.cypher ? '' : 'FREE');
+      const ready = Meta.tasksReady(this.save, t);
+      badge('tasks', ready ? String(ready) : '');
+      badge('drop', Meta.dropReady(this.save, t) ? '!' : '');
       for (const b of document.querySelectorAll('.booster')) {
         const n = this.save.boosters[b.dataset.b] || 0;
         b.querySelector('.count').textContent = n > 0 ? n : '+';
@@ -5290,11 +7876,11 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
         <li class="build-row${built[i] ? ' done' : ''}">
           <span class="build-name">${esc(it.name)}</span>
           ${built[i] ? '<span class="build-done">Built</span>'
-            : `<button class="btn btn-gold btn-small" data-build="${i}" ${this.save.stars < 1 ? 'disabled' : ''}>Build <img src="${Art.iconUrl('star')}" alt="">1</button>`}
+            : `<button class="btn btn-gold btn-small" data-build="${i}" ${this.save.stars < BUILD_COSTS[i] ? 'disabled' : ''}>Build <img src="${Art.iconUrl('star')}" alt="">${BUILD_COSTS[i]}</button>`}
         </li>`).join('');
       this.modal(`
         <h2 class="modal-title">${esc(area.name)}</h2>
-        <p class="modal-sub">You have <b>${this.save.stars}</b> star${this.save.stars === 1 ? '' : 's'}. Each piece costs one.</p>
+        <p class="modal-sub">You have <b>${this.save.stars}</b> star${this.save.stars === 1 ? '' : 's'}. Every level you clear earns one.</p>
         <ul class="build-list">${rows}</ul>
         <div class="modal-actions"><button class="btn btn-plum" data-close>Close</button></div>`, {
         onClick: (el) => {
@@ -5305,8 +7891,8 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
     },
 
     async build(ai, i) {
-      if (this.save.stars < 1 || this.save.built[ai][i]) return;
-      this.save.stars -= 1;
+      if (this.save.stars < BUILD_COSTS[i] || this.save.built[ai][i]) return;
+      this.save.stars -= BUILD_COSTS[i];
       this.save.built[ai][i] = 1;
       this.persist();
       this.closeModal();
@@ -5332,10 +7918,12 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
     },
 
     async startLevel(n, opts = {}) {
-      const L = LEVELS[n - 1];
+      const L = opts.level || LEVELS[n - 1];
       if (!L) return;
+      // Story levels need a life; the Daily Cypher is always free.
+      if (!L.daily && !Meta.canPlay(this.save, now())) { this.openLives(true); return; }
       const key = 'before-' + n;
-      if (Story.SCENES[key] && !this.save.seen[key] && !opts.retry) {
+      if (!L.daily && Story.SCENES[key] && !this.save.seen[key] && !opts.retry) {
         this.save.seen[key] = 1;
         this.persist();
         await this.story(Story.SCENES[key]);
@@ -5353,11 +7941,11 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       this.eng = new Engine(L, (Math.random() * 4294967296) >>> 0);
       this.boosterOff();
       this.show('game');
-      const ch = chapterOf(n);
+      const ch = L.daily ? chapterOf(Math.min(this.save.level, LEVELS.length)) : chapterOf(n);
       document.body.dataset.chapter = ch.bg;
       this.setBackdrop(ch.bg, false, true);
-      Snd.play(L.boss ? 'boss' : ch.track);
-      $('#hud-level').textContent = `Level ${n}`;
+      Snd.play(L.boss ? 'boss' : L.daily ? 'daily' : ch.track);
+      $('#hud-level').textContent = L.daily ? 'Daily Cypher' : `Level ${n}`;
       const hard = $('#hud-hard');
       hard.hidden = !L.hard;
       hard.textContent = L.hard === 2 ? 'Super hard' : 'Hard';
@@ -5371,21 +7959,29 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
     },
 
     levelCard(L) {
-      const ch = chapterOf(L.id);
+      const ch = L.daily ? chapterOf(Math.min(this.save.level, LEVELS.length)) : chapterOf(L.id);
       const counts = new Engine({ ...L, tutorial: null }, 1).goals;
       const goals = L.goals.map((g, i) =>
         `<li><img src="${goalIcon(g, L)}" alt=""><b>${counts[i].need}</b><span>${esc(goalLabel(g))}</span></li>`).join('');
       const hard = L.hard === 2 ? '<span class="tag tag-super">Super hard</span>' : L.hard ? '<span class="tag tag-hard">Hard</span>' : '';
-      const face = L.boss ? Art.portraitUrl(L.boss.kind) : Art.portraitUrl(ch.host);
+      const face = L.boss ? Art.portraitUrl(L.boss.kind) : Art.portraitUrl(L.daily ? 'griot' : ch.host);
+      const st = Meta.status(this.save, now());
+      const won = L.daily && Meta.daily(this.save, now()).cypher;
+      const perk = L.daily
+        ? `<p class="card-perk"><img src="${Art.iconUrl('heart')}" alt="">${won ? 'You already won today. Play again just for fun!' : 'Free to play. Win today for +1 life and 50 coins.'}</p>`
+        : L.gold && !this.save.cleared[L.id] ? `<p class="card-perk"><img src="${Art.iconUrl('heart')}" alt="">Gold level: win it for a free life!</p>`
+          : L.boss && !this.save.cleared[L.id] ? `<p class="card-perk"><img src="${Art.iconUrl('heartInf')}" alt="">Beat the boss: full lives and 30 minutes of unlimited lives.</p>` : '';
+      const lives = L.daily ? '' : `<p class="card-lives"><img src="${Art.iconUrl(st.unlimited ? 'heartInf' : 'heart')}" alt="">${st.unlimited ? 'Unlimited lives' : `${st.n} ${st.n === 1 ? 'life' : 'lives'}`}${this.save.streak >= 1 ? ` · Win streak ${this.save.streak}` : ''}</p>`;
       return new Promise((res) => {
         this.modal(`
           <div class="level-card">
             <img class="level-face" src="${face}" alt="">
-            <p class="modal-kicker">Chapter ${ch.n}: ${esc(ch.title)}</p>
-            <h2 class="modal-title">Level ${L.id} ${hard}</h2>
+            <p class="modal-kicker">${L.daily ? esc(Meta.today(now())) : `Chapter ${ch.n}: ${esc(ch.title)}`}</p>
+            <h2 class="modal-title">${L.daily ? 'Daily Cypher' : `Level ${L.id}`} ${hard}</h2>
             <p class="level-name">${esc(L.name)}</p>
             <ul class="goal-list">${goals}</ul>
             <p class="modal-sub">${L.moves} moves</p>
+            ${perk}${lives}
           </div>
           <div class="modal-actions">
             <button class="btn btn-plum" data-v="0">Back</button>
@@ -5477,6 +8073,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       if (this.booster) return;
       const res = this.eng.swap(a, b);
       if (!res.events.length) return;
+      if (res.ok) this.trackMove(res.events);
       await this.view.play(res.events);
       if (res.ok) await this.afterMove();
     },
@@ -5485,8 +8082,15 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       if (this.view.busy || !this.eng || this.eng.status !== 'playing') return;
       const res = this.eng.tap(p);
       if (!res.ok) return;
+      this.trackMove(res.events);
       await this.view.play(res.events);
       await this.afterMove();
+    },
+
+    trackMove(events, booster) {
+      const st = Meta.statsFromEvents(events);
+      if (!booster) st.moves = 1;
+      Meta.track(this.save, st, now());
     },
 
     async afterMove() {
@@ -5525,6 +8129,8 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       const res = this.eng.booster(type, p || { c: 0, r: 0 });
       if (!res.ok) return;
       this.save.boosters[type]--;
+      Meta.track(this.save, { boosters: 1 }, now());
+      this.trackMove(res.events, true);
       this.persist();
       this.boosterOff();
       await this.view.play(res.events);
@@ -5559,10 +8165,12 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
     async win() {
       this.view.tut = null;
       if (!$('#coach').hidden) { $('#coach').hidden = true; this.view.layout(); }
-      const n = this.level.id;
-      const first = !this.save.cleared[n];
+      const L = this.level;
+      const n = L.id;
+      const first = !L.daily && !this.save.cleared[n];
+      const left = this.eng.moves;
       this.hintOk = false;
-      if (this.eng.moves > 0) {
+      if (left > 0) {
         this.view.text('ENCORE!', this.view.W / 2, this.view.oy + this.view.rows * this.view.S * 0.4, Math.min(this.view.W / 6, 64), '#ff2a3d', 1.2);
         Snd.fx('horn', 2);
         await pause(600);
@@ -5570,51 +8178,80 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       const enc = this.eng.encore();
       await this.view.play(enc.events);
       Snd.fx('win');
-      this.view.text('LEVEL CLEAR!', this.view.W / 2, this.view.oy + this.view.rows * this.view.S * 0.45, Math.min(this.view.W / 7, 60), '#ffffff', 1.6, 10);
+      this.view.text(L.daily ? 'CYPHER CLEAR!' : 'LEVEL CLEAR!', this.view.W / 2, this.view.oy + this.view.rows * this.view.S * 0.45, Math.min(this.view.W / 7, 60), '#ffffff', 1.6, 10);
       this.view.fireworks(8, 1.4);
       await pause(1300);
+      const t = now();
+      Meta.track(this.save, { wins: 1, bigwin: left >= 5 ? 1 : 0 }, t);
       const coins = 20 + enc.bonus * 4;
       this.save.coins += coins;
-      if (first) {
-        this.save.cleared[n] = 1;
-        this.save.stars += 1;
+      // extra rewards: gold level, boss, hot streak, daily cypher
+      let extras = [];
+      if (L.daily) {
+        const r = Meta.cypherWin(this.save, t);
+        if (r) extras.push({ why: 'Daily Cypher', reward: r });
+      } else {
+        if (first) {
+          this.save.cleared[n] = 1;
+          this.save.stars += 1;
+        }
+        extras = Meta.levelWinRewards(this.save, L, first, t);
+        if (this.save.level === n) this.save.level = n + 1;
       }
-      if (this.save.level === n) this.save.level = n + 1;
       this.persist();
       this.hintOk = true;
-      const ch = chapterOf(n);
+      const ch = L.daily ? chapterOf(Math.min(this.save.level, LEVELS.length)) : chapterOf(n);
+      const host = L.daily ? 'griot' : ch.host;
       const hype = HYPE[(n * 7 + Math.floor(Math.random() * 3)) % HYPE.length];
+      const extraHtml = extras.map((x) => `<li class="reward-extra"><p class="reward-why">${esc(x.why)}</p><ul class="reward-chips">${rewardItems(x.reward)}</ul></li>`).join('');
       await new Promise((res) => {
         this.modal(`
           <div class="win-card">
-            <p class="win-burst">Level ${n} complete!</p>
-            <img class="win-face" src="${Art.portraitUrl(ch.host)}" alt="">
-            <p class="win-hype">“${esc(hype)}” <span>${esc(Story.CAST[ch.host].name)}</span></p>
+            <p class="win-burst">${L.daily ? 'Cypher complete!' : `Level ${n} complete!`}</p>
+            <img class="win-face" src="${Art.portraitUrl(host)}" alt="">
+            <p class="win-hype">“${esc(hype)}” <span>${esc(Story.CAST[host].name)}</span></p>
             <ul class="reward-list">
               ${first ? `<li><img src="${Art.iconUrl('star')}" alt=""><b>+1</b><span>Star</span></li>` : ''}
               <li><img src="${Art.iconUrl('coin')}" alt=""><b>+${coins}</b><span>Coins</span></li>
             </ul>
+            ${extraHtml ? `<ul class="reward-extras">${extraHtml}</ul>` : ''}
           </div>
           <div class="modal-actions"><button class="btn btn-gold btn-big" data-close>Continue</button></div>`, { onClose: res, celebrate: true });
         this.confetti($('#modal .modal-card'));
       });
-      const after = Story.SCENES['after-' + n];
-      if (after && !this.save.seen['after-' + n]) {
-        this.save.seen['after-' + n] = 1;
-        this.persist();
-        await this.story(after);
-      }
-      if (n === LEVELS.length && first) {
-        await this.alert('The Kingdom of Rhyme is restored!', 'You beat all 25 levels. Finish building the Block with your stars, and watch for new chapters.', 'Back to the Block');
+      if (!L.daily) {
+        const after = Story.SCENES['after-' + n];
+        if (after && !this.save.seen['after-' + n]) {
+          this.save.seen['after-' + n] = 1;
+          this.persist();
+          await this.story(after);
+        }
+        if (n === LEVELS.length && first) {
+          await this.alert('The Kingdom of Rhyme is restored!', `You beat all ${LEVELS.length} levels. Finish building the Block with your stars, and come back for the Daily Cypher.`, 'Back to the Block');
+        }
       }
       this.goHome();
     },
 
+    // Failing a story level (or quitting after a move) uses a life.
+    spendLife() {
+      if (!this.level || this.level.daily) return false;
+      Meta.levelLost(this.save);
+      const used = Meta.loseLife(this.save, now());
+      this.persist();
+      return used;
+    },
+
     async lose() {
       this.hintOk = false;
+      const L = this.level;
       const goals = this.eng.goals.map((g, i) => (g.left > 0
-        ? `<li><img src="${goalIcon(g, this.level)}" alt=""><b>${g.left}</b><span>${esc(goalLabel(g))} left</span></li>` : '')).join('');
+        ? `<li><img src="${goalIcon(g, L)}" alt=""><b>${g.left}</b><span>${esc(goalLabel(g))} left</span></li>` : '')).join('');
       const can = this.save.coins >= CONTINUE_PRICE;
+      const st = Meta.status(this.save, now());
+      const lifeNote = L.daily ? '<p class="modal-sub">The Daily Cypher is free. Try it as many times as you like.</p>'
+        : st.unlimited ? `<p class="card-lives"><img src="${Art.iconUrl('heartInf')}" alt="">Unlimited lives: trying again is free.</p>`
+          : `<p class="card-lives"><img src="${Art.iconUrl('heart')}" alt="">Trying again or leaving uses 1 of your ${st.n} ${st.n === 1 ? 'life' : 'lives'}.</p>`;
       const choice = await new Promise((res) => {
         this.modal(`
           <h2 class="modal-title">Out of moves</h2>
@@ -5625,6 +8262,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
             <button class="btn btn-pink" data-v="retry">Try again</button>
             <button class="btn btn-plum" data-v="home">Back to the Block</button>
           </div>
+          ${lifeNote}
           <p class="modal-sub">You have ${this.save.coins} coins.</p>`, {
           onClick: (el) => { if (el.dataset.v) { this.closeModal(true); res(el.dataset.v); return true; } return false; },
           onClose: () => res('home'),
@@ -5635,17 +8273,23 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
         this.save.coins -= CONTINUE_PRICE;
         this.persist();
         Snd.fx('coin');
-        Snd.play(this.level.boss ? 'boss' : chapterOf(this.level.id).track);
+        Snd.play(L.boss ? 'boss' : L.daily ? 'daily' : chapterOf(L.id).track);
         this.eng.addMoves(5);
         this.setMoves(this.eng.moves);
-      } else if (choice === 'retry') {
-        this.startLevel(this.level.id, { retry: true });
+        return;
+      }
+      this.spendLife();
+      if (choice === 'retry') {
+        if (!L.daily && !Meta.canPlay(this.save, now())) { this.goHome(); this.openLives(true); return; }
+        this.startLevel(L.id, { retry: true, level: L });
       } else this.goHome();
     },
 
     // --------------------------------------------------------------- menus
     openPause() {
       if (this.screen !== 'game' || !$('#modal').hidden) return;
+      const L = this.level;
+      const costly = !L.daily && this.eng.movesUsed > 0 && this.eng.status === 'playing' && !Meta.status(this.save, now()).unlimited;
       this.modal(`
         <h2 class="modal-title">Paused</h2>
         <div class="toggles">${this.toggleRows()}</div>
@@ -5653,12 +8297,18 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
           <button class="btn btn-gold btn-big" data-close>Resume</button>
           <button class="btn btn-pink" data-v="restart">Restart level</button>
           <button class="btn btn-plum" data-v="home">Quit to the Block</button>
-        </div>`, {
+        </div>
+        ${costly ? `<p class="card-lives"><img src="${Art.iconUrl('heart')}" alt="">Restarting or quitting now uses 1 life.</p>` : ''}`, {
         onClick: (el) => {
           if (this.handleToggle(el)) return true;
-          if (el.dataset.v === 'restart') { this.closeModal(); this.startLevel(this.level.id, { retry: true }); return true; }
-          if (el.dataset.v === 'home') { this.closeModal(); this.goHome(); return true; }
-          return false;
+          const v = el.dataset.v;
+          if (v !== 'restart' && v !== 'home') return false;
+          this.closeModal();
+          if (!L.daily && this.eng.movesUsed > 0 && this.eng.status === 'playing') this.spendLife();
+          if (v === 'home') { this.goHome(); return true; }
+          if (!L.daily && !Meta.canPlay(this.save, now())) { this.goHome(); this.openLives(true); return true; }
+          this.startLevel(L.id, { retry: true, level: L });
+          return true;
         },
       });
     },
@@ -5676,6 +8326,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
       if (key === 'music') Snd.setMusic(this.save.music);
       if (key === 'sfx') Snd.setSfx(this.save.sfx);
       this.persist();
+      if (key === 'creatorLives' && this.screen === 'home') this.refreshCounters();
       Snd.fx('click');
       return true;
     },
@@ -5685,13 +8336,14 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
         <h2 class="modal-title">Settings</h2>
         <div class="toggles">${this.toggleRows()}
           <button class="toggle" data-toggle="unlockAll" aria-pressed="${this.save.unlockAll ? 'true' : 'false'}"><span>Creator preview: unlock all levels</span><i></i></button>
+          <button class="toggle" data-toggle="creatorLives" aria-pressed="${this.save.creatorLives ? 'true' : 'false'}"><span>Creator preview: unlimited lives</span><i></i></button>
         </div>
         <div class="modal-actions modal-actions-col">
           <button class="btn btn-gold" data-v="levels">Level select</button>
           <button class="btn btn-pink" data-v="story">Replay the intro story</button>
           <button class="btn btn-plum" data-v="reset">Reset progress</button>
         </div>
-        <p class="credits">Rhyme Kingdom is a Cloudnhyne Designz game. Characters, art and music are original and made in code.</p>
+        <p class="credits">Rhyme Kingdom is a Cloudnhyne Designz game. Characters, story and levels are original.</p>
         <div class="modal-actions"><button class="btn btn-plum" data-close>Close</button></div>`, {
         onClick: (el) => {
           if (this.handleToggle(el)) return true;
@@ -5715,7 +8367,7 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
         onClick: (el) => {
           if (el.dataset.v !== 'yes') return false;
           const keep = { music: this.save.music, sfx: this.save.sfx, haptics: this.save.haptics };
-          this.save = Object.assign(DEFAULTS(), keep);
+          this.save = Meta.ensure(Object.assign(DEFAULTS(), keep));
           this.persist();
           this.closeModal();
           this.goHome();
@@ -5727,18 +8379,20 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
 
     openLevels() {
       const max = this.save.unlockAll ? LEVELS.length : Math.min(this.save.level, LEVELS.length);
-      const cells = LEVELS.map((L) => {
+      const cell = (L) => {
         const open = L.id <= max;
         const done = this.save.cleared[L.id];
-        const cls = ['lv', done ? 'lv-done' : '', open ? '' : 'lv-locked', L.boss ? 'lv-boss' : '', L.hard ? 'lv-hard' : ''].join(' ');
-        return `<button class="${cls}" data-lv="${L.id}" ${open ? '' : 'disabled'} aria-label="Level ${L.id}${done ? ', cleared' : ''}${open ? '' : ', locked'}">
-          <b>${L.id}</b>${done ? `<img src="${Art.iconUrl('star')}" alt="">` : open ? '' : `<img src="${Art.iconUrl('lock')}" alt="">`}</button>`;
-      }).join('');
-      const chapters = Story.CHAPTERS.map((c) => `<span>${c.from}–${c.to} ${esc(c.title)}</span>`).join('');
+        const cls = ['lv', done ? 'lv-done' : '', open ? '' : 'lv-locked', L.boss ? 'lv-boss' : '', L.hard ? 'lv-hard' : '', L.gold ? 'lv-gold' : ''].join(' ');
+        const mark = done ? `<img src="${Art.iconUrl('star')}" alt="">` : !open ? `<img src="${Art.iconUrl('lock')}" alt="">` : L.gold ? `<img src="${Art.iconUrl('heart')}" alt="">` : '';
+        return `<button class="${cls}" data-lv="${L.id}" ${open ? '' : 'disabled'} aria-label="Level ${L.id}${done ? ', cleared' : ''}${open ? '' : ', locked'}"><b>${L.id}</b>${mark}</button>`;
+      };
+      const groups = Story.CHAPTERS.map((c) => `
+        <h3 class="lv-chapter">${c.n}. ${esc(c.title)}</h3>
+        <div class="lv-grid">${LEVELS.slice(c.from - 1, c.to).map(cell).join('')}</div>`).join('');
       this.modal(`
         <h2 class="modal-title">Levels</h2>
-        <div class="lv-grid">${cells}</div>
-        <p class="lv-legend">${chapters}</p>
+        <div class="lv-scroll">${groups}</div>
+        <p class="lv-legend"><span><img src="${Art.iconUrl('heart')}" alt=""> Gold level: a free life on the first win</span></p>
         <div class="modal-actions"><button class="btn btn-plum" data-close>Close</button></div>`, {
         onClick: (el) => {
           if (!el.dataset.lv) return false;
@@ -5747,6 +8401,194 @@ body.level-art[data-screen="game"] .backdrop::after { background: linear-gradien
           return true;
         },
       });
+      const cur = document.querySelector(`#modal .lv[data-lv="${Math.min(this.save.level, LEVELS.length)}"]`);
+      if (cur) cur.scrollIntoView({ block: 'center' });
+    },
+
+    // ------------------------------------------------------- lives and gifts
+    // Countdowns on the home pill and in any open lives/tasks window.
+    tickLive() {
+      if (!this.save) return;
+      const t = now();
+      const st = Meta.status(this.save, t);
+      const pill = $('#home-lives');
+      if (pill) {
+        pill.querySelector('img').src = Art.iconUrl(st.unlimited ? 'heartInf' : st.n > 0 ? 'heart' : 'heartEmpty');
+        pill.querySelector('b').textContent = st.unlimited ? '∞' : st.n;
+        $('#lives-timer').textContent = st.unlimited ? (this.save.creatorLives ? 'Creator' : Meta.clock(st.infLeft)) : st.full ? 'Full' : Meta.clock(st.next);
+        pill.classList.toggle('empty', !st.unlimited && st.n <= 0);
+      }
+      for (const el of document.querySelectorAll('#modal [data-live]')) {
+        const k = el.dataset.live;
+        if (k === 'next') el.textContent = st.unlimited ? `Unlimited lives for ${Meta.clock(st.infLeft)}` : st.full ? 'Your lives are full' : `Next life in ${Meta.clock(st.next)}`;
+        else if (k === 'count') el.textContent = st.unlimited ? '∞' : st.n;
+        else if (k === 'reset') el.textContent = `New tasks in ${Meta.clock(Meta.msToMidnight(t))}`;
+        else if (k === 'drop') el.textContent = `Next gift in ${Meta.clock(Meta.msToMidnight(t))}`;
+      }
+    },
+
+    openLives(empty) {
+      const t = now();
+      const st = Meta.status(this.save, t);
+      const d = Meta.daily(this.save, t);
+      const ready = Meta.tasksReady(this.save, t);
+      const canRefill = !st.unlimited && st.n < Meta.MAX_LIVES;
+      const row = (v, icon, title, sub, tag) => `
+        <button class="free-row" data-v="${v}"><img src="${icon}" alt=""><span><b>${title}</b><small>${sub}</small></span>${tag ? `<i>${tag}</i>` : ''}</button>`;
+      const rows = [
+        !d.cypher ? row('cypher', Art.powerUrl('d'), 'Daily Cypher', 'Free level. Win it for +1 life.', 'FREE') : '',
+        row('tasks', Art.iconUrl('trophy'), 'Street Tasks', ready ? `${ready} reward${ready > 1 ? 's' : ''} ready to claim` : 'Three tasks a day, with lives as rewards.', ready ? String(ready) : ''),
+        Meta.dropReady(this.save, t) ? row('drop', Art.iconUrl('gift'), 'Daily Drop', 'Today’s gift is waiting.', '!') : '',
+        !d.shared ? row('share', Art.iconUrl('share'), 'Share with a friend', 'Send the game to someone: +1 life, once a day.', '+1') : '',
+      ].join('');
+      this.modal(`
+        <div class="lives-hero"><img src="${Art.iconUrl(st.unlimited ? 'heartInf' : st.n > 0 ? 'heart' : 'heartEmpty')}" alt=""><b data-live="count">${st.unlimited ? '∞' : st.n}</b></div>
+        <h2 class="modal-title">${empty ? 'Out of lives' : 'Lives'}</h2>
+        <p class="modal-sub" data-live="next"></p>
+        <p class="modal-text">A life comes back every 30 minutes, up to ${Meta.MAX_LIVES}. You only use one when a level gets away from you.</p>
+        ${canRefill ? `<div class="modal-actions"><button class="btn btn-gold" data-v="refill" ${this.save.coins >= Meta.REFILL_PRICE ? '' : 'disabled'}>Refill lives <img src="${Art.iconUrl('coin')}" alt="">${Meta.REFILL_PRICE}</button></div>` : ''}
+        <p class="free-head">Free lives</p>
+        <div class="free-list">${rows}</div>
+        <div class="modal-actions"><button class="btn btn-plum" data-close>Close</button></div>`, {
+        onClick: (el) => {
+          const v = el.dataset.v;
+          if (v === 'refill') {
+            if (this.save.coins < Meta.REFILL_PRICE) return true;
+            this.save.coins -= Meta.REFILL_PRICE;
+            Meta.refill(this.save, now());
+            this.persist();
+            Snd.fx('coin');
+            this.closeModal();
+            this.rewardPop('Lives refilled!', { refill: true });
+            return true;
+          }
+          if (v === 'cypher') { this.closeModal(); this.openCypher(); return true; }
+          if (v === 'tasks') { this.closeModal(); this.openTasks(); return true; }
+          if (v === 'drop') { this.closeModal(); this.openDrop(); return true; }
+          if (v === 'share') { this.share(); return true; }
+          return false;
+        },
+      });
+      this.tickLive();
+    },
+
+    openTasks() {
+      const t = now();
+      const list = Meta.taskList(this.save, t);
+      const d = Meta.daily(this.save, t);
+      const items = list.map((k) => `
+        <li class="task${k.done ? ' done' : ''}${k.claimed ? ' claimed' : ''}">
+          <div class="task-main">
+            <p>${esc(k.text)}</p>
+            <div class="bar"><i style="width:${(k.prog / k.need) * 100}%"></i></div>
+            <small>${k.prog} / ${k.need}</small>
+          </div>
+          <ul class="reward-chips">${rewardItems(k.reward)}</ul>
+          ${k.claimed ? '<span class="task-check">Claimed</span>' : `<button class="btn btn-gold btn-small" data-claim="${k.i}" ${k.done ? '' : 'disabled'}>Claim</button>`}
+        </li>`).join('');
+      const allClaimed = list.every((k) => k.claimed);
+      this.modal(`
+        <img class="intro-art" src="${Art.iconUrl('trophy')}" alt="">
+        <h2 class="modal-title">Street Tasks</h2>
+        <p class="modal-sub" data-live="reset"></p>
+        <ul class="task-list">${items}</ul>
+        <div class="task-bonus${d.bonus ? ' claimed' : ''}">
+          <img src="${Art.iconUrl('heartInf')}" alt="">
+          <span><b>Finish all 3</b><small>30 minutes of unlimited lives</small></span>
+          ${d.bonus ? '<span class="task-check">Claimed</span>' : `<button class="btn btn-gold btn-small" data-v="bonus" ${allClaimed ? '' : 'disabled'}>Claim</button>`}
+        </div>
+        <div class="modal-actions"><button class="btn btn-plum" data-close>Close</button></div>`, {
+        onClick: (el) => {
+          if (el.dataset.claim != null) {
+            const r = Meta.claimTask(this.save, +el.dataset.claim, now());
+            if (r) { this.persist(); Snd.fx('coin'); this.openTasks(); this.confetti($('#modal .modal-card')); }
+            return true;
+          }
+          if (el.dataset.v === 'bonus') {
+            const r = Meta.claimBonus(this.save, now());
+            if (r) { this.persist(); this.closeModal(); this.rewardPop('All tasks done!', r); }
+            return true;
+          }
+          return false;
+        },
+      });
+      this.tickLive();
+    },
+
+    openDrop() {
+      const t = now();
+      const ready = Meta.dropReady(this.save, t);
+      const idx = this.save.drop.idx;
+      // the day that is claimable now, or the one claimed today
+      const cur = ready ? idx : (idx + Meta.DROP.length - 1) % Meta.DROP.length;
+      const days = Meta.DROP.map((r, i) => {
+        const got = i < cur || (!ready && i === cur);
+        const d0 = Meta.describe(r)[0];
+        return `<li class="drop-day${got ? ' got' : ''}${i === cur ? ' today' : ''}${i === 6 ? ' big' : ''}">
+          <span>Day ${i + 1}</span><img src="${rewardIcon(d0.icon)}" alt=""><b>${esc(Meta.describe(r).map((x) => x.text).join(', '))}</b></li>`;
+      }).join('');
+      this.modal(`
+        <img class="intro-art" src="${Art.iconUrl('gift')}" alt="">
+        <h2 class="modal-title">Daily Drop</h2>
+        <p class="modal-sub">A gift every day you stop by. Miss a day? No stress, your spot waits for you.</p>
+        <ol class="drop-grid">${days}</ol>
+        <div class="modal-actions">
+          ${ready ? '<button class="btn btn-gold btn-big" data-v="claim">Claim today’s gift</button>' : '<p class="modal-sub" data-live="drop"></p>'}
+        </div>
+        <div class="modal-actions"><button class="btn btn-plum" data-close>Close</button></div>`, {
+        onClick: (el) => {
+          if (el.dataset.v !== 'claim') return false;
+          const r = Meta.claimDrop(this.save, now());
+          if (r) { this.persist(); this.closeModal(); this.rewardPop(`Day ${cur + 1} gift!`, r); }
+          return true;
+        },
+      });
+      this.tickLive();
+    },
+
+    openCypher() {
+      const L = todayDaily(now(), this.save.level);
+      this.startLevel(L.id, { level: L });
+    },
+
+    async share() {
+      const data = { title: 'Rhyme Kingdom', text: 'Play Rhyme Kingdom with me: a hip-hop match-3 adventure!', url: SHARE_URL };
+      let ok = false;
+      try {
+        if (navigator.share) { await navigator.share(data); ok = true; }
+        else if (navigator.clipboard && navigator.clipboard.writeText) { await navigator.clipboard.writeText(`${data.text} ${data.url}`); ok = true; }
+      } catch (e) { ok = false; }
+      if (!ok && !navigator.share) {
+        // No share sheet or clipboard here: show the link to copy by hand.
+        ok = await new Promise((res) => {
+          this.modal(`
+            <h2 class="modal-title">Share Rhyme Kingdom</h2>
+            <p class="modal-text">Copy this link and send it to a friend:</p>
+            <p class="share-link">${esc(SHARE_URL)}</p>
+            <div class="modal-actions"><button class="btn btn-gold" data-v="done">I sent it</button></div>`, {
+            onClick: (el) => { if (el.dataset.v === 'done') { this.closeModal(true); res(true); return true; } return false; },
+            onClose: () => res(false),
+          });
+        });
+      }
+      if (!ok) return;
+      const r = Meta.shareReward(this.save, now());
+      this.persist();
+      this.closeModal(true);
+      if (r) this.rewardPop('Thanks for sharing!', r);
+      else this.rewardPop('Thanks for sharing!', null, 'You already got today’s share life. Share all you want!');
+    },
+
+    // A small celebration window for any reward.
+    rewardPop(title, reward, text) {
+      Snd.fx('coin');
+      this.modal(`
+        <p class="win-burst">${esc(title)}</p>
+        ${reward ? `<ul class="reward-chips big">${rewardItems(reward)}</ul>` : ''}
+        ${text ? `<p class="modal-text">${esc(text)}</p>` : ''}
+        <div class="modal-actions"><button class="btn btn-gold btn-big" data-close>Nice!</button></div>`, { celebrate: true, onClose: () => { if (this.screen === 'home') this.refreshCounters(); } });
+      this.confetti($('#modal .modal-card'));
+      this.refreshCounters();
     },
 
     // ------------------------------------------------------------- dialogs

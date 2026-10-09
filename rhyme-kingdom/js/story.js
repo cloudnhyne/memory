@@ -19,11 +19,11 @@
 
   // One chapter per area of the Block. Levels are 1-based and inclusive.
   const CHAPTERS = [
-    { n: 1, title: 'The Block Party', host: 'kingFlow', from: 1, to: 5, track: 'block', bg: 'block' },
-    { n: 2, title: 'The Record Shop', host: 'djDuchess', from: 6, to: 10, track: 'shop', bg: 'shop' },
-    { n: 3, title: 'The Blacktop', host: 'princeBreaks', from: 11, to: 15, track: 'blacktop', bg: 'blacktop' },
-    { n: 4, title: 'The Wall', host: 'countessCanvas', from: 16, to: 20, track: 'wall', bg: 'wall' },
-    { n: 5, title: 'The Crown Arena', host: 'queenCadence', from: 21, to: 25, track: 'arena', bg: 'arena' },
+    { n: 1, title: 'The Block Party', host: 'kingFlow', from: 1, to: 20, track: 'block', bg: 'block' },
+    { n: 2, title: 'The Record Shop', host: 'djDuchess', from: 21, to: 40, track: 'shop', bg: 'shop' },
+    { n: 3, title: 'The Blacktop', host: 'princeBreaks', from: 41, to: 60, track: 'blacktop', bg: 'blacktop' },
+    { n: 4, title: 'The Wall', host: 'countessCanvas', from: 61, to: 80, track: 'wall', bg: 'wall' },
+    { n: 5, title: 'The Crown Arena', host: 'queenCadence', from: 81, to: 100, track: 'arena', bg: 'arena' },
   ];
 
   // Scenes shown before or after a level. Keys: before-<level>, after-<level>.
@@ -36,46 +36,70 @@
       ['kingFlow', 'Not on my watch. Help me bring the music back, one beat at a time.'],
       ['kingFlow', 'Match 3 or more to clear the noise. Let’s get this block party started!'],
     ],
-    'before-6': [
-      ['djDuchess', 'The block is jumping again! Now King Static has my record shop locked in crates.'],
-      ['djDuchess', 'Every record tells somebody’s story. Let’s dig them out.'],
-    ],
-    'before-10': [
-      ['buzzkill', 'Music? Dancing? Smiling? Not while Baron Buzzkill is on duty.'],
-      ['djDuchess', 'Somebody’s mad he can’t find the beat. Hit him with matches right next to him, and power-ups that reach him.'],
-    ],
-    'after-10': [
-      ['buzzkill', 'Okay... okay. That beat is kind of fresh.'],
-      ['djDuchess', 'Told you. Nobody stays a buzzkill once the needle drops.'],
-    ],
     'before-11': [
-      ['princeBreaks', 'Yo! King Static taped up the whole park. You can’t spin on a court full of tape.'],
-      ['princeBreaks', 'When I dance, I’m free. Let’s free the Blacktop!'],
-    ],
-    'before-13': [
-      ['princeBreaks', 'Those are the Crowns King Static stole! Clear the tiles under them and bring them down to the bottom row.'],
-    ],
-    'before-16': [
-      ['countessCanvas', 'This wall held all our names, every color, every story. Now it’s static.'],
-      ['countessCanvas', 'Static spreads if you leave it alone. Knock some out every turn!'],
+      ['kingFlow', 'Somebody stacked crates all over the block. Match right next to them to break them open.'],
     ],
     'before-20': [
-      ['lipsync', 'Why write your own rhymes when you can borrow mine? Well. Everybody else’s.'],
-      ['countessCanvas', 'Your voice is yours. Nobody gets to tape it shut.'],
+      ['buzzkill', 'Music? Dancing? Smiling? Not while Baron Buzzkill is on duty.'],
+      ['kingFlow', 'Somebody’s mad he can’t find the beat. Hit him with matches right next to him, and power-ups that reach him.'],
     ],
     'after-20': [
-      ['lipsync', 'Maybe... maybe I could write a verse of my own.'],
-      ['countessCanvas', 'Pick up a pen. The wall has room for you too.'],
+      ['buzzkill', 'Okay... okay. That beat is kind of fresh.'],
+      ['kingFlow', 'Told you. Nobody stays a buzzkill once the needle drops.'],
     ],
     'before-21': [
+      ['djDuchess', 'The block is jumping again! Now King Static has my record shop locked down.'],
+      ['djDuchess', 'Every record tells somebody’s story. Let’s dig them out.'],
+    ],
+    'before-23': [
+      ['djDuchess', 'He taped the records shut! Match a taped tile, or hit it with a power-up, to rip the tape off.'],
+    ],
+    'before-27': [
+      ['djDuchess', 'Those are the Crowns King Static stole! Clear the tiles under them and bring them down to the bottom row.'],
+    ],
+    'before-40': [
+      ['lipsync', 'Why write your own rhymes when you can borrow mine? Well. Everybody else’s.'],
+      ['djDuchess', 'Your voice is yours. Nobody gets to tape it shut.'],
+    ],
+    'after-40': [
+      ['lipsync', 'Maybe... maybe I could write a verse of my own.'],
+      ['djDuchess', 'Pick up a pen. There’s a spot on the wall for you too.'],
+    ],
+    'before-41': [
+      ['princeBreaks', 'Yo! The Blacktop went quiet. No cyphers, no battles, no dancing.'],
+      ['princeBreaks', 'When I dance, I’m free. Let’s free the Blacktop!'],
+    ],
+    'before-60': [
+      ['buzzkill', 'I’m back, and I brought a bigger frown.'],
+      ['princeBreaks', 'Bad days happen to everybody. We can still dance through them.'],
+    ],
+    'after-60': [
+      ['buzzkill', 'Fine. Maybe I just needed somebody to ask how I was doing.'],
+      ['princeBreaks', 'So how are you doing, Baron? For real. We’ve got time.'],
+    ],
+    'before-61': [
+      ['countessCanvas', 'This wall held all our names, every color, every story. Now it’s static.'],
+    ],
+    'before-62': [
+      ['countessCanvas', 'Static spreads if you leave it alone. Knock some out every turn!'],
+    ],
+    'before-80': [
+      ['lipsync', 'One more show! Everybody’s lines, my mouth!'],
+      ['countessCanvas', 'Use your own voice. It’s the only one that fits you.'],
+    ],
+    'after-80': [
+      ['lipsync', 'I wrote this one myself. It’s short... but it’s mine.'],
+      ['countessCanvas', 'Short and true beats long and borrowed. Every time.'],
+    ],
+    'before-81': [
       ['queenCadence', 'The Crown Arena. This is where the whole Kingdom comes together.'],
       ['griot', 'King Static is waiting at the end of this road. Stay sharp, and keep your heart open.'],
     ],
-    'before-25': [
+    'before-100': [
       ['static', 'Every king needs a crowd. So why does NOBODY ever listen to ME?!'],
       ['kingFlow', 'Then step into the cypher. But first, we’re bringing the music back!'],
     ],
-    'after-25': [
+    'after-100': [
       ['static', '...I got loud because I felt like nobody heard me.'],
       ['griot', 'Feeling unheard is heavy. Naming it is how we set it down.'],
       ['queenCadence', 'Everybody gets a turn in the cypher. Even you.'],

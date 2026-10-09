@@ -4,8 +4,10 @@ A hip-hop match-3 adventure in the style of Royal Kingdom, from Cloudnhyne Desig
 
 King Static has silenced the Kingdom of Rhyme. He stole the Crowns, taped up the park,
 and buried the block in static. Help **King Flow** and the hip-hop royal court bring the
-music back across **25 levels** and **5 chapters**, then spend your stars to rebuild the
+music back across **100 levels** and **5 chapters**, then spend your stars to rebuild the
 neighborhood piece by piece.
+
+Play it online: https://rhyme-kingdom.vercel.app
 
 ## Play it
 
@@ -29,13 +31,30 @@ for the Suno and Gemini prompts and how to swap tracks.
 | Power-up combos | Crossfade, Bass Cross, Double Drop, Airmail, Special Delivery, Remix, Double Platinum |
 | In-game boosters | **Mic Drop** (hammer), **Scratch** (row), **Bass Drop** (column), **Remix** (shuffle) |
 | Boxes, grass, chains, collectibles | Record crates (1 to 3 layers), dance-floor panels (1 to 2 layers), taped tiles, Crowns to bring home, spreading static |
-| Boss fights | Level 10 Baron Buzzkill (throws crates), Level 20 Lady Lip-Sync (tapes tiles), Level 25 King Static (spreads static) |
+| Boss fights | A boss closes every chapter: Baron Buzzkill (20, and his remix at 60), Lady Lip-Sync (40, and her encore at 80), King Static (100) |
+| Lives and free lives | 5 lives, one back every 30 minutes. Free lives from the Daily Cypher, Street Tasks, the Daily Drop, Gold levels, hot streaks, boss wins and sharing |
 | End-of-level celebration | **Encore!** Leftover moves turn into spray cans and fire for bonus coins |
 
 All artwork (pieces, obstacles, characters, bosses, icons and the ten Block paintings) was
 generated with a professional image model and cut into sprites by `tools/slice.mjs`.
 Each area of the Block has a "silenced" painting and a rebuilt one; every piece you build
 lights up its part of the scene.
+
+### Lives and free lives
+
+- **Lives:** you start with 5 and get one back every 30 minutes. A life is only used when you
+  fail a level, or quit or restart one after making a move. The Daily Cypher never uses one.
+- **Daily Cypher:** a free bonus level every day (picked from 30, only with obstacles you have
+  learned). Win it for +1 life and 50 coins.
+- **Street Tasks:** three tasks a day (like "Drop 3 Boomboxes"). Two pay lives, one pays coins,
+  and finishing all three gives 30 minutes of unlimited lives.
+- **Daily Drop:** a 7-day gift calendar ending in an hour of unlimited lives. Missing a day
+  never resets it, so nobody feels pressured to log in.
+- **Gold levels:** every level ending in 5 gives a free life the first time you beat it.
+- **Hot streak:** every third win in a row gives a life. **Boss wins** refill your lives and
+  add 30 minutes of unlimited lives. **Sharing** the game gives a life once a day.
+- Rewards can stack lives up to 9. Lives can also be refilled for 250 coins.
+- **Creator preview** in Settings has a switch for unlimited lives while you test.
 
 Also included: forced-move tutorials on the levels that introduce a power-up, "New!" cards for
 each mechanic, idle hints, story scenes with every character, coins, +5 moves when you run out,
@@ -48,14 +67,18 @@ Progress saves in the browser on that device.
 
 | Chapter | Levels | New ideas |
 | --- | --- | --- |
-| 1. The Block Party (King Flow) | 1 to 5 | matching, Spray Can, dance floor, Boombox, Platinum Record |
-| 2. The Record Shop (DJ Duchess) | 6 to 10 | crates, Flyer, boss: Baron Buzzkill |
-| 3. The Blacktop (Prince Breaks) | 11 to 15 | tape, combos, Crowns |
-| 4. The Wall (Countess Canvas) | 16 to 20 | spreading static, 3-layer crates, boss: Lady Lip-Sync |
-| 5. The Crown Arena (Queen Cadence) | 21 to 25 | everything together, final boss: King Static |
+| 1. The Block Party (King Flow) | 1 to 20 | matching, Spray Can, dance floor, Boombox, Platinum Record, Flyer, crates, combos, boss: Baron Buzzkill |
+| 2. The Record Shop (DJ Duchess) | 21 to 40 | deep crates, tape, Crowns, boss: Lady Lip-Sync |
+| 3. The Blacktop (Prince Breaks) | 41 to 60 | two-layer floors, odd board shapes, boss: Buzzkill Remix |
+| 4. The Wall (Countess Canvas) | 61 to 80 | spreading static, boss: Lip-Sync Encore |
+| 5. The Crown Arena (Queen Cadence) | 81 to 100 | everything together, final boss: King Static |
 
-Difficulty was tuned with a bot that played every level hundreds of times: early levels are
-near-certain wins, the bosses and the last chapter are genuinely hard.
+Boards are at most 7 wide and 8 tall so the pieces stay big on a phone. Each area of the Block
+has five pieces that cost 1, 3, 4, 5 and 7 stars (20 stars per chapter, one per level).
+
+Difficulty is tuned with a bot that plays every level many times: intro levels are near-certain
+wins, normal levels win about 80 to 90 percent of the time for the bot, hard levels about two
+thirds, super hard levels and bosses about half to two thirds.
 
 ## Project layout
 
@@ -63,7 +86,8 @@ near-certain wins, the bosses and the last chapter are genuinely hard.
 index.html        page structure (screens, HUD, popups)
 css/style.css     all styling
 js/engine.js      match-3 rules: matching, gravity, power-ups, combos, obstacles, bosses
-js/levels.js      the 25 level layouts
+js/levels.js      the 100 levels and the Daily Cypher pool (generated by tools/makelevels.mjs)
+js/meta.js        lives, Street Tasks, Daily Drop and other rewards (pure rules, no screen code)
 js/render.js      canvas board renderer, animations and touch input
 js/art.js         art registry and the Block's build regions
 assets/           game art (WebP), cut from the generated sheets
@@ -79,7 +103,17 @@ dist/             the bundled single-file game
 
 ## Editing levels
 
-Each level in `js/levels.js` is a small block of text. Example:
+`js/levels.js` is generated by `tools/makelevels.mjs`. Each level there is a short spec: a
+board shape, obstacle patterns and goals. Edit a spec, then run:
+
+```
+node tools/makelevels.mjs           # rebuild every level and re-tune all move counts (about 2 minutes)
+node tools/makelevels.mjs 12 40     # re-tune only levels 12 and 40
+node tools/makelevels.mjs --lint    # rebuild and check layouts without re-tuning
+node tools/meta-test.mjs            # check the lives, tasks and daily reward rules
+```
+
+The generated file uses the same board format you can read and tweak by hand. Example:
 
 ```js
 {
@@ -144,7 +178,7 @@ Google Play by wrapping it with [Capacitor](https://capacitorjs.com/) when you'r
 
 ## Natural next steps
 
-- Lives and timed refills, a shop, and ads or in-app purchases for coins
+- A coin shop, and ads or in-app purchases for coins and lives
 - More chapters (each new area is 5 levels, 5 buildable pieces, and a host)
 - Leaderboards and daily challenges
 - Voiced callouts and animated character reactions

@@ -165,7 +165,7 @@
       this.cache.clear();
       if (!this.eng) return;
       // leave room around the grid for the chrome frame
-      const S = Math.floor(Math.min((this.W - 6) / (this.cols + 0.5), (this.H - 6) / (this.rows + 0.5), 66));
+      const S = Math.floor(Math.min((this.W - 6) / (this.cols + 0.45), (this.H - 6) / (this.rows + 0.45), 78));
       this.S = Math.max(16, S);
       this.ox = Math.round((this.W - this.S * this.cols) / 2);
       this.oy = Math.round((this.H - this.S * this.rows) / 2);
@@ -1153,7 +1153,7 @@
       for (const sp of list) {
         if (sp.a <= 0.01 || sp.s <= 0.01) continue;
         const key = this._keyOf(sp);
-        const base = sp.k === 'c' ? 0.95 : sp.k === 'p' ? 1.0 : 0.96;
+        const base = sp.k === 'c' ? 1.02 : sp.k === 'p' ? 1.1 : 1.06;
         let size = S * base * sp.s;
         let x = this.ox + (sp.x + 0.5) * S, y = this.oy + (sp.y + 0.5) * S;
         let rot = sp.rot;
